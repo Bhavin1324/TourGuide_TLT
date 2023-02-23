@@ -8,6 +8,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -20,7 +21,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "bus_stop")
@@ -41,7 +42,7 @@ public class BusStop implements Serializable {
     @Column(name = "Name")
     private String name;
     @JoinColumn(name = "BusNumber", referencedColumnName = "BusNumber")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private BusMaster busNumber;
 
     public BusStop() {

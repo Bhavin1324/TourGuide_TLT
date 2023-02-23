@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,10 +14,25 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:setDataSource dataSource="tltjdbc"/>
+        <sql:setDataSource dataSource="jdbc/TLT"/>
         <sql:query var="query">
-            select * from city_master
+            select * from countries
         </sql:query>
-        <h1>connection success!</h1>
+        <table border="1">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Capital</th>
+                <th>Currency</th>
+            </tr>
+            <c:forEach var="row" items="${query.rowsByIndex}">
+                <tr>
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[6]}</td>
+                    <td>${row[7]}</td>
+                </tr>
+            </c:forEach>
+        </table>
     </body>
 </html>

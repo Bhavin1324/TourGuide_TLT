@@ -9,6 +9,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -23,7 +24,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "payment_master")
@@ -52,13 +53,13 @@ public class PaymentMaster implements Serializable {
     @Column(name = "PaymentStatus")
     private String paymentStatus;
     @JoinColumn(name = "GuideId", referencedColumnName = "Id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
     @JoinColumn(name = "SubscriptionId", referencedColumnName = "Id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionMaster subscriptionId;
     @JoinColumn(name = "Username", referencedColumnName = "Username")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserMaster username;
 
     public PaymentMaster() {

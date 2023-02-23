@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Embeddable
 public class ProjectRolePK implements Serializable {

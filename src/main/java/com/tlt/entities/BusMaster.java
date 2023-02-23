@@ -9,6 +9,7 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -22,7 +23,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "bus_master")
@@ -48,13 +49,13 @@ public class BusMaster implements Serializable {
     @Size(min = 1, max = 500)
     @Column(name = "BusNumber")
     private String busNumber;
-    @JoinColumn(name = "CityId", referencedColumnName = "Id")
-    @ManyToOne
-    private CityMaster cityId;
+    @JoinColumn(name = "CityId", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Cities cityId;
     @JoinColumn(name = "PlaceId", referencedColumnName = "Id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private PlaceMaster placeId;
-    @OneToMany(mappedBy = "busNumber")
+    @OneToMany(mappedBy = "busNumber", fetch = FetchType.LAZY)
     private Collection<BusStop> busStopCollection;
 
     public BusMaster() {
@@ -93,11 +94,11 @@ public class BusMaster implements Serializable {
         this.busNumber = busNumber;
     }
 
-    public CityMaster getCityId() {
+    public Cities getCityId() {
         return cityId;
     }
 
-    public void setCityId(CityMaster cityId) {
+    public void setCityId(Cities cityId) {
         this.cityId = cityId;
     }
 

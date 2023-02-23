@@ -11,6 +11,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -24,7 +25,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "guide_master")
@@ -88,7 +89,7 @@ public class GuideMaster implements Serializable {
     @Size(max = 500)
     @Column(name = "PaymentMethodId")
     private String paymentMethodId;
-    @OneToMany(mappedBy = "guideId")
+    @OneToMany(mappedBy = "guideId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
 
     public GuideMaster() {

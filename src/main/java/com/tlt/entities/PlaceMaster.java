@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -25,7 +26,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "place_master")
@@ -69,13 +70,13 @@ public class PlaceMaster implements Serializable {
     @Size(max = 16777215)
     @Column(name = "Description")
     private String description;
-    @JoinColumn(name = "CityId", referencedColumnName = "Id")
-    @ManyToOne
-    private CityMaster cityId;
+    @JoinColumn(name = "CityId", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Cities cityId;
     @JoinColumn(name = "CategoryId", referencedColumnName = "Id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private PlaceCategory categoryId;
-    @OneToMany(mappedBy = "placeId")
+    @OneToMany(mappedBy = "placeId", fetch = FetchType.LAZY)
     private Collection<BusMaster> busMasterCollection;
 
     public PlaceMaster() {
@@ -149,11 +150,11 @@ public class PlaceMaster implements Serializable {
         this.description = description;
     }
 
-    public CityMaster getCityId() {
+    public Cities getCityId() {
         return cityId;
     }
 
-    public void setCityId(CityMaster cityId) {
+    public void setCityId(Cities cityId) {
         this.cityId = cityId;
     }
 

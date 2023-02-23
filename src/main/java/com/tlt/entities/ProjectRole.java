@@ -7,6 +7,7 @@ package com.tlt.entities;
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "project_role")
@@ -29,7 +30,7 @@ public class ProjectRole implements Serializable {
     @EmbeddedId
     protected ProjectRolePK projectRolePK;
     @JoinColumn(name = "Username", referencedColumnName = "Username", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UserMaster userMaster;
 
     public ProjectRole() {

@@ -10,6 +10,7 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -21,7 +22,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "subscription_model")
@@ -52,7 +53,7 @@ public class SubscriptionModel implements Serializable {
     @Size(max = 65535)
     @Column(name = "Description")
     private String description;
-    @OneToMany(mappedBy = "subscriptionModelId")
+    @OneToMany(mappedBy = "subscriptionModelId", fetch = FetchType.LAZY)
     private Collection<SubscriptionMaster> subscriptionMasterCollection;
 
     public SubscriptionModel() {

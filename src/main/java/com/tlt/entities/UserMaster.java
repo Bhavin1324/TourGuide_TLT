@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -21,7 +22,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "user_master")
@@ -57,9 +58,9 @@ public class UserMaster implements Serializable {
     private String roleId;
     @Column(name = "HasSubscription")
     private Boolean hasSubscription;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userMaster")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userMaster", fetch = FetchType.LAZY)
     private Collection<ProjectRole> projectRoleCollection;
-    @OneToMany(mappedBy = "username")
+    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
 
     public UserMaster() {

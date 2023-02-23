@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,7 +25,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "subscription_master")
@@ -49,12 +50,12 @@ public class SubscriptionMaster implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     @JoinColumn(name = "PaymentMethodId", referencedColumnName = "Id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private PaymentMethod paymentMethodId;
     @JoinColumn(name = "SubscriptionModelId", referencedColumnName = "Id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionModel subscriptionModelId;
-    @OneToMany(mappedBy = "subscriptionId")
+    @OneToMany(mappedBy = "subscriptionId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
 
     public SubscriptionMaster() {
