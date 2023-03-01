@@ -25,7 +25,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "subscription_master")
@@ -55,6 +55,12 @@ public class SubscriptionMaster implements Serializable {
     @JoinColumn(name = "SubscriptionModelId", referencedColumnName = "Id")
     @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionModel subscriptionModelId;
+    @JoinColumn(name = "paymentId", referencedColumnName = "Id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PaymentMaster paymentId;
+    @JoinColumn(name = "userId", referencedColumnName = "Username")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserMaster userId;
     @OneToMany(mappedBy = "subscriptionId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
 
@@ -103,6 +109,22 @@ public class SubscriptionMaster implements Serializable {
 
     public void setSubscriptionModelId(SubscriptionModel subscriptionModelId) {
         this.subscriptionModelId = subscriptionModelId;
+    }
+
+    public PaymentMaster getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(PaymentMaster paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public UserMaster getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserMaster userId) {
+        this.userId = userId;
     }
 
     public Collection<PaymentMaster> getPaymentMasterCollection() {

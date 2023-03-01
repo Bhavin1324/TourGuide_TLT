@@ -2,8 +2,12 @@
 package com.tlt.ejb;
 
 import com.tlt.entities.GuideMaster;
+import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
+import com.tlt.entities.SubscriptionMaster;
+import com.tlt.entities.SubscriptionModel;
+import com.tlt.entities.UserMaster;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.ejb.Stateful;
@@ -85,6 +89,56 @@ public class Admin implements AdminLocal {
 
     @Override
     public Collection<GuideMaster> getGuideByPlace(String PlaceId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void insertSubscriptionModel(SubscriptionModel newSubModel) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void deleteSubscriptionModel(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void updateSubscriptionModel(String id, SubscriptionModel subModel) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public SubscriptionModel getSubModelById(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Collection<SubscriptionModel> getSubModelByName(String modelName) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Collection<SubscriptionMaster> getAllSubscriptions() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public SubscriptionMaster getSubscriptionsbyUser(String Username) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Collection<PaymentMaster> getAllPaymentDetails() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public PaymentMaster getPaymentDetailsByUser(String Username) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Collection<UserMaster> getAllUsers() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
         

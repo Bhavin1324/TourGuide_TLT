@@ -5,6 +5,7 @@
 package com.tlt.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,7 +26,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "payment_master")
@@ -52,6 +54,8 @@ public class PaymentMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "PaymentStatus")
     private String paymentStatus;
+    @OneToMany(mappedBy = "paymentId", fetch = FetchType.LAZY)
+    private Collection<SubscriptionMaster> subscriptionMasterCollection;
     @JoinColumn(name = "GuideId", referencedColumnName = "Id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
@@ -99,6 +103,14 @@ public class PaymentMaster implements Serializable {
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {
+        return subscriptionMasterCollection;
+    }
+
+    public void setSubscriptionMasterCollection(Collection<SubscriptionMaster> subscriptionMasterCollection) {
+        this.subscriptionMasterCollection = subscriptionMasterCollection;
     }
 
     public GuideMaster getGuideId() {

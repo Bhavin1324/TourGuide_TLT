@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "user_master")
@@ -60,6 +60,8 @@ public class UserMaster implements Serializable {
     private Boolean hasSubscription;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userMaster", fetch = FetchType.LAZY)
     private Collection<ProjectRole> projectRoleCollection;
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    private Collection<SubscriptionMaster> subscriptionMasterCollection;
     @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
 
@@ -124,6 +126,14 @@ public class UserMaster implements Serializable {
 
     public void setProjectRoleCollection(Collection<ProjectRole> projectRoleCollection) {
         this.projectRoleCollection = projectRoleCollection;
+    }
+
+    public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {
+        return subscriptionMasterCollection;
+    }
+
+    public void setSubscriptionMasterCollection(Collection<SubscriptionMaster> subscriptionMasterCollection) {
+        this.subscriptionMasterCollection = subscriptionMasterCollection;
     }
 
     public Collection<PaymentMaster> getPaymentMasterCollection() {

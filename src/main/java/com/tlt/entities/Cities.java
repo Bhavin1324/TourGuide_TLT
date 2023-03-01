@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +29,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "cities")
@@ -93,15 +94,15 @@ public class Cities implements Serializable {
     @Size(max = 255)
     @Column(name = "wikiDataId")
     private String wikiDataId;
-    @JoinColumn(name = "country_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Countries countryId;
     @JoinColumn(name = "state_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private States stateId;
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Countries countryId;
     @OneToMany(mappedBy = "cityId", fetch = FetchType.LAZY)
     private Collection<PlaceMaster> placeMasterCollection;
-    @OneToMany(mappedBy = "cityId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityId", fetch = FetchType.LAZY)
     private Collection<BusMaster> busMasterCollection;
 
     public Cities() {
@@ -203,20 +204,20 @@ public class Cities implements Serializable {
         this.wikiDataId = wikiDataId;
     }
 
-    public Countries getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Countries countryId) {
-        this.countryId = countryId;
-    }
-
     public States getStateId() {
         return stateId;
     }
 
     public void setStateId(States stateId) {
         this.stateId = stateId;
+    }
+
+    public Countries getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Countries countryId) {
+        this.countryId = countryId;
     }
 
     public Collection<PlaceMaster> getPlaceMasterCollection() {

@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "bus_master")
@@ -50,7 +50,7 @@ public class BusMaster implements Serializable {
     @Column(name = "BusNumber")
     private String busNumber;
     @JoinColumn(name = "CityId", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cities cityId;
     @JoinColumn(name = "PlaceId", referencedColumnName = "Id")
     @ManyToOne(fetch = FetchType.LAZY)
