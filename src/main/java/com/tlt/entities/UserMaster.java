@@ -12,7 +12,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -22,54 +25,69 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "user_master")
 @NamedQueries({
     @NamedQuery(name = "UserMaster.findAll", query = "SELECT u FROM UserMaster u"),
-    @NamedQuery(name = "UserMaster.findByUsername", query = "SELECT u FROM UserMaster u WHERE u.username = :username"),
-    @NamedQuery(name = "UserMaster.findByHasSubscription", query = "SELECT u FROM UserMaster u WHERE u.hasSubscription = :hasSubscription")})
+    @NamedQuery(name = "UserMaster.findById", query = "SELECT u FROM UserMaster u WHERE u.id = :id"),
+    @NamedQuery(name = "UserMaster.findByUsername", query = "SELECT u FROM UserMaster u WHERE u.username = :username")})
 public class UserMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Username")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
+    private String id;
+    @Size(max = 100)
+    @Column(name = "username")
     private String username;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Password")
+    @Column(name = "password")
     private String password;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Lob
     @Size(max = 65535)
-    @Column(name = "Email")
+    @Column(name = "email")
     private String email;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "RoleId")
-    private String roleId;
-    @Column(name = "HasSubscription")
-    private Boolean hasSubscription;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userMaster", fetch = FetchType.LAZY)
-    private Collection<ProjectRole> projectRoleCollection;
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    @JoinTable(name = "guide_user_mapping", joinColumns = {
+        @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "guide_id", referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<GuideMaster> guideMasterCollection;
+    @JoinTable(name = "user_subscription_mapping", joinColumns = {
+        @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "subscription_id", referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<SubscriptionMaster> subscriptionMasterCollection;
-    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userMaster", fetch = FetchType.LAZY)
+    private Collection<UserRole> userRoleCollection;
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    private Collection<AppointmentMaster> appointmentMasterCollection;
 
     public UserMaster() {
     }
 
-    public UserMaster(String username) {
-        this.username = username;
+    public UserMaster(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -104,28 +122,12 @@ public class UserMaster implements Serializable {
         this.email = email;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public Collection<GuideMaster> getGuideMasterCollection() {
+        return guideMasterCollection;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public Boolean getHasSubscription() {
-        return hasSubscription;
-    }
-
-    public void setHasSubscription(Boolean hasSubscription) {
-        this.hasSubscription = hasSubscription;
-    }
-
-    public Collection<ProjectRole> getProjectRoleCollection() {
-        return projectRoleCollection;
-    }
-
-    public void setProjectRoleCollection(Collection<ProjectRole> projectRoleCollection) {
-        this.projectRoleCollection = projectRoleCollection;
+    public void setGuideMasterCollection(Collection<GuideMaster> guideMasterCollection) {
+        this.guideMasterCollection = guideMasterCollection;
     }
 
     public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {
@@ -144,10 +146,26 @@ public class UserMaster implements Serializable {
         this.paymentMasterCollection = paymentMasterCollection;
     }
 
+    public Collection<UserRole> getUserRoleCollection() {
+        return userRoleCollection;
+    }
+
+    public void setUserRoleCollection(Collection<UserRole> userRoleCollection) {
+        this.userRoleCollection = userRoleCollection;
+    }
+
+    public Collection<AppointmentMaster> getAppointmentMasterCollection() {
+        return appointmentMasterCollection;
+    }
+
+    public void setAppointmentMasterCollection(Collection<AppointmentMaster> appointmentMasterCollection) {
+        this.appointmentMasterCollection = appointmentMasterCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (username != null ? username.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -158,7 +176,7 @@ public class UserMaster implements Serializable {
             return false;
         }
         UserMaster other = (UserMaster) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -166,7 +184,7 @@ public class UserMaster implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tlt.entities.UserMaster[ username=" + username + " ]";
+        return "com.tlt.entities.UserMaster[ id=" + id + " ]";
     }
     
 }

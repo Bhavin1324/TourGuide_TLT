@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "subscription_model")
@@ -37,22 +37,22 @@ public class SubscriptionModel implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Id")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
     private String id;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
-    @Column(name = "DurationInMonth")
+    @Column(name = "duration_in_month")
     private Integer durationInMonth;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "Cost")
+    @Column(name = "cost")
     private BigDecimal cost;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Description")
-    private String description;
+    @Column(name = "details")
+    private String details;
     @OneToMany(mappedBy = "subscriptionModelId", fetch = FetchType.LAZY)
     private Collection<SubscriptionMaster> subscriptionMasterCollection;
 
@@ -95,12 +95,12 @@ public class SubscriptionModel implements Serializable {
         this.cost = cost;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetails() {
+        return details;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {

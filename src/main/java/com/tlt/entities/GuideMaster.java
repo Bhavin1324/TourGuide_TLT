@@ -6,26 +6,25 @@ package com.tlt.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "guide_master")
@@ -33,64 +32,45 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "GuideMaster.findAll", query = "SELECT g FROM GuideMaster g"),
     @NamedQuery(name = "GuideMaster.findById", query = "SELECT g FROM GuideMaster g WHERE g.id = :id"),
     @NamedQuery(name = "GuideMaster.findByAmount", query = "SELECT g FROM GuideMaster g WHERE g.amount = :amount"),
-    @NamedQuery(name = "GuideMaster.findByPlaceId", query = "SELECT g FROM GuideMaster g WHERE g.placeId = :placeId"),
-    @NamedQuery(name = "GuideMaster.findByUserId", query = "SELECT g FROM GuideMaster g WHERE g.userId = :userId"),
-    @NamedQuery(name = "GuideMaster.findByIsAppointed", query = "SELECT g FROM GuideMaster g WHERE g.isAppointed = :isAppointed"),
-    @NamedQuery(name = "GuideMaster.findByAppiontmentStartedAt", query = "SELECT g FROM GuideMaster g WHERE g.appiontmentStartedAt = :appiontmentStartedAt"),
-    @NamedQuery(name = "GuideMaster.findByAppiontmentEndedAt", query = "SELECT g FROM GuideMaster g WHERE g.appiontmentEndedAt = :appiontmentEndedAt"),
-    @NamedQuery(name = "GuideMaster.findByPaymentMethodId", query = "SELECT g FROM GuideMaster g WHERE g.paymentMethodId = :paymentMethodId")})
+    @NamedQuery(name = "GuideMaster.findByPhoneNumber", query = "SELECT g FROM GuideMaster g WHERE g.phoneNumber = :phoneNumber"),
+    @NamedQuery(name = "GuideMaster.findByIsAppointed", query = "SELECT g FROM GuideMaster g WHERE g.isAppointed = :isAppointed")})
 public class GuideMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Id")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
     private String id;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Gender")
+    @Column(name = "gender")
     private String gender;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Lob
     @Size(max = 65535)
-    @Column(name = "Email")
+    @Column(name = "email")
     private String email;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "Amount")
+    @Column(name = "amount")
     private BigDecimal amount;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "ContactNo")
-    private String contactNo;
-    @Size(max = 500)
-    @Column(name = "PlaceId")
-    private String placeId;
-    @Size(max = 500)
-    @Column(name = "UserId")
-    private String userId;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "VisitStatus")
-    private String visitStatus;
-    @Column(name = "IsAppointed")
+    @Column(name = "phone_number")
+    private BigInteger phoneNumber;
+    @Column(name = "is_appointed")
     private Boolean isAppointed;
-    @Column(name = "AppiontmentStartedAt")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date appiontmentStartedAt;
-    @Column(name = "AppiontmentEndedAt")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date appiontmentEndedAt;
-    @Size(max = 500)
-    @Column(name = "PaymentMethodId")
-    private String paymentMethodId;
+    @ManyToMany(mappedBy = "guideMasterCollection", fetch = FetchType.LAZY)
+    private Collection<UserMaster> userMasterCollection;
+    @ManyToMany(mappedBy = "guideMasterCollection", fetch = FetchType.LAZY)
+    private Collection<PlaceMaster> placeMasterCollection;
     @OneToMany(mappedBy = "guideId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
+    @OneToMany(mappedBy = "guideId", fetch = FetchType.LAZY)
+    private Collection<AppointmentMaster> appointmentMasterCollection;
 
     public GuideMaster() {
     }
@@ -139,36 +119,12 @@ public class GuideMaster implements Serializable {
         this.amount = amount;
     }
 
-    public String getContactNo() {
-        return contactNo;
+    public BigInteger getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setContactNo(String contactNo) {
-        this.contactNo = contactNo;
-    }
-
-    public String getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getVisitStatus() {
-        return visitStatus;
-    }
-
-    public void setVisitStatus(String visitStatus) {
-        this.visitStatus = visitStatus;
+    public void setPhoneNumber(BigInteger phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Boolean getIsAppointed() {
@@ -179,28 +135,20 @@ public class GuideMaster implements Serializable {
         this.isAppointed = isAppointed;
     }
 
-    public Date getAppiontmentStartedAt() {
-        return appiontmentStartedAt;
+    public Collection<UserMaster> getUserMasterCollection() {
+        return userMasterCollection;
     }
 
-    public void setAppiontmentStartedAt(Date appiontmentStartedAt) {
-        this.appiontmentStartedAt = appiontmentStartedAt;
+    public void setUserMasterCollection(Collection<UserMaster> userMasterCollection) {
+        this.userMasterCollection = userMasterCollection;
     }
 
-    public Date getAppiontmentEndedAt() {
-        return appiontmentEndedAt;
+    public Collection<PlaceMaster> getPlaceMasterCollection() {
+        return placeMasterCollection;
     }
 
-    public void setAppiontmentEndedAt(Date appiontmentEndedAt) {
-        this.appiontmentEndedAt = appiontmentEndedAt;
-    }
-
-    public String getPaymentMethodId() {
-        return paymentMethodId;
-    }
-
-    public void setPaymentMethodId(String paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
+    public void setPlaceMasterCollection(Collection<PlaceMaster> placeMasterCollection) {
+        this.placeMasterCollection = placeMasterCollection;
     }
 
     public Collection<PaymentMaster> getPaymentMasterCollection() {
@@ -209,6 +157,14 @@ public class GuideMaster implements Serializable {
 
     public void setPaymentMasterCollection(Collection<PaymentMaster> paymentMasterCollection) {
         this.paymentMasterCollection = paymentMasterCollection;
+    }
+
+    public Collection<AppointmentMaster> getAppointmentMasterCollection() {
+        return appointmentMasterCollection;
+    }
+
+    public void setAppointmentMasterCollection(Collection<AppointmentMaster> appointmentMasterCollection) {
+        this.appointmentMasterCollection = appointmentMasterCollection;
     }
 
     @Override

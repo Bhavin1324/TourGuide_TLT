@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "payment_method")
@@ -34,19 +34,19 @@ public class PaymentMethod implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Id")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
     private String id;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
     @OneToMany(mappedBy = "paymentMethodId", fetch = FetchType.LAZY)
-    private Collection<SubscriptionMaster> subscriptionMasterCollection;
+    private Collection<PaymentMaster> paymentMasterCollection;
 
     public PaymentMethod() {
     }
@@ -79,12 +79,12 @@ public class PaymentMethod implements Serializable {
         this.description = description;
     }
 
-    public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {
-        return subscriptionMasterCollection;
+    public Collection<PaymentMaster> getPaymentMasterCollection() {
+        return paymentMasterCollection;
     }
 
-    public void setSubscriptionMasterCollection(Collection<SubscriptionMaster> subscriptionMasterCollection) {
-        this.subscriptionMasterCollection = subscriptionMasterCollection;
+    public void setPaymentMasterCollection(Collection<PaymentMaster> paymentMasterCollection) {
+        this.paymentMasterCollection = paymentMasterCollection;
     }
 
     @Override

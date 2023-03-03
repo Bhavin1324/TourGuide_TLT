@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,7 +26,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "subscription_master")
@@ -40,27 +41,20 @@ public class SubscriptionMaster implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Id")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
     private String id;
-    @Column(name = "StartDate")
+    @Column(name = "start_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-    @Column(name = "EndDate")
+    @Column(name = "end_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
-    @JoinColumn(name = "PaymentMethodId", referencedColumnName = "Id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PaymentMethod paymentMethodId;
-    @JoinColumn(name = "SubscriptionModelId", referencedColumnName = "Id")
+    @ManyToMany(mappedBy = "subscriptionMasterCollection", fetch = FetchType.LAZY)
+    private Collection<UserMaster> userMasterCollection;
+    @JoinColumn(name = "subscription_model_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionModel subscriptionModelId;
-    @JoinColumn(name = "paymentId", referencedColumnName = "Id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PaymentMaster paymentId;
-    @JoinColumn(name = "userId", referencedColumnName = "Username")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserMaster userId;
     @OneToMany(mappedBy = "subscriptionId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
 
@@ -95,12 +89,12 @@ public class SubscriptionMaster implements Serializable {
         this.endDate = endDate;
     }
 
-    public PaymentMethod getPaymentMethodId() {
-        return paymentMethodId;
+    public Collection<UserMaster> getUserMasterCollection() {
+        return userMasterCollection;
     }
 
-    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
+    public void setUserMasterCollection(Collection<UserMaster> userMasterCollection) {
+        this.userMasterCollection = userMasterCollection;
     }
 
     public SubscriptionModel getSubscriptionModelId() {
@@ -109,22 +103,6 @@ public class SubscriptionMaster implements Serializable {
 
     public void setSubscriptionModelId(SubscriptionModel subscriptionModelId) {
         this.subscriptionModelId = subscriptionModelId;
-    }
-
-    public PaymentMaster getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(PaymentMaster paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public UserMaster getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UserMaster userId) {
-        this.userId = userId;
     }
 
     public Collection<PaymentMaster> getPaymentMasterCollection() {

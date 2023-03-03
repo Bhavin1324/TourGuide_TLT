@@ -12,9 +12,8 @@ import javax.ejb.Local;
 
 @Local
 public interface AdminLocal {
-    
-    //-------------places crud-------
 
+    // Place
     void insertPlace(PlaceMaster data);
 
     void deletePlace(String id);
@@ -25,11 +24,11 @@ public interface AdminLocal {
 
     PlaceMaster getPlaceById(String id);
 
-    Collection<PlaceMaster> getPlacesByCategory(PlaceCategory categoryId);
+    Collection<PlaceMaster> getPlacesByCategory(String categoryId);
 
-    PlaceMaster getPlacesByName(String Name);
+    Collection<PlaceMaster> getPlacesByName(String Name);
 
-    //-------------Guide crud--------
+    // Guide
     void insertGuide(GuideMaster data);
 
     void deleteGuide(String id);
@@ -43,27 +42,27 @@ public interface AdminLocal {
     Collection<GuideMaster> getGuideByPlace(String PlaceId);
 
     //SubscriptionModel management
-    void insertSubscriptionModel(SubscriptionModel newSubModel);
+    void insertSubscriptionModel(SubscriptionModel data);
 
     void deleteSubscriptionModel(String id);
 
-    void updateSubscriptionModel(String id, SubscriptionModel subModel);
+    void updateSubscriptionModel(String id, SubscriptionModel newSubscriptionModel);
 
-    SubscriptionModel getSubModelById(String id);
+    SubscriptionModel getSubscriptionModelById(String id);
 
-    Collection<SubscriptionModel> getSubModelByName(String modelName);
+    Collection<SubscriptionModel> getSubscriptionModelByName(String modelName);
 
     //Subscription 
     Collection<SubscriptionMaster> getAllSubscriptions();
 
-    SubscriptionMaster getSubscriptionsbyUser(String Username);
+    Collection<SubscriptionMaster> getSubscriptionsbyUser(String userId);
 
     //Payment
     Collection<PaymentMaster> getAllPaymentDetails();
 
-    PaymentMaster getPaymentDetailsByUser(String Username);
-    
+    Collection<PaymentMaster> getPaymentDetailsByUser(String username);
+
     //Users
     Collection<UserMaster> getAllUsers();
-    
+
 }

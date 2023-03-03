@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "place_category")
@@ -34,12 +34,12 @@ public class PlaceCategory implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Id")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
     private String id;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
     @OneToMany(mappedBy = "categoryId", fetch = FetchType.LAZY)
     private Collection<PlaceMaster> placeMasterCollection;

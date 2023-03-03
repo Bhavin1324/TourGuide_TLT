@@ -13,7 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -26,7 +28,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "place_master")
@@ -41,43 +43,52 @@ public class PlaceMaster implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Id")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
     private String id;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Address")
+    @Column(name = "address")
     private String address;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Longitude")
+    @Column(name = "longitude")
     private String longitude;
     @Lob
     @Size(max = 65535)
-    @Column(name = "Latitude")
+    @Column(name = "latitude")
     private String latitude;
-    @Column(name = "OpeningTime")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "opening_time")
+    @Temporal(TemporalType.TIME)
     private Date openingTime;
-    @Column(name = "ClosingTime")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "closing_time")
+    @Temporal(TemporalType.TIME)
     private Date closingTime;
     @Lob
+    @Size(max = 2147483647)
+    @Column(name = "images")
+    private String images;
+    @Lob
     @Size(max = 16777215)
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
-    @JoinColumn(name = "CityId", referencedColumnName = "id")
+    @JoinTable(name = "place_guide_mapping", joinColumns = {
+        @JoinColumn(name = "place_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "guide_id", referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<GuideMaster> guideMasterCollection;
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Cities cityId;
-    @JoinColumn(name = "CategoryId", referencedColumnName = "Id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PlaceCategory categoryId;
     @OneToMany(mappedBy = "placeId", fetch = FetchType.LAZY)
-    private Collection<BusMaster> busMasterCollection;
+    private Collection<AppointmentMaster> appointmentMasterCollection;
 
     public PlaceMaster() {
     }
@@ -142,12 +153,28 @@ public class PlaceMaster implements Serializable {
         this.closingTime = closingTime;
     }
 
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Collection<GuideMaster> getGuideMasterCollection() {
+        return guideMasterCollection;
+    }
+
+    public void setGuideMasterCollection(Collection<GuideMaster> guideMasterCollection) {
+        this.guideMasterCollection = guideMasterCollection;
     }
 
     public Cities getCityId() {
@@ -166,12 +193,12 @@ public class PlaceMaster implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public Collection<BusMaster> getBusMasterCollection() {
-        return busMasterCollection;
+    public Collection<AppointmentMaster> getAppointmentMasterCollection() {
+        return appointmentMasterCollection;
     }
 
-    public void setBusMasterCollection(Collection<BusMaster> busMasterCollection) {
-        this.busMasterCollection = busMasterCollection;
+    public void setAppointmentMasterCollection(Collection<AppointmentMaster> appointmentMasterCollection) {
+        this.appointmentMasterCollection = appointmentMasterCollection;
     }
 
     @Override

@@ -1,4 +1,3 @@
-
 package com.tlt.ejb;
 
 import com.tlt.entities.GuideMaster;
@@ -16,13 +15,16 @@ import javax.persistence.PersistenceContext;
 
 @Stateful
 public class Admin implements AdminLocal {
+
     @PersistenceContext(unitName = "TLT_Persistance")
     EntityManager em;
-    
+
+    // implementation of methods related to places
     @Override
     public void insertPlace(PlaceMaster data) {
-        if(data == null)
+        if (data == null) {
             return;
+        }
         em.persist(data);
     }
 
@@ -34,113 +36,139 @@ public class Admin implements AdminLocal {
 
     @Override
     public void updatePlace(String id, PlaceMaster newPlaceData) {
-       PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, id);
-       if(place != null){
-           em.merge(newPlaceData);
-       }
+        PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, id);
+        if (place != null) {
+            em.merge(newPlaceData);
+        }
     }
 
     @Override
     public Collection<PlaceMaster> getAllPlaces() {
-       Collection<PlaceMaster> places = em.createNamedQuery("PlaceMaster.findAll").getResultList();
-       return places;
+        Collection<PlaceMaster> places = em.createNamedQuery("PlaceMaster.findAll").getResultList();
+        return places;
     }
 
     @Override
     public PlaceMaster getPlaceById(String id) {
         PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, id);
-       return place;
+        return place;
     }
 
     @Override
-    public Collection<PlaceMaster> getPlacesByCategory(PlaceCategory categoryId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<PlaceMaster> getPlacesByCategory(String categoryId) {
+        Collection<PlaceMaster> places = em.createNamedQuery("PlaceMaster.findByCategoryId").setParameter("categoryId", categoryId).getResultList();
+        return places;
     }
 
     @Override
-    public PlaceMaster getPlacesByName(String Name) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<PlaceMaster> getPlacesByName(String Name) {
+        Collection<PlaceMaster> places = em.createNamedQuery("PlaceMaster.findByPlaceName").setParameter("placeName", Name).getResultList();
+        return places;
     }
 
+    // implementation of methods related to guide
     @Override
     public void insertGuide(GuideMaster data) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (data == null) {
+            return;
+        }
+        em.persist(data);
     }
 
     @Override
     public void deleteGuide(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        GuideMaster guide = (GuideMaster) em.find(GuideMaster.class, id);
+        em.remove(guide);
     }
 
     @Override
     public void updateGuide(String id, GuideMaster newGuideData) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        GuideMaster guide = (GuideMaster) em.find(GuideMaster.class, id);
+        if (guide != null) {
+            em.merge(newGuideData);
+        }
     }
 
     @Override
     public GuideMaster getGuideById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        GuideMaster guide = (GuideMaster) em.find(GuideMaster.class, id);
+        return guide;
     }
 
     @Override
     public Collection<GuideMaster> getAllGuides() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Collection<GuideMaster> guides = em.createNamedQuery("GuideMaster.findAll").getResultList();
+        return guides;
     }
 
     @Override
     public Collection<GuideMaster> getGuideByPlace(String PlaceId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, PlaceId);
+        return place.getGuideMasterCollection();
     }
 
+    // implementation of method related to subscription
     @Override
-    public void insertSubscriptionModel(SubscriptionModel newSubModel) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void insertSubscriptionModel(SubscriptionModel data) {
+        if(data == null) 
+            return;
+        em.persist(data);
     }
 
     @Override
     public void deleteSubscriptionModel(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       SubscriptionModel subModel = (SubscriptionModel) em.find(SubscriptionModel.class, id);
+       em.remove(subModel);
     }
 
     @Override
-    public void updateSubscriptionModel(String id, SubscriptionModel subModel) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void updateSubscriptionModel(String id, SubscriptionModel newSubscriptionModel) {
+         SubscriptionModel subModel = (SubscriptionModel) em.find(SubscriptionModel.class, id);
+        if (subModel != null) {
+            em.merge(newSubscriptionModel);
+        }
     }
 
     @Override
-    public SubscriptionModel getSubModelById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public SubscriptionModel getSubscriptionModelById(String id) {
+        SubscriptionModel subModel = (SubscriptionModel) em.find(SubscriptionModel.class, id);
+        return subModel;
     }
 
     @Override
-    public Collection<SubscriptionModel> getSubModelByName(String modelName) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<SubscriptionModel> getSubscriptionModelByName(String modelName) {
+        Collection<SubscriptionModel> subscriptionModels = em.createNamedQuery("SubscriptionModel.findByName").setParameter("name", modelName).getResultList();
+        return subscriptionModels;
     }
 
     @Override
     public Collection<SubscriptionMaster> getAllSubscriptions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Collection<SubscriptionMaster> subscriptions = em.createNamedQuery("SubscriptionMaster.findAll").getResultList();
+        return subscriptions;
     }
 
     @Override
-    public SubscriptionMaster getSubscriptionsbyUser(String Username) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<SubscriptionMaster> getSubscriptionsbyUser(String userId) {
+        UserMaster user = (UserMaster) em.find(UserMaster.class, userId);
+        return user.getSubscriptionMasterCollection();
     }
 
     @Override
     public Collection<PaymentMaster> getAllPaymentDetails() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Collection<PaymentMaster> payments = em.createNamedQuery("PaymentMaster.findAll").getResultList();
+        return payments;
     }
 
     @Override
-    public PaymentMaster getPaymentDetailsByUser(String Username) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<PaymentMaster> getPaymentDetailsByUser(String username) {
+        UserMaster user = (UserMaster) em.find(UserMaster.class, username);
+        return user.getPaymentMasterCollection();
     }
 
     @Override
     public Collection<UserMaster> getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Collection<UserMaster> users = em.createNamedQuery("UserMaster.findAll").getResultList();
+        return users;
     }
-        
 
 }

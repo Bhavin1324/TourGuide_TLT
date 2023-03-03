@@ -5,7 +5,6 @@
 package com.tlt.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,7 +16,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,7 +24,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "payment_master")
@@ -40,31 +38,32 @@ public class PaymentMaster implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Id")
+    @Size(min = 1, max = 200)
+    @Column(name = "id")
     private String id;
-    @Column(name = "CreatedAt")
+    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Lob
-    @Size(max = 65535)
-    @Column(name = "CardDetails")
+    @Size(max = 16777215)
+    @Column(name = "card_details")
     private String cardDetails;
     @Lob
     @Size(max = 65535)
-    @Column(name = "PaymentStatus")
+    @Column(name = "payment_status")
     private String paymentStatus;
-    @OneToMany(mappedBy = "paymentId", fetch = FetchType.LAZY)
-    private Collection<SubscriptionMaster> subscriptionMasterCollection;
-    @JoinColumn(name = "GuideId", referencedColumnName = "Id")
+    @JoinColumn(name = "guide_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
-    @JoinColumn(name = "SubscriptionId", referencedColumnName = "Id")
+    @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PaymentMethod paymentMethodId;
+    @JoinColumn(name = "subscription_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionMaster subscriptionId;
-    @JoinColumn(name = "Username", referencedColumnName = "Username")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private UserMaster username;
+    private UserMaster userId;
 
     public PaymentMaster() {
     }
@@ -105,20 +104,20 @@ public class PaymentMaster implements Serializable {
         this.paymentStatus = paymentStatus;
     }
 
-    public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {
-        return subscriptionMasterCollection;
-    }
-
-    public void setSubscriptionMasterCollection(Collection<SubscriptionMaster> subscriptionMasterCollection) {
-        this.subscriptionMasterCollection = subscriptionMasterCollection;
-    }
-
     public GuideMaster getGuideId() {
         return guideId;
     }
 
     public void setGuideId(GuideMaster guideId) {
         this.guideId = guideId;
+    }
+
+    public PaymentMethod getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     public SubscriptionMaster getSubscriptionId() {
@@ -129,12 +128,12 @@ public class PaymentMaster implements Serializable {
         this.subscriptionId = subscriptionId;
     }
 
-    public UserMaster getUsername() {
-        return username;
+    public UserMaster getUserId() {
+        return userId;
     }
 
-    public void setUsername(UserMaster username) {
-        this.username = username;
+    public void setUserId(UserMaster userId) {
+        this.userId = userId;
     }
 
     @Override
