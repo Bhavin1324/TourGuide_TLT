@@ -6,6 +6,7 @@ package com.tlt.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -129,7 +130,8 @@ public class UserMaster implements Serializable {
     public void setGuideMasterCollection(Collection<GuideMaster> guideMasterCollection) {
         this.guideMasterCollection = guideMasterCollection;
     }
-
+    
+    @JsonbTransient
     public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {
         return subscriptionMasterCollection;
     }
@@ -138,6 +140,7 @@ public class UserMaster implements Serializable {
         this.subscriptionMasterCollection = subscriptionMasterCollection;
     }
 
+    @JsonbTransient
     public Collection<PaymentMaster> getPaymentMasterCollection() {
         return paymentMasterCollection;
     }
@@ -154,6 +157,7 @@ public class UserMaster implements Serializable {
         this.userRoleCollection = userRoleCollection;
     }
 
+    @JsonbTransient
     public Collection<AppointmentMaster> getAppointmentMasterCollection() {
         return appointmentMasterCollection;
     }

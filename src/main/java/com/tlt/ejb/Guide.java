@@ -1,34 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/J2EE/EJB30/StatefulEjbClass.java to edit this template
- */
 package com.tlt.ejb;
 
+import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.GuideMaster;
+import com.tlt.entities.UserMaster;
 import java.util.Collection;
 import javax.ejb.Stateful;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-/**
- *
- * @author kunal
- */
 @Stateful
 public class Guide implements GuideLocal {
 
+    @PersistenceContext(unitName = "TLT_Persistance")
+    EntityManager em;
+
     @Override
-    public Collection<GuideMaster> getAllAppointments() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<AppointmentMaster> getAllAppointments() {
+        Collection<AppointmentMaster> appointments = em.createNamedQuery("AppointmentMaster.findAll").getResultList();
+        return appointments;
     }
 
     @Override
-    public Collection<GuideMaster> getAllAppointmentsByUserame(String Username) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<AppointmentMaster> getAllAppointmentsByUserame(String Username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", Username);
+        return user.getAppointmentMasterCollection();
     }
 
-    @Override
-    public void updateAppointmentStatus() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-   
 }
