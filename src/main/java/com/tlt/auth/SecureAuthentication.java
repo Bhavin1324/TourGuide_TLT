@@ -41,6 +41,8 @@ public class SecureAuthentication implements Serializable, HttpAuthenticationMec
 
     @Inject
     TokenProvider tokenProvider;
+    Cookie[] cs;
+    Cookie ck;
 
 //    @Inject
 //    LoginBean lbean;
@@ -48,6 +50,11 @@ public class SecureAuthentication implements Serializable, HttpAuthenticationMec
     public AuthenticationStatus validateRequest(HttpServletRequest req, HttpServletResponse res, HttpMessageContext ctx) throws AuthenticationException {
         try {
 
+             for(Cookie c : (cs = req.getCookies())){
+                if(c.getName().equals("Token")){
+                    ck = c;
+                }
+            }
             if (req.getRequestURI().contains("Logout")) {
                 req.logout();
                 KeepRecord.reset();
@@ -108,8 +115,10 @@ public class SecureAuthentication implements Serializable, HttpAuthenticationMec
                     return ctx.doNothing();
                 }
             }
-            if (req.getRequestURI().contains("Login") && KeepRecord.getToken() != null) {
+           
+            if ((req.getRequestURI().equals("/tlt_1.0/") || req.getRequestURI().contains("Login"))&& KeepRecord.getToken() != null && ck.getName().equals("Token")) {
 
+                System.out.println(req.getRequestURI());
                 if (KeepRecord.getRoles().contains("admin")) {
                     res.sendRedirect("admin/Admin.jsf");
                 }
