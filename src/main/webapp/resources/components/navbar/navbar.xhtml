@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <div class="card">
+            <h:form>
+                <p:growl id="messages"/>
+                <p:menubar styleClass="custom-menuflex">
+                    <div style="display: block">
+                        <p:menuitem styleClass="p-2">
+                            <p:graphicImage value="/images/tlt-logo.png" height="40"/>
+                        </p:menuitem>
+                        <p:menuitem style="font-family: cursive" styleClass="pl-0 pr-6 text-xl branding font-italic" value="Landmark Tour"/>
+                    </div>
+                    <p:menuitem value="Home"/>
+
+                    <p:submenu label="Explor">
+                        <p:menuitem value="Nearby places" icon="pi pi-fw pi-map-marker"/>
+                        <p:menuitem value="Nearyby buses" icon="pi pi-fw pi-flag"/>
+                        <p:menuitem value="Recommand me" icon="pi pi-fw pi-star"/>
+                    </p:submenu>
+
+                    <p:submenu label="Guide">
+                        <p:menuitem value="Personal guide" icon="pi pi-fw pi-user"/>
+                        <p:menuitem value="Join guide" icon="pi pi-fw pi-users"/>
+                    </p:submenu>
+
+                    <p:menuitem value="Hotels">
+                    </p:menuitem>
+
+                    <p:divider layout="vertical"/>
+
+                    <p:menuitem value="Gallary"/>
+                    <p:menuitem value="About us"/>
+                    
+                    <f:facet name="options">
+                        <p:button value="Landmark Tour prime" icon="pi pi-fw pi-verified" class="" styleClass="ui-button-raised ui-button-help ui-button-flat my-2 mx-2"/>
+                        <p:button value="Sign in" styleClass="ui-button-raised ui-button-help my-2 mx-2"/>
+                    </f:facet>
+                </p:menubar>
+            </h:form>
+        </div>
+    </cc:implementation>
+</html>
