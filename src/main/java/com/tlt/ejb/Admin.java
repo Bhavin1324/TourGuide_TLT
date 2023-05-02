@@ -9,10 +9,12 @@ import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.annotation.security.DeclareRoles;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+@DeclareRoles("Admin")
 @Stateful
 public class Admin implements AdminLocal {
 
