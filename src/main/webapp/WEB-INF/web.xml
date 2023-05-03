@@ -19,7 +19,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>jsf/index.jsf</welcome-file>
+        <welcome-file>Login.jsf</welcome-file>
     </welcome-file-list>
     <resource-ref>
         <res-ref-name>jdbc/TLT</res-ref-name>
@@ -27,37 +27,52 @@
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
-    <mime-mapping>
-        <extension>ico</extension>
-        <mime-type>image/x-icon</mime-type>
-    </mime-mapping>
-    <mime-mapping>
-        <extension>woff</extension>
-        <mime-type>application/font-woff</mime-type>
-    </mime-mapping>
-    <mime-mapping>
-        <extension>woff2</extension>
-        <mime-type>application/font-woff2</mime-type>
-    </mime-mapping>
-    <mime-mapping>
-        <extension>ttf</extension>
-        <mime-type>application/font-sfnt</mime-type>
-    </mime-mapping>
-    <mime-mapping>
-        <extension>eot</extension>
-        <mime-type>application/vnd.ms-fontobject</mime-type>
-    </mime-mapping>
-    <mime-mapping>
-        <extension>otf</extension>
-        <mime-type>font/opentype</mime-type>
-    </mime-mapping>
-
-    <mime-mapping>
-        <extension>svg</extension>
-        <mime-type>image/svg+xml</mime-type>
-    </mime-mapping>
-      <context-param>
-        <param-name>primefaces.FLEX</param-name>
-        <param-value>true</param-value>
-    </context-param>
+    <security-constraint>
+        <display-name>Secure pages for admin</display-name>
+        <web-resource-collection>
+            <web-resource-name>Admin Resource</web-resource-name>
+            <description>Admin Secured Resources</description>
+            <url-pattern>/admin/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>Only for Admin</description>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Secure pages for Tourists</display-name>
+        <web-resource-collection>
+            <web-resource-name>Tourist's Resource</web-resource-name>
+            <description>Tourist Secured Resources</description>
+            <url-pattern>/tourist/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>Only for Tourist</description>
+            <role-name>tourist</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Secure pages for Guides</display-name>
+        <web-resource-collection>
+            <web-resource-name>Guide's Resource</web-resource-name>
+            <description>Guide Secured Resources</description>
+            <url-pattern>/guide/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>Only for Guide</description>
+            <role-name>guide</role-name>
+        </auth-constraint>
+    </security-constraint>
 </web-app>
