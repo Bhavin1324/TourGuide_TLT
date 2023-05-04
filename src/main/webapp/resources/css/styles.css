@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+*,::before,::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.branding{
+    font-family: cursive;
+}
+.background {
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    background-color: #E6E6FA;
+    height: 200%;
+    width: 100%;
+    background-size: cover;
+}
+
+.login-card {
+    height: 80%;
+    width: 80%;
+    background-color: #425fec;
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    display: flex;
+    border: 0;
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.card-desc {
+    background: url("../images/travel.jpg") no-repeat top center;
+    background-size: cover;
+    width: 150%;
+    overflow: hidden;
+    border-radius: 20px;
+    color: white;
+    padding: 30px;
+}
+
+.card-form {
+    padding: 20px 50px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.input-text-box {
+    padding: 8px 0px;
+    width: 100%;
+    font-size: 18px;
+    background: none;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid white;
+    color: white;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.input-text-box::placeholder {
+    color: white;
+    opacity: 60%;
+}
+
+.input-text-box:focus {
+    border-color: #390da0;
+}
+
+.login-button {
+    margin: 30px 0px 10px 0px;
+    width: 100%;
+    padding: 10px 20px;
+    border-radius: 200px;
+    border: 0;
+    font-size: 18px;
+    background-color: white;
+    color: #425fec;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    cursor: pointer;
+    transform: scale(1);
+    transition: all 0.3s ease;
+}
+
+.login-button:hover,
+.login-button:focus {
+    transform: scale(.95);
+}
+
+.login-button-inverse {
+    margin: 4px 0px;
+    width: 100%;
+    padding: 10px 20px;
+    border-radius: 200px;
+    border: 1px solid white;
+    font-size: 18px;
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+    transform: scale(1);
+    transition: all 0.3s ease;
+}
+
+.login-button-inverse:hover,
+.login-button-inverse:focus {
+    transform: scale(.95);
+    background-color: white;
+    color: #425fec;
+}
+.card-form-heading {
+    margin: 20px 0px 40px 0px;
+}
+
+.card-form-heading-secondary {
+    font-size: 18px;
+}
+
+.card-form-heading-primary {
+    font-size: 32px;
+    font-weight: 500;
+}
+
+@media(min-width:992px) {
+    .card-desc {
+        width: 150%;
+    }
+}
+
+@media(min-width:768px) and (max-width:991px) {
+    .card-desc {
+        width: 60%;
+    }
+
+    .card-form-heading-primary {
+        font-size: 30px;
+        font-weight: 500;
+    }
+}
+
+@media(max-width:767px) {
+    .login-card {
+        width: 90%;
+    }
+
+    .card-desc {
+        display: none;
+    }
+
+    .card-form {
+        width: 100%;
+        padding: 20px 25px;
+    }
+
+    .login-button {
+        margin: 15px 0px 8px 0px;
+    }
+
+    .card-form-heading {
+        margin: 20px 0px 30px 0px;
+    }
+
+    .card-form-heading-primary {
+        font-size: 28px;
+        font-weight: 500;
+    }
+}

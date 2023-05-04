@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
  */
-package com.tlt.CDIBeans;
+package com.tlt.cdis;
 
 import com.tlt.record.KeepRecord;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class LoginBean {
     public void Logout(boolean status) {
         try {
             KeepRecord.reset();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/tlt_1.0/Logout.jsf");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/TheLandmarkTour/Logout.jsf");
         } catch (IOException ex) {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
         }

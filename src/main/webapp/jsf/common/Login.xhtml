@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:outputStylesheet library="css" name="styles.css"/>  
+
+    <h:body class="styled-body">
+        <div class="background"></div>
+        <div class="login-card">
+            <div class="card-desc">
+            </div>
+            <div class="card-form">
+                <div>
+                    <div class="card-form-heading">
+                        <div class="card-form-heading-secondary">Welcome to</div>
+                        <div class="card-form-heading-primary">The Landmark Tour</div>
+                    </div>
+                    <div style="font-size: 25px; margin-bottom: 25px;">Login</div>
+                    <form method="POST">
+                        <div>
+                            <input type="text" id="username" name="username" value="" placeholder="Enter username" class="input-text-box"/>
+                        </div>
+                        <div>
+                            <input type="password" id="password" name="password" value="" placeholder="Enter password" class="input-text-box"/>
+                        </div>
+                        <div>
+                            <input type="submit" value="Login" class="login-button"/>
+                        </div>
+                        <div>
+                            <input type="button" value="Sign up" class="login-button-inverse"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <h:outputText id= "errorStatus" style="color:red" value="#{loginBean.errorStatus}"/>
+    </h:body> 
+</html>
+
