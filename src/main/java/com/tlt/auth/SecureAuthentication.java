@@ -1,14 +1,14 @@
-package com.tlt.auth;
 
-import static com.tlt.constants.JwtConstants.*;
 import com.tlt.JwtConfig.JWTCredential;
 import com.tlt.JwtConfig.TokenProvider;
+import static com.tlt.constants.JwtConstants.BEARER;
+import static com.tlt.constants.JwtConstants.TOKEN;
 import static com.tlt.constants.UrlConstants.TO_ADMIN;
 import static com.tlt.constants.UrlConstants.TO_GUIDE;
 import static com.tlt.constants.UrlConstants.TO_LOGIN;
 import static com.tlt.constants.UrlConstants.TO_TOURIST;
 import com.tlt.record.KeepRecord;
-import java.io.Serializable;
+import io.jsonwebtoken.ExpiredJwtException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,147 +28,128 @@ import javax.servlet.http.HttpServletResponse;
 
 @Named
 @RequestScoped
-public class SecureAuthentication implements Serializable, HttpAuthenticationMechanism {
+public class SecureAuthentication implements HttpAuthenticationMechanism {
 
     @Inject
     IdentityStoreHandler handler;
     CredentialValidationResult result;
-    AuthenticationStatus status;
 
     @Inject
     TokenProvider tokenProvider;
-    Cookie[] cs;
+    String token;
     Cookie ck;
 
     @Override
-    public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext ctx) throws AuthenticationException {
+    public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context) throws AuthenticationException {
         try {
-
-            for (Cookie c : (cs = request.getCookies())) {
-                if (c.getName().equals(TOKEN)) {
-                    ck = c;
-                }
-            }
             if (request.getRequestURI().contains("Logout")) {
                 request.logout();
                 KeepRecord.reset();
-                Cookie[] cookies = request.getCookies();
-
-                if (cookies != null) {
-                    for (Cookie c : cookies) {
-                        if (c.getName().equals(TOKEN)) {
-                            c.setValue("");
-                            c.setMaxAge(0);
-                            response.addCookie(c);
-                        }
-                    }
-                }
+                request.getSession().removeAttribute(TOKEN);
+                clearTokenFromCookie(request, response);
                 response.sendRedirect(TO_LOGIN);
-                return ctx.doNothing();
-            }
-        } catch (Exception e) {
-            System.out.println("Error Found : " + e);
-        }
-
-        String token = extractToken(ctx);
-        try {
-            if (token == null && request.getParameter("username") != null) {
-                String username = request.getParameter("username");
-                String password = request.getParameter("password");
-
-                Credential credentials = new UsernamePasswordCredential(username, new Password(password));
-                result = handler.validate(credentials);
-
-                if (result.getStatus() == Status.VALID) {
-                    KeepRecord.setErrorStatus("");
-                    AuthenticationStatus status = createToken(result, ctx, response);
-
-                    status = ctx.notifyContainerAboutLogin(result);
-
-                    KeepRecord.setPrincipal(result.getCallerPrincipal());
-                    KeepRecord.setRoles(result.getCallerGroups());
-                    KeepRecord.setCredential(credentials);
-
-                    if (result.getCallerGroups().contains("admin")) {
-                        response.sendRedirect(TO_ADMIN);
-                    }
-                    if (result.getCallerGroups().contains("guide")) {
-                        response.sendRedirect(TO_GUIDE);
-                    }
-                    if (result.getCallerGroups().contains("tourist")) {
-                        response.sendRedirect(TO_TOURIST);
-                    }
-                } else {
-                    KeepRecord.setErrorStatus("Wrong Username or Password");
-                    response.sendRedirect(TO_LOGIN);
-                    return ctx.doNothing();
-                }
-            }
-
-            if ((request.getRequestURI().equals("/TheLandmarkTour/") || request.getRequestURI().contains("Login")) && KeepRecord.getToken() != null && ck.getName().equals(TOKEN)) {
-
-                System.out.println(request.getRequestURI());
-                if (KeepRecord.getRoles().contains("admin")) {
-                    response.sendRedirect(TO_ADMIN);
-                }
-                if (KeepRecord.getRoles().contains("guide")) {
-                    response.sendRedirect(TO_GUIDE);
-                }
-                if (KeepRecord.getRoles().contains("tourist")) {
-                    response.sendRedirect(TO_TOURIST);
-                }
-            }
-
-            if (KeepRecord.getToken() != null) {
-                ctx.notifyContainerAboutLogin(KeepRecord.getPrincipal(), KeepRecord.getRoles());
-            }
-
-            if (token != null) {
-                // validation of the jwt credential
-                return validateToken(token, ctx);
-            } else if (ctx.isProtected()) {
-                // A protected resource is a resource for which a constraint has been defined.
-                // if there are no credentials and the resource is protected, we response with unauthorized status
-                return ctx.responseUnauthorized();
+                return context.doNothing();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return ctx.doNothing();
+        if (KeepRecord.getToken() != null) {
+            token = KeepRecord.getToken();
+        }
+
+        try {
+            if (token == null && request.getParameter("username") != null) {
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
+
+                Credential credential = new UsernamePasswordCredential(username, new Password(password));
+                result = handler.validate(credential);
+
+                if (result.getStatus() == Status.VALID) {
+                    KeepRecord.setErrorStatus("");
+                    AuthenticationStatus status = createToken(result, context);
+
+                    status = context.notifyContainerAboutLogin(result);
+
+                    KeepRecord.setPrincipal(result.getCallerPrincipal());
+                    KeepRecord.setRoles(result.getCallerGroups());
+                    KeepRecord.setCredential(credential);
+                    if (result.getCallerGroups().contains("admin")) {
+                        response.sendRedirect(TO_ADMIN);
+                    }
+                    if (result.getCallerGroups().contains("tourist")) {
+                        response.sendRedirect(TO_TOURIST);
+                    }
+                    if (result.getCallerGroups().contains("guide")) {
+                        response.sendRedirect(TO_GUIDE);
+                    }
+                    return status;
+                } else {
+                    KeepRecord.setErrorStatus("Either username or password is wrong!");
+                    response.sendRedirect(TO_LOGIN);
+                    return context.doNothing();
+                }
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Exception occured  " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        if (KeepRecord.getToken() != null) {
+            context.notifyContainerAboutLogin(KeepRecord.getPrincipal(), KeepRecord.getRoles());
+        }
+
+        if (token != null) {
+            return validateToken(token, context);
+        } else if (context.isProtected()) {
+            return context.responseUnauthorized();
+        }
+        return context.doNothing();
     }
 
-    public AuthenticationStatus validateToken(String token, HttpMessageContext context) {
+    private AuthenticationStatus validateToken(String token, HttpMessageContext context) {
         try {
             if (tokenProvider.validateToken(token)) {
                 JWTCredential credential = tokenProvider.getCredential(token);
                 return context.notifyContainerAboutLogin(credential.getPrincipal(), credential.getAuthorities());
             }
             return context.responseUnauthorized();
-        } catch (Exception ex) {
+        } catch (ExpiredJwtException ex) {
+            System.out.println("Token expired exception occured!");
             ex.printStackTrace();
             return context.responseUnauthorized();
         }
     }
 
-    public AuthenticationStatus createToken(CredentialValidationResult result, HttpMessageContext context, HttpServletResponse response) {
+    private AuthenticationStatus createToken(CredentialValidationResult result, HttpMessageContext context) {
         String jwt = tokenProvider.createToken(result.getCallerPrincipal().getName(), result.getCallerGroups(), false);
         KeepRecord.setToken(jwt);
-        context.getResponse().addCookie(new Cookie(TOKEN, BEARER + jwt));
+        Cookie cookie = new Cookie(TOKEN, BEARER + jwt);
+        cookie.setPath("/TheLandmarkTour");
+        context.getResponse().addCookie(cookie);
+        context.getRequest().getSession().setAttribute(TOKEN, BEARER + jwt);
         return context.notifyContainerAboutLogin(result.getCallerPrincipal(), result.getCallerGroups());
     }
 
-    public String extractToken(HttpMessageContext context) {
-        Cookie[] cookies = context.getRequest().getCookies();
+    private String extractToken(HttpMessageContext context) {
+        return context.getRequest().getSession().getAttribute(TOKEN).toString();
+    }
+
+    public boolean clearTokenFromCookie(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie c : cookies) {
                 if (c.getName().equals(TOKEN)) {
-                    String token = c.getValue().substring(BEARER.length(), c.getValue().length());
-                    KeepRecord.setToken(token);
-                    return token;
+                    c.setValue("");
+                    c.setMaxAge(0);
+                    c.setPath("/TheLandmarkTour");
+                    response.addCookie(c);
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 }

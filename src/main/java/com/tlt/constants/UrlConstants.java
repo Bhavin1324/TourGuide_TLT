@@ -8,4 +8,6 @@ public final class UrlConstants {
     public static final String TO_ADMIN = BASE_URL + "admin/Home.jsf";
     public static final String TO_GUIDE = BASE_URL + "guide/Home.jsf";
     public static final String TO_TOURIST = BASE_URL + "tourist/Home.jsf";
+    public static final String TO_LOGOUT = BASE_URL + "common/Logout.jsf";
+    public static final String TO_FORWARD_LOGOUT = "common/Logout.jsf";
 }

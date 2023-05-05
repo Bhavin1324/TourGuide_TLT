@@ -1,7 +1,9 @@
 
 package com.tlt.JwtConfig;
 
+import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
@@ -14,7 +16,7 @@ dataSourceLookup = "jdbc/TLT",
         priority = 30
 )
 
-@ApplicationScoped  
-public class Project {
+@SessionScoped  
+public class Project implements Serializable{
     
 }
