@@ -37,7 +37,6 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
     @Inject
     TokenProvider tokenProvider;
     String token;
-    Cookie ck;
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context) throws AuthenticationException {
@@ -91,7 +90,18 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                     return context.doNothing();
                 }
             }
-            
+            if (request.getSession().getAttribute(TOKEN) != null && ((request.getRequestURI().contains("Login")) || request.getRequestURI().equals("/TheLandmarkTour/"))) {
+                if (KeepRecord.getRoles().contains("admin")) {
+                    response.sendRedirect(TO_ADMIN);
+                }
+                if (KeepRecord.getRoles().contains("tourist")) {
+                    response.sendRedirect(TO_TOURIST);
+                }
+                if (KeepRecord.getRoles().contains("guide")) {
+                    response.sendRedirect(TO_GUIDE);
+                }
+            }
+
         } catch (Exception ex) {
             System.out.println("Exception occured  " + ex.getMessage());
             ex.printStackTrace();
@@ -106,6 +116,12 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
         } else if (context.isProtected()) {
             return context.responseUnauthorized();
         }
+//        try {
+//           
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return context.doNothing();
+//        }
         return context.doNothing();
     }
 
@@ -137,7 +153,7 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
         return context.getRequest().getSession().getAttribute(TOKEN).toString();
     }
 
-    public boolean clearTokenFromCookie(HttpServletRequest request, HttpServletResponse response) {
+    public void clearTokenFromCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie c : cookies) {
@@ -146,6 +162,18 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                     c.setMaxAge(0);
                     c.setPath("/TheLandmarkTour");
                     response.addCookie(c);
+                    return;
+                }
+            }
+        }
+        return;
+    }
+
+    public boolean isCookieExist(HttpMessageContext context) {
+        Cookie[] cookies = context.getRequest().getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals(TOKEN)) {
                     return true;
                 }
             }
