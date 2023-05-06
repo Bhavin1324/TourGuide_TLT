@@ -112,20 +112,21 @@ public class Admin implements AdminLocal {
     // implementation of method related to subscription
     @Override
     public void insertSubscriptionModel(SubscriptionModel data) {
-        if(data == null) 
+        if (data == null) {
             return;
+        }
         em.persist(data);
     }
 
     @Override
     public void deleteSubscriptionModel(String id) {
-       SubscriptionModel subModel = (SubscriptionModel) em.find(SubscriptionModel.class, id);
-       em.remove(subModel);
+        SubscriptionModel subModel = (SubscriptionModel) em.find(SubscriptionModel.class, id);
+        em.remove(subModel);
     }
 
     @Override
     public void updateSubscriptionModel(String id, SubscriptionModel newSubscriptionModel) {
-         SubscriptionModel subModel = (SubscriptionModel) em.find(SubscriptionModel.class, id);
+        SubscriptionModel subModel = (SubscriptionModel) em.find(SubscriptionModel.class, id);
         if (subModel != null) {
             em.merge(newSubscriptionModel);
         }
@@ -171,6 +172,29 @@ public class Admin implements AdminLocal {
     public Collection<UserMaster> getAllUsers() {
         Collection<UserMaster> users = em.createNamedQuery("UserMaster.findAll").getResultList();
         return users;
+    }
+
+    @Override
+    public void insertPlaceCategory(PlaceCategory category) {
+        em.persist(category);
+    }
+
+    @Override
+    public void updatePlaceCategory(String id, PlaceCategory category) {
+        PlaceCategory oldCategory = em.find(PlaceCategory.class, id);
+        oldCategory.setName(category.getName());
+        em.merge(oldCategory);
+    }
+
+    @Override
+    public void deletePlaceCategory(String id) {
+        PlaceCategory p = em.find(PlaceCategory.class, id);
+        em.remove(p);
+    }
+
+    @Override
+    public Collection<PlaceCategory> getAllPlaceCategories() {
+        return em.createNamedQuery("PlaceCategory.findAll").getResultList();
     }
 
 }

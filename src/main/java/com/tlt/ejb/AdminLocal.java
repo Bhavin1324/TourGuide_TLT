@@ -65,4 +65,13 @@ public interface AdminLocal {
     //Users
     Collection<UserMaster> getAllUsers();
 
+    //Category
+    void insertPlaceCategory(PlaceCategory category);
+
+    void updatePlaceCategory(String id, PlaceCategory category);
+
+    void deletePlaceCategory(String id);
+
+    Collection<PlaceCategory> getAllPlaceCategories();
+
 }
