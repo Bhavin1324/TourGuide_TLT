@@ -8,15 +8,12 @@ import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.PlaceCategory;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 
@@ -24,9 +21,9 @@ import org.primefaces.PrimeFaces;
  *
  * @author kunal
  */
-@Named(value = "adminBean")
+@Named(value = "placeCatBean")
 @SessionScoped
-public class AdminBean implements Serializable {
+public class PlaceCategoryBean implements Serializable {
 
     @EJB
     AdminLocal ad;
@@ -38,7 +35,7 @@ public class AdminBean implements Serializable {
     /**
      * Creates a new instance of AdminBean
      */
-    public AdminBean() {
+    public PlaceCategoryBean() {
         pc = new ArrayList<>();
         selectedCategories = new ArrayList<>();
         selectedCategory = new PlaceCategory();
@@ -94,22 +91,18 @@ public class AdminBean implements Serializable {
             this.selectedCategory = null;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Updated"));
         }
-
         PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
     }
 
     public void updateProduct() {
         if (this.selectedCategory.getId() != null) {
-//            this.pc.add(this.selectedCategory);
             ad.updatePlaceCategory(selectedCategory.getId(), selectedCategory);
-//            ad.insertPlaceCategory(selectedCategory);
             this.selectedCategory = null;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Added"));
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Updated"));
         }
-
         PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
     }
@@ -119,7 +112,6 @@ public class AdminBean implements Serializable {
             int size = this.selectedCategories.size();
             return size > 1 ? size + " selected" : "1 selected";
         }
-
         return "Delete";
     }
 
@@ -128,18 +120,24 @@ public class AdminBean implements Serializable {
     }
 
     public void deleteProduct() {
-        System.out.println("=>>>>>>>>>>> " + this.catid);
         ad.deletePlaceCategory(catid);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
     }
 
     public void deleteSelectedProducts() {
-//        this.products.removeAll(this.selectedProducts);
-//        this.selectedProducts = null;
-
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Products Removed"));
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
-        PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
+        try {
+            for (PlaceCategory p : selectedCategories) {
+                ad.deletePlaceCategory(p.getId());
+            }
+            selectedCategories = null;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Products Removed"));
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
+            PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error Deleting Category"));
+            PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
+        }
     }
+
 }
