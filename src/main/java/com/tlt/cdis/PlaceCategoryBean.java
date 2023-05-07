@@ -80,7 +80,7 @@ public class PlaceCategoryBean implements Serializable {
 
     public void saveProduct() {
         if (this.selectedCategory.getId() == null) {
-            this.selectedCategory.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
+            this.selectedCategory.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
             this.pc.add(this.selectedCategory);
             ad.insertPlaceCategory(selectedCategory);
             this.selectedCategory = null;

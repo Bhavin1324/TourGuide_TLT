@@ -116,12 +116,6 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
         } else if (context.isProtected()) {
             return context.responseUnauthorized();
         }
-//        try {
-//           
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            return context.doNothing();
-//        }
         return context.doNothing();
     }
 

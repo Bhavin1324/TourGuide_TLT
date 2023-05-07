@@ -2,20 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:sidebar="http://xmlns.jcp.org/jsf/composite/components/sidebar"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      >
     <h:head>
-        <title>Facelet Title</title>
+        <title>Subscription model</title>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
-
-
     </h:head>
     <h:body>
-        <navbar:admin-navbar logoutAction="#{loginBean.Logout()}" sideNavigationBean="#{navigationBean}"/>
-        <div>Admin home page</div>
+       <navbar:admin-navbar logoutAction="#{loginBean.Logout()}" sideNavigationBean="#{navigationBean}"/>
+        <h2>This page is to manage subscription model information</h2>
     </h:body>
-
 </html>
 

@@ -8,40 +8,42 @@
 
     <!-- INTERFACE -->
     <cc:interface>
+        <cc:attribute name="bean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <div class="card">
-
+            <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
             <p:sidebar widgetVar="side_panel">
-                <h3>The Landmr Tour</h3>
-                <p:tabMenu activeIndex="#{param.i}"  orientation="left">
-                    <p:menuitem value="Home"  icon="pi pi-fw pi-home">
-                        <f:param name="i" value="0"/>
-                    </p:menuitem>
-                    <p:menuitem value="Calendar"  icon="pi pi-fw pi-calendar">
-                        <f:param name="i" value="1"/>
-                    </p:menuitem>
-                    <p:menuitem value="Edit"  icon="pi pi-fw pi-pencil"
-                                disabled="true">
-                        <f:param name="i" value="2"/>
-                    </p:menuitem>
-                    <p:menuitem value="Documentation" icon="pi pi-fw pi-file">
-                        <f:param name="i" value="3"/>
-                    </p:menuitem>
-                    <p:menuitem value="Settings" icon="pi pi-fw pi-cog">
-                        <f:param name="i" value="4"/>
-                    </p:menuitem>
-                </p:tabMenu>
-
+                <h3 class="mb-4">Configuration panel</h3>
+                <h:form>
+                    <p:growl id="messages" showDetail="true"/>
+                    <div class="card">
+                        <p:menu toggleable="true" styleClass="border-0 w-full">
+                            <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.toHome()}"/>
+                            <p:submenu label="Manage places">
+                                <p:menuitem styleClass="px-5" value="Place category" action="#{cc.attrs.bean.redirectTo(uc.TO_PLACE_CATEGORY)}" update="messages" icon="pi pi-th-large"/>
+                                <p:menuitem styleClass="px-5" value="Places" action="#{cc.attrs.bean.redirectTo(uc.TO_PLACE)}" update="messages" icon="pi pi-map-marker"/>
+                            </p:submenu>
+                            <p:submenu label="Manage guide">
+                                <p:menuitem styleClass="px-5" value="Guide" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_CONF)}" update="messages" icon="pi pi-user"/>
+                                <p:menuitem styleClass="px-5" value="Appointments" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_APPOINTMENTS_CONF)}" update="messages" icon="pi pi-file-edit"/>
+                            </p:submenu>
+                            <p:submenu label="Users &amp; Payments">
+                                <p:menuitem styleClass="px-5" value="Users" action="#{cc.attrs.bean.redirectTo(uc.TO_USER_CONF)}" update="messages" icon="pi pi-users"/>
+                                <p:menuitem styleClass="px-5" value="Subscriptions" action="#{cc.attrs.bean.redirectTo(uc.TO_SUBSCRIPTION_CONF)}" update="messages" icon="pi pi-verified"/>
+                                <p:menuitem styleClass="px-5" value="Subsctiption model" action="#{cc.attrs.bean.redirectTo(uc.TO_SUBSMODEL_CONF)}" update="messages" icon="pi pi-dollar"/>
+                                <p:menuitem styleClass="px-5" value="Payment" action="#{cc.attrs.bean.redirectTo(uc.TO_PAYMENT_CONF)}" update="messages" icon="pi pi-credit-card"/>
+                            </p:submenu>
+                            <p:submenu label="Manage transport">
+                                <p:menuitem styleClass="px-5" value="Transport" action="#{cc.attrs.bean.redirectTo(uc.TO_TRANSPORT_CONF)}" update="messages" icon="pi pi-car"/>
+                            </p:submenu>
+                            <p:menuitem value="Logout" icon="pi pi-sign-out" action="#{cc.attrs.bean.redirectTo(uc.TO_LOGOUT)}"/>
+                        </p:menu>
+                    </div>
+                </h:form>
             </p:sidebar>
-
-
-
-            <p:commandButton icon="pi pi-bars" type="button" onclick="PF('side_panel').show()" styleClass="mr-2" />
-
-
         </div>
     </cc:implementation>
 </html>
