@@ -4,7 +4,8 @@
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <!-- INTERFACE -->
     <cc:interface>
@@ -12,7 +13,6 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <div class="card">
             <h:form>
                 <p:growl id="messages"/>
                 <p:menubar styleClass="custom-menuflex">
@@ -20,10 +20,9 @@
                         <p:menuitem styleClass="p-2">
                             <p:graphicImage value="/images/tlt-logo.png" height="40"/>
                         </p:menuitem>
-                        <p:menuitem style="font-family: cursive" styleClass="pl-0 pr-6 text-xl branding font-italic" value="Landmark Tour"/>
+                        <p:menuitem style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" styleClass="pl-0 pr-6 text-xl branding font-italic" value="Landmark Tour"/>
                     </div>
                     <p:menuitem value="Home"/>
-
                     <p:submenu label="Explor">
                         <p:menuitem value="Nearby places" icon="pi pi-fw pi-map-marker"/>
                         <p:menuitem value="Nearyby buses" icon="pi pi-fw pi-flag"/>
@@ -49,6 +48,5 @@
                     </f:facet>
                 </p:menubar>
             </h:form>
-        </div>
     </cc:implementation>
 </html>
