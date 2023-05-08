@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.Cities;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceCategory;
@@ -73,5 +74,12 @@ public interface AdminLocal {
     void deletePlaceCategory(String id);
 
     Collection<PlaceCategory> getAllPlaceCategories();
+
+    PlaceCategory getPlaceCategoryById(String catid);
+
+    //City
+    Collection<Cities> getCityByStateId(Integer stateId);
+
+    Cities getCityById(Integer cityid);
 
 }

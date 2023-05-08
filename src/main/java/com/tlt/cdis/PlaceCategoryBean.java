@@ -78,7 +78,7 @@ public class PlaceCategoryBean implements Serializable {
         this.selectedCategory = new PlaceCategory();
     }
 
-    public void saveProduct() {
+    public void saveCategory() {
         if (this.selectedCategory.getId() == null) {
             this.selectedCategory.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
             this.pc.add(this.selectedCategory);
@@ -91,52 +91,39 @@ public class PlaceCategoryBean implements Serializable {
             this.selectedCategory = null;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Updated"));
         }
-        PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
+        PrimeFaces.current().executeScript("PF('manageCategoryDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
     }
-
-    public void updateProduct() {
-        if (this.selectedCategory.getId() != null) {
-            ad.updatePlaceCategory(selectedCategory.getId(), selectedCategory);
-            this.selectedCategory = null;
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Added"));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Updated"));
-        }
-        PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
-    }
-
     public String getDeleteButtonMessage() {
-        if (hasSelectedProducts()) {
+        if (hasSelectedCategories()) {
             int size = this.selectedCategories.size();
             return size > 1 ? size + " selected" : "1 selected";
         }
         return "Delete";
     }
 
-    public boolean hasSelectedProducts() {
+    public boolean hasSelectedCategories() {
         return this.selectedCategories != null && !this.selectedCategories.isEmpty();
     }
 
-    public void deleteProduct() {
+    public void deleteCategory() {
         ad.deletePlaceCategory(catid);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
     }
 
-    public void deleteSelectedProducts() {
+    public void deleteSelectedCategories() {
         try {
             for (PlaceCategory p : selectedCategories) {
                 ad.deletePlaceCategory(p.getId());
             }
             selectedCategories = null;
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Products Removed"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Removed"));
             PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
-            PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
+            PrimeFaces.current().executeScript("PF('dtCategory').clearFilters()");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error Deleting Category"));
-            PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
+            PrimeFaces.current().executeScript("PF('dtCategory').clearFilters()");
         }
     }
 

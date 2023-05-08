@@ -1,9 +1,11 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.Cities;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
+import com.tlt.entities.States;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
@@ -195,6 +197,22 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<PlaceCategory> getAllPlaceCategories() {
         return em.createNamedQuery("PlaceCategory.findAll").getResultList();
+    }
+
+    @Override
+    public Collection<Cities> getCityByStateId(Integer stateId) {
+        States state = em.find(States.class, stateId);
+        return em.createNamedQuery("Cities.findByStateId").setParameter("stateId", state).getResultList();
+    }
+
+    @Override
+    public PlaceCategory getPlaceCategoryById(String catid) {
+        return em.find(PlaceCategory.class, catid);
+    }
+
+    @Override
+    public Cities getCityById(Integer cityid) {
+        return em.find(Cities.class, cityid);
     }
 
 }
