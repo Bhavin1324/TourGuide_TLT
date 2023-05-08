@@ -11,7 +11,7 @@
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200">
         <navbar:admin-navbar logoutAction="#{loginBean.Logout()}" sideNavigationBean="#{navigationBean}"/>
         <div class="my-5">
             <div class="container-fluid mx-3">
@@ -144,7 +144,6 @@
                                     <p:outputLabel for="city">City</p:outputLabel>
 <!--                                    <c:if test="#{placesBean.catid}">-->
                                     <p:selectOneMenu id="city" value="#{placesBean.cityid}" >
-<!--                                        <f:selectItems var="ct" value="#{placesBean.cities}"  itemLabel="#{ct.name}" itemValue="#{ct.id}"/>-->
                                         <f:selectItem itemValue="-1" itemLabel="--Select City--" />
                                         <c:forEach var="c" items="#{placesBean.cities}" >
                                             <f:selectItem itemLabel="#{c.name}" itemValue="#{c.id}" />
