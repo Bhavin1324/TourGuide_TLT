@@ -15,7 +15,6 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.Set;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 @Named(value = "navigationBean")
