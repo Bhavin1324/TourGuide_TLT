@@ -71,10 +71,10 @@
                                 <h:outputText value="#{p.latitude}" />
                             </p:column>
                             <p:column headerText="Opening Time" sortBy="#{p.openingTime}" filterBy="#{p.openingTime}">
-                                <h:outputText value="#{p.openingTime}" />
+                                <h:outputText value="#{p.openingTime.hours} : #{p.openingTime.minutes}" />
                             </p:column>
                             <p:column headerText="Closing Time" sortBy="#{p.closingTime}" filterBy="#{p.closingTime}">
-                                <h:outputText value="#{p.closingTime}" />
+                                <h:outputText value="#{p.closingTime.hours} : #{p.closingTime.minutes}" />
                             </p:column>
                             <p:column headerText="Description" sortBy="#{p.description}" filterBy="#{p.description}">
                                 <h:outputText value="#{p.description}" />

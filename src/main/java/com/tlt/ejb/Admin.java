@@ -215,4 +215,9 @@ public class Admin implements AdminLocal {
         return em.find(Cities.class, cityid);
     }
 
+    @Override
+    public Collection<SubscriptionModel> getAllSubscriptionModel() {
+        return em.createNamedQuery("SubscriptionModel.findAll").getResultList();
+    }
+
 }

@@ -53,6 +53,8 @@ public interface AdminLocal {
 
     Collection<SubscriptionModel> getSubscriptionModelByName(String modelName);
 
+    Collection<SubscriptionModel> getAllSubscriptionModel();
+
     //Subscription 
     Collection<SubscriptionMaster> getAllSubscriptions();
 

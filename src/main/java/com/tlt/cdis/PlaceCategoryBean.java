@@ -94,6 +94,7 @@ public class PlaceCategoryBean implements Serializable {
         PrimeFaces.current().executeScript("PF('manageCategoryDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
     }
+
     public String getDeleteButtonMessage() {
         if (hasSelectedCategories()) {
             int size = this.selectedCategories.size();
@@ -107,9 +108,14 @@ public class PlaceCategoryBean implements Serializable {
     }
 
     public void deleteCategory() {
-        ad.deletePlaceCategory(catid);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Removed"));
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
+        try {
+            ad.deletePlaceCategory(catid);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Category Removed"));
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error Deleting Category"));
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
+        }
     }
 
     public void deleteSelectedCategories() {
