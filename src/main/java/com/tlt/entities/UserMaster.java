@@ -6,7 +6,6 @@ package com.tlt.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,7 +32,8 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "UserMaster.findAll", query = "SELECT u FROM UserMaster u"),
     @NamedQuery(name = "UserMaster.findById", query = "SELECT u FROM UserMaster u WHERE u.id = :id"),
-    @NamedQuery(name = "UserMaster.findByUsername", query = "SELECT u FROM UserMaster u WHERE u.username = :username")})
+    @NamedQuery(name = "UserMaster.findByUsername", query = "SELECT u FROM UserMaster u WHERE u.username = :username"),
+    @NamedQuery(name = "UserMaster.findByContact", query = "SELECT u FROM UserMaster u WHERE u.contact = :contact")})
 public class UserMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,6 +59,22 @@ public class UserMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "email")
     private String email;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "contact")
+    private long contact;
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Size(min = 1, max = 65535)
+    @Column(name = "address")
+    private String address;
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Size(min = 1, max = 65535)
+    @Column(name = "profile_image")
+    private String profileImage;
     @JoinTable(name = "guide_user_mapping", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "guide_id", referencedColumnName = "id")})
@@ -81,6 +97,13 @@ public class UserMaster implements Serializable {
 
     public UserMaster(String id) {
         this.id = id;
+    }
+
+    public UserMaster(String id, long contact, String address, String profileImage) {
+        this.id = id;
+        this.contact = contact;
+        this.address = address;
+        this.profileImage = profileImage;
     }
 
     public String getId() {
@@ -123,6 +146,31 @@ public class UserMaster implements Serializable {
         this.email = email;
     }
 
+    public long getContact() {
+        return contact;
+    }
+
+    public void setContact(long contact) {
+        System.out.println("Contact: " + contact);
+        this.contact = contact;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
     public Collection<GuideMaster> getGuideMasterCollection() {
         return guideMasterCollection;
     }
@@ -130,8 +178,7 @@ public class UserMaster implements Serializable {
     public void setGuideMasterCollection(Collection<GuideMaster> guideMasterCollection) {
         this.guideMasterCollection = guideMasterCollection;
     }
-    
-    @JsonbTransient
+
     public Collection<SubscriptionMaster> getSubscriptionMasterCollection() {
         return subscriptionMasterCollection;
     }
@@ -140,7 +187,6 @@ public class UserMaster implements Serializable {
         this.subscriptionMasterCollection = subscriptionMasterCollection;
     }
 
-    @JsonbTransient
     public Collection<PaymentMaster> getPaymentMasterCollection() {
         return paymentMasterCollection;
     }
@@ -157,7 +203,6 @@ public class UserMaster implements Serializable {
         this.userRoleCollection = userRoleCollection;
     }
 
-    @JsonbTransient
     public Collection<AppointmentMaster> getAppointmentMasterCollection() {
         return appointmentMasterCollection;
     }

@@ -66,7 +66,7 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                 result = handler.validate(credential);
 
                 if (result.getStatus() == Status.VALID) {
-                    KeepRecord.setErrorStatus("");
+                    KeepRecord.setErrorStatus(null);
                     AuthenticationStatus status = createToken(result, context);
 
                     status = context.notifyContainerAboutLogin(result);

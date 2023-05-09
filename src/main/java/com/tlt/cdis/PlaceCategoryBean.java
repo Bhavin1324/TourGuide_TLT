@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
- */
+
 package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
@@ -17,10 +14,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 
-/**
- *
- * @author kunal
- */
 @Named(value = "placeCatBean")
 @SessionScoped
 public class PlaceCategoryBean implements Serializable {
@@ -32,9 +25,7 @@ public class PlaceCategoryBean implements Serializable {
     String catid;
     List<PlaceCategory> selectedCategories;
 
-    /**
-     * Creates a new instance of AdminBean
-     */
+    
     public PlaceCategoryBean() {
         pc = new ArrayList<>();
         selectedCategories = new ArrayList<>();

@@ -7,6 +7,7 @@ import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
+import com.tlt.entities.UserRole;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.security.DeclareRoles;
@@ -195,6 +196,19 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<PlaceCategory> getAllPlaceCategories() {
         return em.createNamedQuery("PlaceCategory.findAll").getResultList();
+    }
+
+    @Override
+    public Collection<UserRole> getAllRoles() {
+        return em.createNamedQuery("UserRole.findAll").getResultList();
+    }
+
+    @Override
+    public void addUserRole(UserRole userRole) {
+        Collection<UserRole> roles = em.createNamedQuery("UserMaster.findByUsername").setParameter("username",userRole.getUserMaster().getUsername()).getResultList();
+        if(!roles.contains(userRole)){
+            em.persist(userRole);
+        }
     }
 
 }

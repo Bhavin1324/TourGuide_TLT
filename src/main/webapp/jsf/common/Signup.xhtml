@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+        <h:outputStylesheet library="css" name="primeflex.min.css"/>
+    </h:head>
+    <h:body>
+        <h:form enctype="multipart/form-data">
+            <div class="background"></div>
+            <div class="signup-card">
+                <p:messages id="msgs" closable="true" styleClass="mt-4">
+                    <p:autoUpdate/>
+                </p:messages>
+                <p:message for="profile-image"/>
+                <p:message for="confirm-password"/>
+
+                <div>
+                    <div class="text-2xl font-medium align-self-start mb-4 mt-3">Register yourself</div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-user" />
+                        <p:inputText id="name" placeholder="Provide full name" required="true" validatorMessage="Name: Length of name must be greater than 2 characters" requiredMessage="Name: Fullname is required" styleClass="w-full block" value="#{registerUserBean.userMaster.name}" >
+                            <f:validateLength minimum="3"/>
+                        </p:inputText>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-at" />
+                        <p:inputText id="email" placeholder="example@email.com" styleClass="w-full" required="true" requiredMessage="Email: Email is required" validatorMessage="Email: Entered email is invalid" value="#{registerUserBean.userMaster.email}">
+                            <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>                            
+                        </p:inputText>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full">
+                        <i class="pi pi-user-plus" />
+                        <p:inputText id="username" placeholder="Username" styleClass="w-full" rendered="true" requiredMessage="Username: Username is required" validatorMessage="Username: Username criteria should be matched" value="#{registerUserBean.userMaster.username}">
+                            <f:validateRegex pattern="^[a-zA-Z]+\d+$"/>
+                        </p:inputText>
+                    </div>
+                    <small class="mb-3 text-blue-400">Username must start with character and ends with any digit</small>
+
+                    <div class="ui-input-icon-left w-full mb-3 mt-3">
+                        <i class="pi pi-hashtag" />
+                        <p:password id="password" placeholder="Create password" toggleMask="true" redisplay="true" styleClass="block w-full" required="true" requiredMessage="Password: Password is required" validatorMessage="Password: Password should contains minimun 6 characters and atleast one digit" value="#{registerUserBean.userMaster.password}">
+                            <f:validateRegex pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"/>
+                            
+                        </p:password>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-hashtag" />
+                        <p:password id="confirm-password" placeholder="Confirm password" toggleMask="true" redisplay="true" styleClass="w-full" required="true" requiredMessage="Password: Confirm passowrd is required" validatorMessage="Password: Password should be matched" value="#{registerUserBean.confirmPass}">
+                        </p:password>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-phone" />
+                        <p:inputMask id="phone" value="#{registerUserBean.contactNumber}" mask="999 999 9999" styleClass="w-full"/>
+                        
+                    </div>
+
+                    <div class="w-full mb-4">
+                        <p:inputTextarea id="address" cols="33" styleClass="w-full" placeholder="Enter your address" required="true" requiredMessage="Address: Address is required" value="#{registerUserBean.userMaster.address}"/>
+                    </div>
+                    <div class="mb-2">Select profile picture</div>
+                    <div class="w-full mb-5 flex align-items-center justify-content-between">
+                        <p:fileUpload id="profile-image" value="#{registerUserBean.file}" mode="simple" skinSimple="true" />
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <p:commandButton id="reg-btn" value="Register" update="@form" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 rounded-button block"/>
+                </div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

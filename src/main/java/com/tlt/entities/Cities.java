@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -217,7 +216,7 @@ public class Cities implements Serializable {
     public void setStateId(States stateId) {
         this.stateId = stateId;
     }
-    @JsonbTransient
+
     public Collection<PlaceMaster> getPlaceMasterCollection() {
         return placeMasterCollection;
     }

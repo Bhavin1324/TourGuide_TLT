@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.tlt.record;
 
 import java.io.Serializable;
@@ -11,10 +8,6 @@ import javax.security.enterprise.CallerPrincipal;
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 
-/**
- *
- * @author kunal
- */
 @SessionScoped
 public class KeepRecord implements Serializable {
 
@@ -29,7 +22,7 @@ public class KeepRecord implements Serializable {
         token = null;
         username = null;
         password = null;
-        errorStatus = "";
+        errorStatus = null;
     }
 
     public static void reset() {
@@ -37,7 +30,7 @@ public class KeepRecord implements Serializable {
         token = null;
         username = null;
         password = null;
-        errorStatus = "";
+        errorStatus = null;
     }
 
     public static CredentialValidationResult getResult() {

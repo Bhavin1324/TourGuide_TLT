@@ -66,7 +66,7 @@
 .login-card {
     height: 80%;
     width: 80%;
-    background-color: #425fec;
+    background-color: white;
     border-radius: 20px;
     position: absolute;
     top: 50%;
@@ -75,7 +75,7 @@
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
     display: flex;
     border: 0;
-    color: white;
+    color: black;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -98,25 +98,24 @@
 }
 
 .input-text-box {
-    padding: 8px 0px;
+    padding: 10px 16px;
     width: 100%;
     font-size: 18px;
     background: none;
     outline: none;
     border: none;
-    border-bottom: 1px solid white;
-    color: white;
+    border: 1px solid rgb(112 9 180 / 50%);
+    border-radius: 8px;
     margin-bottom: 20px;
     transition: all 0.3s ease;
 }
 
 .input-text-box::placeholder {
-    color: white;
-    opacity: 60%;
 }
 
 .input-text-box:focus {
-    border-color: #390da0;
+    border-color: #9c27b0;
+    box-shadow:0 0 0 0.25rem rgb(227 13 253 / 25%)
 }
 
 .login-button {
@@ -126,8 +125,8 @@
     border-radius: 200px;
     border: 0;
     font-size: 18px;
-    background-color: white;
-    color: #425fec;
+    background-color: #9c27b0;
+    color: white;
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
     cursor: pointer;
     transform: scale(1);
@@ -144,9 +143,9 @@
     width: 100%;
     padding: 10px 20px;
     border-radius: 200px;
-    border: 1px solid white;
+    border: 1px solid #9c27b0;
     font-size: 18px;
-    color: white;
+    color: #9c27b0;
     background-color: transparent;
     cursor: pointer;
     transform: scale(1);
@@ -157,7 +156,7 @@
 .login-button-inverse:focus {
     transform: scale(.95);
     background-color: white;
-    color: #425fec;
+    color: #9c27b0;
 }
 .card-form-heading {
     margin: 20px 0px 40px 0px;
@@ -171,7 +170,47 @@
     font-size: 32px;
     font-weight: 500;
 }
+#errorStatus{
+    border: 1px solid #b14242;
+    color: #b14242;
+    display: block;
+    margin: 6px 0px;
+    background: #f1aeb5;
+    padding: 8px 20px;
+    border-radius: 10px;
+    z-index: 0;
+}
 
+.signup-card {
+    height: 95%;
+    width: 30%;
+    padding: 10px 35px;
+    background-color: white;
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-around;*/
+    border: 0;
+    color: black;
+    font-family: sans-serif;
+    overflow-y: auto;
+}
+.ui-password > input[type="password"]{
+    width: 100%
+}
+.ui-password{
+    display: block;
+    width: 100%
+}
+.ui-inputnumber > input[type="text"]{
+    width: 100%;
+    display:block;
+}
 @media(min-width:992px) {
     .card-desc {
         width: 150%;
@@ -182,7 +221,9 @@
     .card-desc {
         width: 60%;
     }
-
+    .signup-card {
+        width: 70%;
+    }
     .card-form-heading-primary {
         font-size: 30px;
         font-weight: 500;
@@ -193,7 +234,9 @@
     .login-card {
         width: 90%;
     }
-
+    .signup-card {
+        width: 90%;
+    }
     .card-desc {
         display: none;
     }

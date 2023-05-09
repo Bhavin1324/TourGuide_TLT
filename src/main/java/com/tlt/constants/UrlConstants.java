@@ -1,7 +1,7 @@
 package com.tlt.constants;
 
 public final class UrlConstants {
-
+    
     public static final String BASE_URL = "/TheLandmarkTour/jsf/";
     public static final String TO_LOGIN = BASE_URL + "common/Login.jsf";
     public static final String TO_ADMIN = BASE_URL + "admin/Home.jsf";
@@ -23,6 +23,7 @@ public final class UrlConstants {
     
     public static final String TO_TRANSPORT_CONF = BASE_URL + "admin/transport/Transport.jsf";
     
+    public static final String TO_SIGNUP = BASE_URL + "common/Signup.jsf";
     
 
 }

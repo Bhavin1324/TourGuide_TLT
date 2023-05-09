@@ -7,6 +7,7 @@ import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
+import com.tlt.entities.UserRole;
 import java.util.Collection;
 import javax.ejb.Local;
 
@@ -64,6 +65,11 @@ public interface AdminLocal {
 
     //Users
     Collection<UserMaster> getAllUsers();
+
+    //Roles
+    Collection<UserRole> getAllRoles();
+
+    void addUserRole(UserRole userRole);
 
     //Category
     void insertPlaceCategory(PlaceCategory category);

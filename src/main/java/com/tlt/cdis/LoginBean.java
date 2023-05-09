@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 import javax.faces.context.FacesContext;
 
 
@@ -26,6 +26,7 @@ public class LoginBean implements Serializable{
     }
 
     public void setErrorStatus(String errorStatus) {
+        System.out.println("Error status" + errorStatus);
         this.errorStatus = errorStatus;
     }
 
