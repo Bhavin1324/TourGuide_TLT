@@ -15,6 +15,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.Set;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 @Named(value = "navigationBean")
@@ -22,6 +23,7 @@ import javax.faces.context.FacesContext;
 public class NavigationBean implements Serializable {
 
     Set<String> roles;
+
     public NavigationBean() {
         roles = KeepRecord.getRoles();
     }
@@ -53,4 +55,21 @@ public class NavigationBean implements Serializable {
         }
     }
 
+    public void confirm(String navigation) {
+        addMessage("Confirmed", "You have accepted");
+    }
+
+    public void delete() {
+        addMessage("Confirmed", "Record deleted");
+    }
+
+    public void logout(String navigation) {
+        addMessage("Confirmed", "Logged out");
+        redirectTo(navigation);
+    }
+
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 }

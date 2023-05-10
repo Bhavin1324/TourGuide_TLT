@@ -9,16 +9,15 @@
 
     <!-- INTERFACE -->
     <cc:interface>
-        <cc:attribute name="logoutAction" method-signature="java.lang.String action()"/>
         <cc:attribute name="sideNavigationBean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <div class="card">
+            <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
             <h:form>
                 <p:growl id="messages"/>
-
                 <p:menubar>
                     <div style="display: block">
                         <p:menuitem styleClass="p-2 select-none">
@@ -38,7 +37,9 @@
                                 <p:avatar id="current_user" icon="pi pi-user" styleClass="bg-purple-600 text-white" shape="circle" style="margin-right: 25px"/>
                             </div>
                             <div class="ml-3">
-                                <p:commandButton id="logout_action" value="Logout" styleClass="rounded-button ui-button-help" action="#{cc.attrs.logoutAction}"/>
+                                <p:commandButton id="logout_action" value="Logout" styleClass="rounded-button ui-button-help" action="#{cc.attrs.sideNavigationBean.logout(uc.TO_LOGOUT)}">
+                                    <p:confirm header="Confirmation" message="Are you sure you want to logout?" icon="pi pi-question-circle"/>
+                                </p:commandButton>
                             </div>
                         </div>
                     </f:facet>
@@ -51,6 +52,10 @@
                            position="bottom"
                            for="conf_panel"
                            value="Open configuration panel"/>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat ui-button-help"/>
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes ui-button-help" />
+                </p:confirmDialog>
             </h:form>
         </div>
         <sidebar:sidepanel bean="#{cc.attrs.sideNavigationBean}"/>

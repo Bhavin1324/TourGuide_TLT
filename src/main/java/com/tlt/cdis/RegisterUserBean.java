@@ -21,6 +21,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.glassfish.soteria.identitystores.hash.Pbkdf2PasswordHashImpl;
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.file.UploadedFile;
 
 @Named(value = "registerUserBean")
@@ -103,7 +104,7 @@ public class RegisterUserBean implements Serializable {
         return true;
     }
 
-    public void register() throws IOException{
+    public void register() throws IOException {
         boolean uploadStatus = upload();
         if (!uploadStatus) {
             this.filePath = DEFAULT_USER_IMG;
@@ -112,23 +113,29 @@ public class RegisterUserBean implements Serializable {
         if (!userMaster.getPassword().equals(confirmPass)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password: Confirm password must match with entered password", ""));
         } else {
-            userMaster.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
-            userMaster.setContact(Long.parseLong(contactNumber.replaceAll(" ", "")));
-            userMaster.setProfileImage(filePath);
-            String nonHashPass = userMaster.getPassword();
-            String hashedPassword = passHash.generate(nonHashPass.toCharArray());
-            userMaster.setPassword(hashedPassword);
-            tejb.insertUser(userMaster);
-            UserRole role = new UserRole(userMaster.getUsername(), ROLE_TOURIST);
-            role.setUserMaster(userMaster);
-            aejb.addUserRole(role);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User has been registerd successfully"));
-            userMaster = new UserMaster();
-            confirmPass = "";
-            contactNumber = "";
-            FacesContext.getCurrentInstance().getExternalContext().redirect(TO_LOGIN);
-        }
 
+            if (tejb.findUserByUsername(userMaster.getUsername()) != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username: This username is already taken. Try to make new.", "Create new username which is unique"));
+            } else {
+                userMaster.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
+                userMaster.setContact(Long.parseLong(contactNumber.replaceAll(" ", "")));
+                userMaster.setProfileImage(filePath);
+                String nonHashPass = userMaster.getPassword();
+                String hashedPassword = passHash.generate(nonHashPass.toCharArray());
+                userMaster.setPassword(hashedPassword);
+                tejb.insertUser(userMaster);
+                UserRole role = new UserRole(userMaster.getUsername(), ROLE_TOURIST);
+                role.setUserMaster(userMaster);
+                aejb.addUserRole(role);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User has been registerd successfully"));
+                userMaster = new UserMaster();
+                confirmPass = "";
+                contactNumber = "";
+                FacesContext.getCurrentInstance().getExternalContext().redirect(TO_LOGIN);
+            }
+        }
     }
+
+    
 
 }

@@ -29,7 +29,7 @@
                         <div>
                             <input type="password" id="password" name="password" value="" placeholder="Enter password" class="input-text-box"/>
                         </div>
-                        <h:outputText id="errorStatus" value="#{loginBean.errorStatus}" rendered="#{loginBean.errorStatus != null}"/>
+                        <p:staticMessage severity="error" styleClass="w-full" summary="ERROR" detail="#{loginBean.errorStatus}" rendered="#{loginBean.errorStatus != null}"/>
                         <div>
                             <input type="submit" id="login-button" value="Login" class="login-button"/>
                         </div>

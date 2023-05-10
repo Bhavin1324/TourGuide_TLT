@@ -30,7 +30,7 @@ import org.primefaces.model.charts.pie.PieChartModel;
  */
 @Named(value = "adminHomeBean")
 @SessionScoped
-public class adminHomeBean implements Serializable {
+public class AdminHomeBean implements Serializable {
 
     private BarChartModel barModel;
     private PieChartModel pieModel;
@@ -41,7 +41,7 @@ public class adminHomeBean implements Serializable {
         createPirChart();
     }
 
-    public adminHomeBean() {
+    public AdminHomeBean() {
     }
 
     public BarChartModel getBarModel() {

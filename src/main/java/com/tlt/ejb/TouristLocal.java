@@ -16,4 +16,6 @@ public interface TouristLocal {
     void deleteUser(String id);
 
     void updateUser(String id, UserMaster newUser);
+    
+    UserMaster findUserByUsername(String username);
 }

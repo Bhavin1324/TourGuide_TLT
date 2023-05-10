@@ -48,7 +48,7 @@
                         <i class="pi pi-hashtag" />
                         <p:password id="password" placeholder="Create password" toggleMask="true" redisplay="true" styleClass="block w-full" required="true" requiredMessage="Password: Password is required" validatorMessage="Password: Password should contains minimun 6 characters and atleast one digit" value="#{registerUserBean.userMaster.password}">
                             <f:validateRegex pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"/>
-                            
+
                         </p:password>
                     </div>
 
@@ -61,7 +61,7 @@
                     <div class="ui-input-icon-left w-full mb-3">
                         <i class="pi pi-phone" />
                         <p:inputMask id="phone" value="#{registerUserBean.contactNumber}" mask="999 999 9999" styleClass="w-full"/>
-                        
+
                     </div>
 
                     <div class="w-full mb-4">
@@ -74,10 +74,17 @@
                 </div>
 
                 <div class="w-full">
-                    <p:commandButton id="reg-btn" value="Register" update="@form" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 rounded-button block"/>
+                    <p:commandButton id="reg-btn" value="Register" update="@form" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 rounded-button block" onclick="PF('dlg3').show()"/>
                 </div>
             </div>
         </h:form>
+<!--        <p:dialog header="Success" widgetVar="dlg3" minHeight="40" width="350" showEffect="fade">
+            <p class="m-0"></p>
+            <f:facet name="footer">
+                <p:commandButton type="button" value="No" styleClass="ui-button-flat mr-2" style="width: 6rem" />
+                <p:commandButton type="button" value="Yes" style="width: 5rem" />
+            </f:facet>
+        </p:dialog>-->
     </h:body>
 </html>
 

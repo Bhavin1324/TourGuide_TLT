@@ -39,9 +39,15 @@
                             <p:submenu label="Manage transport">
                                 <p:menuitem styleClass="px-5" value="Transport" action="#{cc.attrs.bean.redirectTo(uc.TO_TRANSPORT_CONF)}" update="messages" icon="pi pi-car"/>
                             </p:submenu>
-                            <p:menuitem value="Logout" icon="pi pi-sign-out" action="#{cc.attrs.bean.redirectTo(uc.TO_LOGOUT)}"/>
+                            <p:menuitem value="Logout" icon="pi pi-sign-out" action="#{cc.attrs.bean.logout(uc.TO_LOGOUT)}">
+                                <p:confirm header="Confirmation" message="Are you sure you want to logout?" icon="pi pi-question-circle"/>
+                            </p:menuitem>
                         </p:menu>
                     </div>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat ui-button-help"/>
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes ui-button-help" />
+                    </p:confirmDialog>
                 </h:form>
             </p:sidebar>
         </div>

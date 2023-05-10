@@ -207,10 +207,12 @@ public class Admin implements AdminLocal {
 
     @Override
     public void addUserRole(UserRole userRole) {
-        Collection<UserRole> roles = em.createNamedQuery("UserMaster.findByUsername").setParameter("username",userRole.getUserMaster().getUsername()).getResultList();
-        if(!roles.contains(userRole)){
+        Collection<UserRole> roles = em.createNamedQuery("UserMaster.findByUsername").setParameter("username", userRole.getUserMaster().getUsername()).getResultList();
+        if (!roles.contains(userRole)) {
             em.persist(userRole);
         }
+    }
+
     public Collection<Cities> getCityByStateId(Integer stateId) {
         States state = em.find(States.class, stateId);
         return em.createNamedQuery("Cities.findByStateId").setParameter("stateId", state).getResultList();
