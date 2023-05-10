@@ -8,7 +8,10 @@ import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,7 +24,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.glassfish.soteria.identitystores.hash.Pbkdf2PasswordHashImpl;
-import org.primefaces.PrimeFaces;
 import org.primefaces.model.file.UploadedFile;
 
 @Named(value = "registerUserBean")
@@ -40,6 +42,7 @@ public class RegisterUserBean implements Serializable {
 
     UploadedFile file;
     String filePath;
+    String fileName;
 
     public RegisterUserBean() {
         userMaster = new UserMaster();
@@ -87,16 +90,21 @@ public class RegisterUserBean implements Serializable {
     }
 
     public boolean upload() {
-        try {
+        try ( InputStream input = file.getInputStream()){
             if (file == null) {
                 return false;
             }
-            Scanner s = new Scanner(file.getInputStream());
-            String fileContent = s.useDelimiter("\\A").next();
-            s.close();
-            this.filePath = PROFILE_IMG_UPLOAD + file.getFileName();
-            Files.write(Paths.get(PROFILE_IMG_UPLOAD + file.getFileName()), fileContent.getBytes(), StandardOpenOption.CREATE);
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User has been registerd successfully"));
+            String directory = PROFILE_IMG_UPLOAD;
+            this.fileName = System.currentTimeMillis() + "_" + file.getFileName();
+            this.filePath = directory + fileName;
+
+            try ( OutputStream output = new FileOutputStream(this.filePath)) {
+                byte[] buffer = new byte[2048];
+                int bytesRead;
+                while ((bytesRead = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, bytesRead);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -119,7 +127,9 @@ public class RegisterUserBean implements Serializable {
             } else {
                 userMaster.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
                 userMaster.setContact(Long.parseLong(contactNumber.replaceAll(" ", "")));
-                userMaster.setProfileImage(filePath);
+                userMaster.setProfileImage(fileName);
+                
+                
                 String nonHashPass = userMaster.getPassword();
                 String hashedPassword = passHash.generate(nonHashPass.toCharArray());
                 userMaster.setPassword(hashedPassword);
