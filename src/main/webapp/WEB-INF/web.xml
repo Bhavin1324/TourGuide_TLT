@@ -78,7 +78,15 @@
             <role-name>guide</role-name>
         </auth-constraint>
     </security-constraint>
-    <deny-uncovered-http-methods/>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404NotFound.html</location>
+    </error-page> 
+    <error-page>
+        <error-code>401</error-code>
+        <location>/Unauthorized.html</location>
+    </error-page> 
+   <deny-uncovered-http-methods/>
     <mime-mapping>
         <extension>woff2</extension>
         <mime-type>application/font-woff2</mime-type>

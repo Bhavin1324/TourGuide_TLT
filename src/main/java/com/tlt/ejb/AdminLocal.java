@@ -89,5 +89,7 @@ public interface AdminLocal {
     Collection<Cities> getCityByStateId(Integer stateId);
 
     Cities getCityById(Integer cityid);
+    
+    Collection<SubscriptionMaster> getSubscriptionCount();
 
 }
