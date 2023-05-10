@@ -83,8 +83,12 @@
         <location>/404NotFound.html</location>
     </error-page> 
     <error-page>
+        <error-code>403</error-code>
+        <location>/403Forbidden.html</location>
+    </error-page> 
+    <error-page>
         <error-code>401</error-code>
-        <location>/Unauthorized.html</location>
+        <location>/401Unauthorized.html</location>
     </error-page> 
    <deny-uncovered-http-methods/>
     <mime-mapping>
