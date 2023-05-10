@@ -220,4 +220,9 @@ public class Admin implements AdminLocal {
         return em.createNamedQuery("SubscriptionModel.findAll").getResultList();
     }
 
+    @Override
+    public Collection<SubscriptionMaster> getSubscriptionCount() {
+        return em.createNativeQuery("Select s.subscriptionModelId Count(*) from SubscriptionMaster s").getResultList();
+    }
+
 }

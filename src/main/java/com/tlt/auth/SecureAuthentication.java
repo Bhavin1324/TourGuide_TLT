@@ -99,8 +99,8 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                 }
                 if (KeepRecord.getRoles().contains("guide")) {
                     response.sendRedirect(TO_GUIDE);
-                }
-            }
+                }    
+           }
 
         } catch (Exception ex) {
             System.out.println("Exception occured  " + ex.getMessage());
