@@ -55,34 +55,34 @@
 
                             <p:column selectionMode="multiple" styleClass="mr-2" exportable="false"></p:column>
 
-                            <p:column headerText="Id" sortBy="#{p.id}" filterBy="#{p.id}">
+                            <p:column headerText="Id" sortBy="#{p.id}">
                                 <h:outputText value="#{p.id}" />
                             </p:column>
-                            <p:column headerText="Name" sortBy="#{p.name}" filterBy="#{p.name}">
+                            <p:column headerText="Name" sortBy="#{p.name}">
                                 <h:outputText value="#{p.name}" />
                             </p:column>
-                            <p:column headerText="Adress" sortBy="#{p.address}" filterBy="#{p.address}">
+                            <p:column styleClass="" headerText="Image" exportable="false">
+                                <p:graphicImage id="img"  value="/uploads/places/#{p.images}" style="width: 100px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                            </p:column>
+                            <p:column headerText="Adress" sortBy="#{p.address}">
                                 <h:outputText value="#{p.address}" />
                             </p:column>
-                            <p:column headerText="Latitude" sortBy="#{p.longitude}" filterBy="#{p.longitude}">
+                            <p:column headerText="Latitude" sortBy="#{p.longitude}" >
                                 <h:outputText value="#{p.longitude}" />
                             </p:column>
-                            <p:column headerText="Longitude" sortBy="#{p.latitude}" filterBy="#{p.latitude}">
+                            <p:column headerText="Longitude" sortBy="#{p.latitude}">
                                 <h:outputText value="#{p.latitude}" />
                             </p:column>
-                            <p:column headerText="Opening Time" sortBy="#{p.openingTime}" filterBy="#{p.openingTime}">
+                            <p:column headerText="Opening Time" sortBy="#{p.openingTime}" >
                                 <h:outputText value="#{p.openingTime.hours} : #{p.openingTime.minutes}" />
                             </p:column>
-                            <p:column headerText="Closing Time" sortBy="#{p.closingTime}" filterBy="#{p.closingTime}">
+                            <p:column headerText="Closing Time" sortBy="#{p.closingTime}">
                                 <h:outputText value="#{p.closingTime.hours} : #{p.closingTime.minutes}" />
                             </p:column>
-                            <p:column headerText="Description" sortBy="#{p.description}" filterBy="#{p.description}">
-                                <h:outputText value="#{p.description}" />
-                            </p:column>
-                            <p:column headerText="Category" sortBy="#{p.categoryId.name}" filterBy="#{p.categoryId.name}">
+                            <p:column headerText="Category" sortBy="#{p.categoryId.name}">
                                 <h:outputText value="#{p.categoryId.name}" />
                             </p:column>
-                            <p:column headerText="City" sortBy="#{p.cityId.name}" filterBy="#{p.cityId.name}">
+                            <p:column headerText="City" sortBy="#{p.cityId.name}">
                                 <h:outputText value="#{p.cityId.name}" />
                             </p:column>
 
@@ -102,7 +102,7 @@
                         </p:dataTable>
                     </h:form>
 
-                    <h:form id="dialogs">
+                    <h:form enctype="multipart/form-data" id="dialogs">
                         <p:dialog  header="Place Details" styleClass="w-10 md:w-6 h-full overflow-y-auto" showEffect="fade" modal="true" widgetVar="managePlaceDialog" responsive="true">
                             <p:outputPanel id="manage-place-content" class="ui-fluid px-4">
                                 <div class="field">
@@ -142,14 +142,12 @@
                                 </div>
                                 <div class="field">
                                     <p:outputLabel for="city">City</p:outputLabel>
-<!--                                    <c:if test="#{placesBean.catid}">-->
-                                    <p:selectOneMenu id="city" value="#{placesBean.cityid}" >
-                                        <f:selectItem itemValue="-1" itemLabel="--Select City--" />
-                                        <c:forEach var="c" items="#{placesBean.cities}" >
-                                            <f:selectItem itemLabel="#{c.name}" itemValue="#{c.id}" />
-                                        </c:forEach>
-                                    </p:selectOneMenu>
-                                    <!--</c:if>-->
+                                    <p:autoComplete id="city" value="#{placesBean.cityTxt}"
+                                                    completeMethod="#{placesBean.completeText}" scrollHeight="250"/>
+                                </div>
+                                <div class="field">
+                                    <p:outputLabel for="image">Image</p:outputLabel><br/>
+                                    <p:fileUpload id="image" value="#{placesBean.file}" mode="simple" skinSimple="true"/>
                                 </div>
                             </p:outputPanel>
 

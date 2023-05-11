@@ -3,6 +3,7 @@ package com.tlt.cdis;
 import static com.tlt.constants.JwtConstants.ROLE_TOURIST;
 import static com.tlt.constants.PathConstants.DEFAULT_USER_IMG;
 import static com.tlt.constants.PathConstants.PROFILE_IMG_DEST;
+import static com.tlt.constants.UrlConstants.TO_LOGIN;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.UserMaster;

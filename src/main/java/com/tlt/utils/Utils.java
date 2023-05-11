@@ -31,7 +31,8 @@ public class Utils {
             case IMAGE:
                 if (!file.getContentType().equals("image/png") && !file.getContentType().equals("image/jpeg") && !file.getContentType().equals("image/jpg")) {
                     return false;
-                } break;
+                }
+                break;
         }
         try ( InputStream input = file.getInputStream()) {
 

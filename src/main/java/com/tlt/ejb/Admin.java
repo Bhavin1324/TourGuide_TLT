@@ -213,9 +213,10 @@ public class Admin implements AdminLocal {
         }
     }
 
+    @Override
     public Collection<Cities> getCityByStateId(Integer stateId) {
         States state = em.find(States.class, stateId);
-        return em.createNamedQuery("Cities.findByStateId").setParameter("stateId", state).getResultList();
+        return state.getCitiesCollection();
     }
 
     @Override
@@ -236,6 +237,18 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<SubscriptionMaster> getSubscriptionCount() {
         return em.createNativeQuery("Select s.subscriptionModelId Count(*) from SubscriptionMaster s").getResultList();
+    }
+
+    @Override
+    public Cities getCityOfStateByName(Integer state_id, String name) {
+        States state = em.find(States.class, state_id);
+        Collection<Cities> cities = state.getCitiesCollection();
+        for (Cities c : cities) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        }
+        return null;
     }
 
 }
