@@ -17,6 +17,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.glassfish.soteria.identitystores.hash.Pbkdf2PasswordHashImpl;
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.file.UploadedFile;
 
 @Named(value = "registerUserBean")
@@ -35,10 +36,13 @@ public class RegisterUserBean implements Serializable {
 
     UploadedFile file;
     String fileName;
+    
+    boolean showDialog;
 
     public RegisterUserBean() {
         userMaster = new UserMaster();
         passHash = new Pbkdf2PasswordHashImpl();
+        showDialog = false;
     }
 
     public UserMaster getUserMaster() {
@@ -73,6 +77,16 @@ public class RegisterUserBean implements Serializable {
         this.contactNumber = contactNumber;
     }
 
+    public boolean isShowDialog() {
+        return showDialog;
+    }
+
+    public void setShowDialog(boolean showDialog) {
+        this.showDialog = showDialog;
+    }
+
+    
+    
     public void register() throws IOException {
 
         boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE,PROFILE_IMG_UPLOAD);
@@ -111,5 +125,6 @@ public class RegisterUserBean implements Serializable {
         confirmPass = "";
         contactNumber = "";
         Utils.resetFilesCache();
+        PrimeFaces.current().executeScript("PF('success_dlg').show()");
     }
 }

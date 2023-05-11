@@ -75,13 +75,13 @@
                 </div>
 
                 <div class="w-full">
-                    <p:commandButton id="reg-btn" value="Register" update="@form" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 rounded-button block" onclick="PF('dlg3').show()"/>
+                    <p:commandButton id="reg-btn" value="Register" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 rounded-button block"/>
                 </div>
             </div>
         </h:form>
         
         <h:form>
-            <p:dialog header="Success" widgetVar="dlg3" minHeight="40" width="350" showEffect="fade">
+            <p:dialog header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade" visible="${registerUserBean.showDialog}">
                 <p class="m-0">User has been registered successfully!</p>
                 <f:facet name="footer">
                     <p:commandButton value="Close" style="width: 5rem" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}"/>
