@@ -2,6 +2,7 @@ package com.tlt.cdis;
 
 import static com.tlt.constants.JwtConstants.ROLE_TOURIST;
 import static com.tlt.constants.PathConstants.DEFAULT_USER_IMG;
+import static com.tlt.constants.PathConstants.PROFILE_IMG_UPLOAD;
 import static com.tlt.constants.UrlConstants.TO_LOGIN;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
@@ -74,7 +75,7 @@ public class RegisterUserBean implements Serializable {
 
     public void register() throws IOException {
 
-        boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE);
+        boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE,PROFILE_IMG_UPLOAD);
         if (!uploadStatus) {
             if (file != null && !file.getContentType().equalsIgnoreCase("image/png") && !file.getContentType().equalsIgnoreCase("image/jpeg") && !file.getContentType().equalsIgnoreCase("image/jpg")) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Image: image should be jpeg | jpg | png only", ""));

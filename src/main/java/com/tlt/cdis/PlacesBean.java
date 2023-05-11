@@ -1,6 +1,8 @@
-
 package com.tlt.cdis;
 
+import com.tlt.constants.PathConstants;
+import static com.tlt.constants.PathConstants.DEFAULT_USER_IMG;
+import static com.tlt.constants.PathConstants.PLACES_IMG_UPLOAD;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.Cities;
 import com.tlt.entities.PlaceCategory;
@@ -12,11 +14,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
-
+import org.primefaces.model.file.UploadedFile;
 
 @Named(value = "placesBean")
 @SessionScoped
@@ -30,7 +33,9 @@ public class PlacesBean implements Serializable {
     List<PlaceMaster> selectedPlaces;
     Collection<PlaceCategory> placeCategories;
     Collection<Cities> cities;
-
+    private String cityTxt;
+    UploadedFile file;
+    String fileName;
 
     public PlacesBean() {
         pc = new ArrayList<>();
@@ -40,6 +45,30 @@ public class PlacesBean implements Serializable {
         cities = new ArrayList<>();
         catid = "";
         cityid = "";
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+
+    public String getCityTxt() {
+        return cityTxt;
+    }
+
+    public void setCityTxt(String cityTxt) {
+        this.cityTxt = cityTxt;
     }
 
     public Collection<Cities> getCities() {
@@ -104,28 +133,44 @@ public class PlacesBean implements Serializable {
     }
 
     public void savePlace() {
-        PlaceCategory p = ad.getPlaceCategoryById(catid);
-        Cities city = ad.getCityById(Integer.parseInt(cityid));
-        selectedPlace.setCityId(city);
-        selectedPlace.setCategoryId(p);
-        if (this.selectedPlace.getId() == null) {
-            this.selectedPlace.setId(Utils.getUUID());
-            this.pc.add(this.selectedPlace);
-            ad.insertPlace(selectedPlace);
-            this.selectedPlace = null;
-            cityid = "";
-            catid = "";
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Added"));
-        } else {
-            cityid = "";
-            catid = "";
+        try {
+            PlaceCategory p = ad.getPlaceCategoryById(catid);
+            Cities city = ad.getCityOfStateByName(4030, cityTxt);
+            selectedPlace.setCityId(city);
+            selectedPlace.setCategoryId(p);
+            if (this.selectedPlace.getId() == null) {
+                this.selectedPlace.setId(Utils.getUUID());
+//                    this.pc.add(this.selectedPlace);
+                boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE, PLACES_IMG_UPLOAD);
+                if (!uploadStatus) {
+                    if (file != null && !file.getContentType().equalsIgnoreCase("image/png") && !file.getContentType().equalsIgnoreCase("image/jpeg") && !file.getContentType().equalsIgnoreCase("image/jpg")) {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Image: image should be jpeg | jpg | png only", ""));
+                        return;
+                    }
+//                        this.fileName = DEFAULT_USER_IMG;
+                } else {
+                    this.fileName = Utils.FileName;
+                }
+                this.selectedPlace.setImages(this.fileName);
+                ad.insertPlace(selectedPlace);
+                this.selectedPlace = null;
+                cityid = "";
+                catid = "";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Added"));
+            } else {
+                cityid = "";
+                catid = "";
 //            this.pc.add(this.selectedPlace);
-            ad.updatePlace(selectedPlace.getId(), selectedPlace);
-            this.selectedPlace = null;
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Updated"));
+                ad.updatePlace(selectedPlace.getId(), selectedPlace);
+                this.selectedPlace = null;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Updated"));
+            }
+            PrimeFaces.current().executeScript("PF('managePlaceDialog').hide()");
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-places");
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please Enter Valid City!"));
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-places");
         }
-        PrimeFaces.current().executeScript("PF('managePlaceDialog').hide()");
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-places");
     }
 
     public String getDeleteButtonMessage() {
@@ -164,6 +209,17 @@ public class PlacesBean implements Serializable {
     public void selectPlace(PlaceMaster place) {
         catid = place.getCategoryId().getId();
         cityid = place.getCityId().getId().toString();
+    }
+
+    public List<String> completeText(String query) {
+        String queryLowerCase = query.toLowerCase();
+        List<String> cityList = new ArrayList<>();
+        List<Cities> city = (List<Cities>) ad.getCityByStateId(4030);
+        for (Cities c : city) {
+            cityList.add(c.getName());
+        }
+
+        return cityList.stream().filter(t -> t.toLowerCase().startsWith(queryLowerCase)).collect(Collectors.toList());
     }
 
 }

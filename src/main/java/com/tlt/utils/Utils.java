@@ -22,7 +22,7 @@ public class Utils {
         return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
     }
 
-    public static boolean uploadFile_PF(UploadedFile file, String fileType) {
+    public static boolean uploadFile_PF(UploadedFile file, String fileType, String destination) {
         if (file == null) {
             return false;
         }
@@ -30,11 +30,12 @@ public class Utils {
             case IMAGE:
                 if (!file.getContentType().equals("image/png") && !file.getContentType().equals("image/jpeg") && !file.getContentType().equals("image/jpg")) {
                     return false;
-                } break;
+                }
+                break;
         }
         try ( InputStream input = file.getInputStream()) {
 
-            String directory = PROFILE_IMG_UPLOAD;
+            String directory = destination;
             FileName = System.currentTimeMillis() + "_" + file.getFileName();
             FilePath = directory + FileName;
 
