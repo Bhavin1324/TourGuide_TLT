@@ -1,15 +1,16 @@
 package com.tlt.utils;
 
-import static com.tlt.constants.PathConstants.PROFILE_IMG_UPLOAD;
+import static com.tlt.constants.PathConstants.PROFILE_IMG_DEST;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
+import org.glassfish.soteria.identitystores.hash.Pbkdf2PasswordHashImpl;
 import org.primefaces.model.file.UploadedFile;
 
 public class Utils {
-
+    public static Pbkdf2PasswordHashImpl passHash;
     public static String FileName;
     public static String FilePath;
 
@@ -22,7 +23,7 @@ public class Utils {
         return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
     }
 
-    public static boolean uploadFile_PF(UploadedFile file, String fileType) {
+    public static boolean uploadFile_PF(UploadedFile file, String fileType, String destination) {
         if (file == null) {
             return false;
         }
@@ -34,7 +35,7 @@ public class Utils {
         }
         try ( InputStream input = file.getInputStream()) {
 
-            String directory = PROFILE_IMG_UPLOAD;
+            String directory = destination;
             FileName = System.currentTimeMillis() + "_" + file.getFileName();
             FilePath = directory + FileName;
 
@@ -55,5 +56,10 @@ public class Utils {
     public static void resetFilesCache() {
         FileName = null;
         FilePath = null;
+    }
+    
+    public static String generateHash(String password){
+        passHash = new Pbkdf2PasswordHashImpl();
+        return passHash.generate(password.toCharArray());
     }
 }

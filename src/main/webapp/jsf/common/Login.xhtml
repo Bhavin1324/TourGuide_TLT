@@ -23,15 +23,17 @@
                     </div>
                     <div style="font-size: 25px; margin-bottom: 25px;">Login</div>
                     <form method="POST">
+                        <p:staticMessage severity="error" styleClass="w-full m-0 mb-2" summary="ERROR" detail="#{loginBean.errorStatus}" rendered="#{loginBean.errorStatus != null}"/>
                         <div>
-                            <input type="text" id="username" name="username" value="" placeholder="Enter username" class="input-text-box"/>
-                        </div>
-                        <div>
-                            <input type="password" id="password" name="password" value="" placeholder="Enter password" class="input-text-box"/>
-                        </div>
-                        <p:staticMessage severity="error" styleClass="w-full" summary="ERROR" detail="#{loginBean.errorStatus}" rendered="#{loginBean.errorStatus != null}"/>
-                        <div>
-                            <input type="submit" id="login-button" value="Login" class="login-button"/>
+                            <div>
+                                <input type="text" id="username" name="username" value="" placeholder="Enter username" class="input-text-box"/>
+                            </div>
+                            <div>
+                                <input type="password" id="password" name="password" value="" placeholder="Enter password" class="input-text-box mb-2"/>
+                            </div>
+                            <div class="text-right mb-3">Unable to login? <a href="/TheLandmarkTour/jsf/common/ResetPassword.jsf" style="color:#9c27b0;text-decoration: none; font-weight: 500">Did you forgot password?</a></div>
+
+                            <input type="submit" id="login-button mt-3" value="Login" class="login-button"/>
                         </div>
                     </form>
                     <div>

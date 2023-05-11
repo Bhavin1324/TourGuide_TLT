@@ -84,7 +84,7 @@
             <p:dialog header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade" visible="${registerUserBean.showDialog}">
                 <p class="m-0">User has been registered successfully!</p>
                 <f:facet name="footer">
-                    <p:commandButton value="Close" style="width: 5rem" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}"/>
+                    <p:commandButton value="Go for login" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>
