@@ -8,6 +8,7 @@
         <title>Facelet Title</title>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
     </h:head>
     <h:body>
         <h:form enctype="multipart/form-data">
@@ -69,7 +70,7 @@
                     </div>
                     <div class="mb-2">Select profile picture</div>
                     <div class="w-full mb-5 flex align-items-center justify-content-between">
-                        <p:fileUpload id="profile-image" value="#{registerUserBean.file}" mode="simple" skinSimple="true" />
+                        <p:fileUpload id="profile-image" value="#{registerUserBean.file}" mode="simple" skinSimple="true"/>
                     </div>
                 </div>
 
@@ -78,13 +79,15 @@
                 </div>
             </div>
         </h:form>
-<!--        <p:dialog header="Success" widgetVar="dlg3" minHeight="40" width="350" showEffect="fade">
-            <p class="m-0"></p>
-            <f:facet name="footer">
-                <p:commandButton type="button" value="No" styleClass="ui-button-flat mr-2" style="width: 6rem" />
-                <p:commandButton type="button" value="Yes" style="width: 5rem" />
-            </f:facet>
-        </p:dialog>-->
+        
+        <h:form>
+            <p:dialog header="Success" widgetVar="dlg3" minHeight="40" width="350" showEffect="fade">
+                <p class="m-0">User has been registered successfully!</p>
+                <f:facet name="footer">
+                    <p:commandButton value="Close" style="width: 5rem" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </h:body>
 </html>
 

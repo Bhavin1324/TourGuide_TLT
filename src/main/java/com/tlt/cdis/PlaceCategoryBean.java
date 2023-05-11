@@ -3,10 +3,10 @@ package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.PlaceCategory;
+import com.tlt.utils.Utils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -71,7 +71,7 @@ public class PlaceCategoryBean implements Serializable {
 
     public void saveCategory() {
         if (this.selectedCategory.getId() == null) {
-            this.selectedCategory.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
+            this.selectedCategory.setId(Utils.getUUID());
             this.pc.add(this.selectedCategory);
             ad.insertPlaceCategory(selectedCategory);
             this.selectedCategory = null;

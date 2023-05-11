@@ -5,13 +5,13 @@ import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.Cities;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
+import com.tlt.utils.Utils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -109,7 +109,7 @@ public class PlacesBean implements Serializable {
         selectedPlace.setCityId(city);
         selectedPlace.setCategoryId(p);
         if (this.selectedPlace.getId() == null) {
-            this.selectedPlace.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
+            this.selectedPlace.setId(Utils.getUUID());
             this.pc.add(this.selectedPlace);
             ad.insertPlace(selectedPlace);
             this.selectedPlace = null;
