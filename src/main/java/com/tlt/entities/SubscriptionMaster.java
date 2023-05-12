@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -52,6 +53,7 @@ public class SubscriptionMaster implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     @ManyToMany(mappedBy = "subscriptionMasterCollection", fetch = FetchType.LAZY)
+    @CascadeOnDelete
     private Collection<UserMaster> userMasterCollection;
     @JoinColumn(name = "subscription_model_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -138,5 +140,5 @@ public class SubscriptionMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.SubscriptionMaster[ id=" + id + " ]";
     }
-    
+
 }

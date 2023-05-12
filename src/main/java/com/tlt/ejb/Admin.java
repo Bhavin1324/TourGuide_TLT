@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.Cities;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
@@ -172,6 +173,11 @@ public class Admin implements AdminLocal {
     }
 
     @Override
+    public UserRole getRoleByName(String role) {
+        return (UserRole) em.createNamedQuery("UserRole.findByRole");
+    }
+
+    @Override
     public Collection<UserMaster> getAllUsers() {
         Collection<UserMaster> users = em.createNamedQuery("UserMaster.findAll").getResultList();
         return users;
@@ -249,6 +255,42 @@ public class Admin implements AdminLocal {
             }
         }
         return null;
+    }
+
+    @Override
+    public Collection<UserMaster> getUsersByRoles(UserRole role) {
+        Collection<UserRole> roles = em.createNamedQuery("UserRole.findByRole").setParameter("role", role.getUserRolePK().getRole()).getResultList();
+
+        Collection<UserMaster> usersToReturn = new ArrayList<>();
+        for (UserRole r : roles) {
+            usersToReturn.add(r.getUserMaster());
+        }
+        return usersToReturn;
+    }
+
+    @Override
+    public void deleteUser(String id) {
+        UserMaster user = em.find(UserMaster.class, id);
+        Collection<UserRole> roles = user.getUserRoleCollection();
+        Collection<AppointmentMaster> appt = user.getAppointmentMasterCollection();
+        Collection<GuideMaster> guides = user.getGuideMasterCollection();
+        Collection<PaymentMaster> payments = user.getPaymentMasterCollection();
+        Collection<SubscriptionMaster> subs = user.getSubscriptionMasterCollection();
+//        for(UserRole r : roles) {
+//           if(r.getUserMaster().equals(user)){
+//               roles.remove(r);
+//               user.setUserRoleCollection(roles);
+//               return;
+//           }
+//        }
+        em.createNamedQuery("UserRole.deleteByUsername").setParameter("username", user.getName());
+//        em.merge(user);
+        em.remove(user);
+    }
+
+    @Override
+    public void insertUser(UserMaster user) {
+        em.persist(user);
     }
 
 }

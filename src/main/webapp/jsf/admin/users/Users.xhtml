@@ -3,15 +3,170 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      >
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Users</title>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
     </h:head>
-    <h:body>
-       <navbar:admin-navbar sideNavigationBean="#{navigationBean}"/>
-        <h2>This page is to manage users</h2>
+    <h:body class="bg-gray-200">
+        <navbar:admin-navbar sideNavigationBean="#{navigationBean}"/>
+        <div class="my-5">
+            <div class="container-fluid mx-3">
+                <h2 class="my-3 mx-1" style="font-family: sans-serif">Users</h2>
+                <div class="card crud-demo">
+                    <h:form id="form">
+                        <p:growl id="messages" showDetail="true" />
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <p:commandButton value="New" icon="pi pi-plus" actionListener="#{usersBean.openNew}"
+                                                 update=":dialogs:manage-users-content" 
+                                                 oncomplete="PF('manageUserDialog').show()"
+                                                 styleClass="ui-button-success" style="margin-right: .5rem">
+                                    <p:resetInput target=":dialogs:manage-users-content" />
+                                </p:commandButton>
+                                <p:commandButton id="delete-users-button" value="#{usersBean.deleteButtonMessage}"
+                                                 icon="pi pi-trash" actionListener="#{usersBean.deleteSelectedUsers}"
+                                                 styleClass="ui-button-danger mr-2" disabled="#{!usersBean.hasSelectedUsers()}" update="@this">
+                                    <p:confirm header="Confirmation" message="Delete the selected Places?"
+                                               icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+                        <p:dataTable id="dt-users" widgetVar="dtUser" var="u" value="#{usersBean.users}"
+                                     reflow="true" styleClass="products-table" selection="#{usersBean.selectedUsers}"
+                                     rowKey="#{p.id}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <div class="products-table-header">
+                                    <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" onkeyup="PF('dtUser').filter()" placeholder="Search" />
+                                    </span>
+                                    <span class="ml-3">
+                                        <p:selectOneMenu valueChangeListener="#{usersBean.roleChangeListener}" 
+                                                         id="roles" value="#{usersBean.role}">
+                                            <f:selectItem itemLabel="-- Select Role --" itemValue="notSelected" />
+                                            <f:selectItem itemLabel="admin" itemValue="admin"/>
+                                            <f:selectItem itemLabel="guide" itemValue="guide"/>
+                                            <f:selectItem itemLabel="tourist" itemValue="tourist"/>
+                                            <p:ajax event="change" update=":form:dt-users" />
+                                        </p:selectOneMenu>
+                                    </span>
+                                </div>
+                            </f:facet>
+                            <p:ajax event="rowSelect" update=":form:delete-users-button" />
+                            <p:ajax event="rowUnselect" update=":form:delete-users-button" />
+                            <p:ajax event="rowSelectCheckbox" update=":form:delete-users-button" />
+                            <p:ajax event="rowUnselectCheckbox" update=":form:delete-users-button" />
+                            <p:ajax event="toggleSelect" update=":form:delete-users-button" />
+
+                            <p:column selectionMode="multiple" styleClass="mr-2" exportable="false"></p:column>
+
+                            <p:column headerText="Id" sortBy="#{u.id}" filterBy="#{u.id}">
+                                <h:outputText value="#{u.id}" />
+                            </p:column>
+                            <p:column headerText="Name" sortBy="#{u.name}" filterBy="#{u.name}">
+                                <h:outputText value="#{u.name}" />
+                            </p:column>
+                            <p:column class="" headerText="Image" exportable="false" >
+                                <p:graphicImage id="img"  value="/uploads/profiles/#{u.profileImage}" style="width: 130px;height:80px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)" />
+                            </p:column>
+                            <p:column headerText="Email" sortBy="#{u.email}" filterBy="#{u.email}">
+                                <h:outputText value="#{u.email}" />
+                            </p:column>
+                            <p:column headerText="Contact" sortBy="#{u.contact}" filterBy="#{u.contact}" >
+                                <h:outputText value="#{u.contact}" />
+                            </p:column>
+                            <p:column headerText="Address" sortBy="#{u.address}" filterBy="#{u.address}">
+                                <h:outputText value="#{u.address}" />
+                            </p:column>
+
+                            <p:column exportable="false">
+                                <p:commandButton styleClass="ui-button-danger rounded-button" action="#{usersBean.setUserid(u.id)}"
+                                                 icon="pi pi-trash" process="@this" oncomplete="PF('deleteUserDialog').show()">
+                                    <c:set var="category" value="#{u}" />
+                                    <f:setPropertyActionListener target="#{usersBean.selectedUser}" value="${u}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+
+                    <h:form enctype="multipart/form-data" id="dialogs">
+                        <p:dialog  header="Place Details" styleClass="w-10 md:w-6 h-fit" showEffect="fade" modal="true" widgetVar="manageUserDialog" responsive="true">
+                            <p:outputPanel id="manage-users-content" class="ui-fluid px-4">
+                                <div class="field">
+                                    <p:inputText id="name" placeholder="Provide full name" required="true" validatorMessage="Name: Length of name must be greater than 2 characters" requiredMessage="Name: Fullname is required" styleClass="w-full block" value="#{registerUserBean.userMaster.name}" >
+                                        <f:validateLength minimum="3"/>
+                                    </p:inputText>
+                                </div>
+                                <div class="field">
+                                    <p:inputText  id="email" placeholder="example@email.com" styleClass="w-full" required="true" requiredMessage="Email: Email is required" validatorMessage="Email: Entered email is invalid" value="#{registerUserBean.userMaster.email}">
+                                        <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
+                                    </p:inputText>
+                                </div>
+                                <div class="field flex flex-wrap">
+                                    <p:inputText id="username" placeholder="Username" styleClass="w-full" rendered="true" requiredMessage="Username: Username is required" validatorMessage="Username: Username criteria should be matched" value="#{registerUserBean.userMaster.username}">
+                                        <f:validateRegex pattern="^[a-zA-Z]+\d+$"/>
+                                    </p:inputText>
+                                <small class="mb-3 text-blue-400">Username must start with character and ends with any digit</small>
+                                </div>
+                                <div class="field">
+                                    <p:password id="password" placeholder="Create password" toggleMask="true" redisplay="true" styleClass="block w-full" required="true" requiredMessage="Password: Password is required" validatorMessage="Password: Password should contains minimun 6 characters and atleast one digit" value="#{registerUserBean.userMaster.password}">
+                                        <f:validateRegex pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"/>
+
+                                    </p:password>
+                                </div>
+                                <div class="field">
+                                    <p:password id="confirm-password" placeholder="Confirm password" toggleMask="true" redisplay="true" styleClass="w-full" required="true" requiredMessage="Password: Confirm passowrd is required" validatorMessage="Password: Password should be matched" value="#{registerUserBean.confirmPass}">
+                                    </p:password>
+                                </div>
+                                <div class="field">
+                                    <p:inputMask id="phone" value="#{registerUserBean.contactNumber}" mask="999 999 9999" styleClass="w-full"/>
+                                </div>
+                                <div class="field">
+                                    <p:inputTextarea id="address" cols="33" styleClass="w-full" placeholder="Enter your address" required="true" requiredMessage="Address: Address is required" value="#{registerUserBean.userMaster.address}"/>
+                                </div>
+                                <div class="field">
+                                    <p:fileUpload id="profile-image" value="#{registerUserBean.file}" mode="simple" skinSimple="true"/>
+                                </div>
+                            </p:outputPanel>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" styleClass="mr-2" icon="pi pi-check" actionListener="#{registerUserBean.register()}"
+                                                 update="manage-users-content" process="manage-users-content @this" />
+                                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageUserDialog').hide()"
+                                                 class="mx-3 ui-button-secondary" type="button" />
+                            </f:facet>
+                        </p:dialog>
+
+                        <p:confirmDialog widgetVar="deleteUserDialog" showEffect="fade" width="400"
+                                         message="Are you sure you want to delete this Place?" 
+                                         header="Delete" severity="warn"
+                                         styleClass="font-semibold text-lg"
+                                         >
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-confirmdialog-no ui-button-flat ui-button-help"
+                                             onclick="PF('deleteUserDialog').hide()"
+                                             />
+                            <p:commandButton value="Yes" actionListener="#{usersBean.deleteUser}"
+                                             process="@this" update=":form:delete-users-button"
+                                             oncomplete="PF('deleteUserDialog').hide()"
+                                             styleClass="ui-confirmdialog-yes ui-button-help"
+                                             />
+                        </p:confirmDialog>
+
+                        <p:confirmDialog global="false" showEffect="fade" width="300">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                             icon="pi pi-times" />
+                        </p:confirmDialog>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 

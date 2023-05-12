@@ -30,7 +30,7 @@
                                 <p:commandButton id="delete-sub-model-button" value="#{subsModelBean.deleteButtonMessage}"
                                                  icon="pi pi-trash" actionListener="#{subsModelBean.deleteSelectedSubModels()}"
                                                  styleClass="ui-button-danger" disabled="#{!subsModelBean.hasSelectedSubModels()}" update="@this">
-                                        <p:confirm header="Confirmation" message="Delete the selected products?"
+                                        <p:confirm header="Delete" message="Delete the selected Subscription Model?"
                                                icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>
                             </p:toolbarGroup>
@@ -116,13 +116,18 @@
                             </f:facet>
                         </p:dialog>
 
-                        <p:confirmDialog widgetVar="deleteSubModelDialog" showEffect="fade" width="300"
-                                         message="Delete the product?" header="Confirm" severity="warn">
-                            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{subsModelBean.deleteSubModel}"
-                                             process="@this" update=":form:delete-sub-model-button"
-                                             oncomplete="PF('deleteSubModelDialog').hide()" />
-                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                        <p:confirmDialog styleClass="font-semibold text-lg" widgetVar="deleteSubModelDialog" 
+                                         showEffect="fade" width="400"
+                                         message="Are you sure you want to delete this Subscription Model?" 
+                                         header="Delete" severity="warn">
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-confirmdialog-no ui-button-flat ui-button-help"
                                              onclick="PF('deleteSubModelDialog').hide()" />
+                            <p:commandButton value="Yes" actionListener="#{subsModelBean.deleteSubModel}"
+                                             process="@this" update=":form:delete-sub-model-button"
+                                             oncomplete="PF('deleteSubModelDialog').hide()"
+                                             styleClass="ui-confirmdialog-yes ui-button-help"
+                                             />
                         </p:confirmDialog>
 
                         <p:confirmDialog global="false" showEffect="fade" width="300">

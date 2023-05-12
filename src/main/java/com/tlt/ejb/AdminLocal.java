@@ -69,8 +69,16 @@ public interface AdminLocal {
     //Users
     Collection<UserMaster> getAllUsers();
 
+    void deleteUser(String id);
+
+    void insertUser(UserMaster user);
+
+    Collection<UserMaster> getUsersByRoles(UserRole role);
+
     //Roles
     Collection<UserRole> getAllRoles();
+
+    UserRole getRoleByName(String role);
 
     void addUserRole(UserRole userRole);
 
@@ -92,6 +100,6 @@ public interface AdminLocal {
 
     Collection<SubscriptionMaster> getSubscriptionCount();
 
-    Cities  getCityOfStateByName(Integer state_id, String name);
+    Cities getCityOfStateByName(Integer state_id, String name);
 
 }

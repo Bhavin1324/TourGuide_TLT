@@ -21,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -63,6 +64,7 @@ public class PaymentMaster implements Serializable {
     private SubscriptionMaster subscriptionId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @CascadeOnDelete
     private UserMaster userId;
 
     public PaymentMaster() {
@@ -160,5 +162,5 @@ public class PaymentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.PaymentMaster[ id=" + id + " ]";
     }
-    
+
 }

@@ -30,7 +30,7 @@
                                 <p:commandButton id="delete-category-button" value="#{placeCatBean.deleteButtonMessage}"
                                                  icon="pi pi-trash" actionListener="#{placeCatBean.deleteSelectedCategories}"
                                                  styleClass="ui-button-danger" disabled="#{!placeCatBean.hasSelectedCategories()}" update="@this">
-                                    <p:confirm header="Confirmation" message="Delete the selected products?"
+                                    <p:confirm header="Confirmation" message="Delete the selected Categories?"
                                                icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>
                             </p:toolbarGroup>
@@ -97,13 +97,16 @@
                             </f:facet>
                         </p:dialog>
 
-                        <p:confirmDialog widgetVar="deleteCategoryDialog" showEffect="fade" width="300"
-                                         message="Delete the product?" header="Confirm" severity="warn">
-                            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{placeCatBean.deleteCategory}"
+                        <p:confirmDialog widgetVar="deleteCategoryDialog" showEffect="fade" width="400"
+                                         message="Are you sure you want to delete this Category?" 
+                                         styleClass="text-lg font-semibold"
+                                         header="Delete" severity="warn">
+                            <p:commandButton value="Yes" icon="pi pi-check" 
+                                             styleClass="ui-confirmdialog-yes ui-button-help" 
+                                             actionListener="#{placeCatBean.deleteCategory}" 
                                              process="@this" update=":form:delete-category-button"
                                              oncomplete="PF('deleteCategoryDialog').hide()" />
-                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                             onclick="PF('deleteCategoryDialog').hide()" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat ui-button-help" icon="pi pi-times" onclick="PF('deleteCategoryDialog').hide()" />
                         </p:confirmDialog>
 
                         <p:confirmDialog global="false" showEffect="fade" width="300">
