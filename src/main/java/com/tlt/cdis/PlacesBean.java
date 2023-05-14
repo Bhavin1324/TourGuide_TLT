@@ -1,6 +1,6 @@
 package com.tlt.cdis;
 
-import static com.tlt.constants.PathConstants.PLACES_IMG_UPLOAD;
+import static com.tlt.constants.PathConstants.PLACES_IMG_DEST;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.Cities;
 import com.tlt.entities.PlaceCategory;
@@ -139,7 +139,7 @@ public class PlacesBean implements Serializable {
             if (this.selectedPlace.getId() == null) {
                 this.selectedPlace.setId(Utils.getUUID());
 //                    this.pc.add(this.selectedPlace);
-                boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE, PLACES_IMG_UPLOAD);
+                boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE, PLACES_IMG_DEST);
                 if (!uploadStatus) {
                     if (file != null && !file.getContentType().equalsIgnoreCase("image/png") && !file.getContentType().equalsIgnoreCase("image/jpeg") && !file.getContentType().equalsIgnoreCase("image/jpg")) {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Image: image should be jpeg | jpg | png only", ""));
