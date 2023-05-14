@@ -6,6 +6,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
+         <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
@@ -21,7 +24,7 @@
                 <p:message for="confirm-password"/>
 
                 <div>
-                    <div class="text-2xl font-medium align-self-start mb-4 mt-3">Register yourself</div>
+                    <div class="text-2xl font-medium align-self-start mb-4 mt-1">Register yourself</div>
 
                     <div class="ui-input-icon-left w-full mb-3">
                         <i class="pi pi-user" />
@@ -61,7 +64,7 @@
 
                     <div class="ui-input-icon-left w-full mb-3">
                         <i class="pi pi-phone" />
-                        <p:inputMask id="phone" value="#{registerUserBean.contactNumber}" mask="999 999 9999" styleClass="w-full"/>
+                        <p:inputMask id="phone" value="#{registerUserBean.contactNumber}" mask="999 999 9999" styleClass="w-full" required="true" requiredMessage="Phone: phone number is required!"/>
 
                     </div>
 
@@ -75,13 +78,13 @@
                 </div>
 
                 <div class="w-full">
-                    <p:commandButton id="reg-btn" value="Register" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 rounded-button block"/>
+                    <p:commandButton id="reg-btn" value="Register" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 mb-4 rounded-button block"/>
                 </div>
             </div>
         </h:form>
         
         <h:form>
-            <p:dialog header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade" visible="${registerUserBean.showDialog}">
+            <p:dialog header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade">
                 <p class="m-0">User has been registered successfully!</p>
                 <f:facet name="footer">
                     <p:commandButton value="Go for login" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}"/>

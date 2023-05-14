@@ -1,15 +1,16 @@
 package com.tlt.utils;
 
-import static com.tlt.constants.PathConstants.PROFILE_IMG_DEST;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Random;
 import java.util.UUID;
 import org.glassfish.soteria.identitystores.hash.Pbkdf2PasswordHashImpl;
 import org.primefaces.model.file.UploadedFile;
 
 public class Utils {
+
     public static Pbkdf2PasswordHashImpl passHash;
     public static String FileName;
     public static String FilePath;
@@ -58,9 +59,19 @@ public class Utils {
         FileName = null;
         FilePath = null;
     }
-    
-    public static String generateHash(String password){
+
+    public static String generateHash(String password) {
         passHash = new Pbkdf2PasswordHashImpl();
         return passHash.generate(password.toCharArray());
+    }
+
+    public static String generateOtp(Integer length) {
+        String numbers = "0123456789";
+        char[] otp = new char[length];
+        Random rand = new Random();
+        for (int i = 0; i < length; i++) {
+            otp[i] = numbers.charAt(rand.nextInt(numbers.length()));
+        }
+        return new String(otp);
     }
 }

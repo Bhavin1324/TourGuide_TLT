@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import io.jsonwebtoken.*;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 
@@ -23,7 +24,8 @@ public class TokenProvider implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.secretKey = "NcRfUjXn2r5u8x/A?D(G-KaPdSgVkYp3s6v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeShVkYp3s6v9y$B&E)H@McQfTjWnZq4t7w!z%C*F-JaNdRgUkXp2s5u8x/A?D(G+KbPeShVmYq3t6w9y$B&E)H@McQfTjWnZr4u7x!A%C*F-JaNdRgUkXp2s5v8y/B?E(G+KbPeShVmYq3t6w9z$C&F)J@McQfTjWnZr4";
+        ResourceBundle bundle = ResourceBundle.getBundle("properties.config");
+        this.secretKey = bundle.getString("SECRET_KEY");
         this.tokenValidity = TimeUnit.HOURS.toMillis(20);
         this.tokenValidityForRememberMe = TimeUnit.SECONDS.toMillis(REMEMBER_VALIDITY_SECONDS);
     }

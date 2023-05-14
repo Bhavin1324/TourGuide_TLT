@@ -2,6 +2,9 @@
 import com.tlt.JwtConfig.JWTCredential;
 import com.tlt.JwtConfig.TokenProvider;
 import static com.tlt.constants.JwtConstants.BEARER;
+import static com.tlt.constants.JwtConstants.ROLE_ADMIN;
+import static com.tlt.constants.JwtConstants.ROLE_GUIDE;
+import static com.tlt.constants.JwtConstants.ROLE_TOURIST;
 import static com.tlt.constants.JwtConstants.TOKEN;
 import static com.tlt.constants.UrlConstants.TO_ADMIN;
 import static com.tlt.constants.UrlConstants.TO_GUIDE;
@@ -74,13 +77,13 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                     KeepRecord.setPrincipal(result.getCallerPrincipal());
                     KeepRecord.setRoles(result.getCallerGroups());
                     KeepRecord.setCredential(credential);
-                    if (result.getCallerGroups().contains("admin")) {
+                    if (result.getCallerGroups().contains(ROLE_ADMIN)) {
                         response.sendRedirect(TO_ADMIN);
                     }
-                    if (result.getCallerGroups().contains("tourist")) {
+                    if (result.getCallerGroups().contains(ROLE_TOURIST)) {
                         response.sendRedirect(TO_TOURIST);
                     }
-                    if (result.getCallerGroups().contains("guide")) {
+                    if (result.getCallerGroups().contains(ROLE_GUIDE)) {
                         response.sendRedirect(TO_GUIDE);
                     }
                     return status;
@@ -91,13 +94,13 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                 }
             }
             if (request.getSession().getAttribute(TOKEN) != null && ((request.getRequestURI().contains("Login")) || request.getRequestURI().equals("/TheLandmarkTour/"))) {
-                if (KeepRecord.getRoles().contains("admin")) {
+                if (KeepRecord.getRoles().contains(ROLE_ADMIN)) {
                     response.sendRedirect(TO_ADMIN);
                 }
-                if (KeepRecord.getRoles().contains("tourist")) {
+                if (KeepRecord.getRoles().contains(ROLE_TOURIST)) {
                     response.sendRedirect(TO_TOURIST);
                 }
-                if (KeepRecord.getRoles().contains("guide")) {
+                if (KeepRecord.getRoles().contains(ROLE_GUIDE)) {
                     response.sendRedirect(TO_GUIDE);
                 }    
            }

@@ -53,12 +53,22 @@ public class Tourist implements TouristLocal {
     @Override
     public UserMaster findUserByUsername(String username) {
         Collection<UserMaster> users = em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getResultList();
-        for(UserMaster u : users){
-            if(u.getUsername().equals(username)){
+        for (UserMaster u : users) {
+            if (u.getUsername().equals(username)) {
                 return u;
             }
         }
         return null;
     }
-    
+
+    @Override
+    public UserMaster findUserByEmail(String email) {
+        Collection<UserMaster> users = em.createNamedQuery("UserMaster.findByEmail").setParameter("email", email).getResultList();
+        for (UserMaster u : users) {
+            if (u.getEmail().equals(email)) {
+                return u;
+            }
+        }
+        return null;
+    }
 }

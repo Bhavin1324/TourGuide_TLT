@@ -24,10 +24,6 @@ import org.primefaces.model.charts.optionconfig.title.Title;
 import org.primefaces.model.charts.pie.PieChartDataSet;
 import org.primefaces.model.charts.pie.PieChartModel;
 
-/**
- *
- * @author kunal
- */
 @Named(value = "adminHomeBean")
 @SessionScoped
 public class AdminHomeBean implements Serializable {
