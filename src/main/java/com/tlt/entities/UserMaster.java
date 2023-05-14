@@ -6,6 +6,7 @@ package com.tlt.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -196,6 +197,7 @@ public class UserMaster implements Serializable {
         this.paymentMasterCollection = paymentMasterCollection;
     }
 
+    @JsonbTransient
     public Collection<UserRole> getUserRoleCollection() {
         return userRoleCollection;
     }

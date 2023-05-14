@@ -6,6 +6,8 @@ package servlet;
 
 import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.SubscriptionMaster;
+import com.tlt.entities.UserMaster;
+import com.tlt.entities.UserRole;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
@@ -48,10 +50,12 @@ public class TestingServlet extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet TestingServlet at " + request.getContextPath() + "</h1>");
 
-            Collection<SubscriptionMaster> subs = ad.getSubscriptionCount();
-            for (Object s : subs) {
-
-                out.println();
+            Collection<UserMaster> subs = ad.getAllUsers();
+            for (UserMaster s : subs) {
+                Collection<UserRole> roles = s.getUserRoleCollection();
+                for (UserRole r : roles) {
+                    out.println(r.getUserMaster().getName()+ " ----> " + r.getUserRolePK().getRole() + "<br>");
+                }
             }
 
             out.println("</body>");

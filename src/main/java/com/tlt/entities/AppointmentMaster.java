@@ -21,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -60,6 +61,7 @@ public class AppointmentMaster implements Serializable {
     private PlaceMaster placeId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @CascadeOnDelete
     private UserMaster userId;
 
     public AppointmentMaster() {
@@ -149,5 +151,5 @@ public class AppointmentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.AppointmentMaster[ id=" + id + " ]";
     }
-    
+
 }
