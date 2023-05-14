@@ -1,7 +1,5 @@
 package com.tlt.cdis;
 
-import com.tlt.constants.PathConstants;
-import static com.tlt.constants.PathConstants.DEFAULT_USER_IMG;
 import static com.tlt.constants.PathConstants.PLACES_IMG_DEST;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.Cities;
