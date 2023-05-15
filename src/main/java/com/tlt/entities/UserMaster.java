@@ -34,6 +34,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "UserMaster.findAll", query = "SELECT u FROM UserMaster u"),
     @NamedQuery(name = "UserMaster.findById", query = "SELECT u FROM UserMaster u WHERE u.id = :id"),
     @NamedQuery(name = "UserMaster.findByUsername", query = "SELECT u FROM UserMaster u WHERE u.username = :username"),
+    @NamedQuery(name = "UserMaster.getUserCount", query = "SELECT count(u) FROM UserMaster u"),
     @NamedQuery(name = "UserMaster.findByContact", query = "SELECT u FROM UserMaster u WHERE u.contact = :contact")})
 public class UserMaster implements Serializable {
 

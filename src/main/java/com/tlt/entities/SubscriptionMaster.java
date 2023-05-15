@@ -34,7 +34,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 @NamedQueries({
     @NamedQuery(name = "SubscriptionMaster.findAll", query = "SELECT s FROM SubscriptionMaster s"),
     @NamedQuery(name = "SubscriptionMaster.findById", query = "SELECT s FROM SubscriptionMaster s WHERE s.id = :id"),
-    @NamedQuery(name = "SubscriptionMaster.getAllCount", query = "SELECT COUNT(s) FROM SubscriptionMaster s WHERE s.startDate = :startDate and s.endDate = :endDate GROUP BY s.subscriptionModelId"),
+    @NamedQuery(name = "SubscriptionMaster.getActiveSubsCount", query = "SELECT COUNT(s) FROM SubscriptionMaster s WHERE s.endDate >= :today"),
     @NamedQuery(name = "SubscriptionMaster.findByStartDate", query = "SELECT s FROM SubscriptionMaster s WHERE s.startDate = :startDate"),
     @NamedQuery(name = "SubscriptionMaster.findByEndDate", query = "SELECT s FROM SubscriptionMaster s WHERE s.endDate = :endDate")})
 public class SubscriptionMaster implements Serializable {

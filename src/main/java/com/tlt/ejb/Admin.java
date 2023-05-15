@@ -11,12 +11,16 @@ import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import javax.annotation.security.DeclareRoles;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 @DeclareRoles("Admin")
 @Stateful
@@ -241,8 +245,32 @@ public class Admin implements AdminLocal {
     }
 
     @Override
-    public Collection<SubscriptionMaster> getSubscriptionCount() {
-        return em.createNativeQuery("Select s.subscriptionModelId Count(*) from SubscriptionMaster s").getResultList();
+    public long getUserCount() {
+        return (long) em.createNamedQuery("UserMaster.getUserCount").getSingleResult();
+    }
+
+    @Override
+    public long getPlacesCount() {
+        return (long) em.createNamedQuery("PlaceMaster.getPlaceCount").getSingleResult();
+    }
+
+    @Override
+    public long getActiveSubsCount() {
+        Date today = new Date();
+        System.out.println("Today is " + today);
+        return (long) em.createNamedQuery("SubscriptionMaster.getActiveSubsCount").setParameter("today",today).getSingleResult();
+    }
+    @Override
+    public String getTotalIncome() {
+        Date today = new Date();
+//        System.out.println("Today is " + today);
+        List<BigDecimal> costArray = em.createNamedQuery("SubscriptionModel.calculateSubsRevenue").setParameter("today",today).getResultList();
+        BigDecimal revenue = null;
+        BigDecimal sum = null;
+        for(BigDecimal c : costArray){
+        sum = revenue.add(c);
+        }
+        return sum.toString();
     }
 
     @Override

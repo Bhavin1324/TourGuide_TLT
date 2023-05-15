@@ -4,12 +4,15 @@
  */
 package com.tlt.cdis;
 
+import com.tlt.ejb.AdminLocal;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.axes.cartesian.CartesianScales;
 import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
@@ -34,6 +37,13 @@ public class AdminHomeBean implements Serializable {
 
     private BarChartModel barModel;
     private PieChartModel pieModel;
+    @EJB
+    AdminLocal ad;
+    long userCount, placeCount, subsCount;
+    String revenue;
+
+    public AdminHomeBean() {
+    }
 
     @PostConstruct
     public void init() {
@@ -41,11 +51,36 @@ public class AdminHomeBean implements Serializable {
         createPirChart();
     }
 
-    public AdminHomeBean() {
+    public long getUserCount() {
+        return ad.getUserCount();
+    }
+
+    public void setUserCount(long userCount) {
+        this.userCount = userCount;
+    }
+
+    public long getPlaceCount() {
+        return ad.getPlacesCount();
+    }
+
+    public void setPlaceCount(long placeCount) {
+        this.placeCount = placeCount;
+    }
+
+    public String getRevenue() {
+        return ad.getTotalIncome();
     }
 
     public BarChartModel getBarModel() {
         return barModel;
+    }
+
+    public long getSubsCount() {
+        return ad.getActiveSubsCount();
+    }
+
+    public void setSubsCount(long subsCount) {
+        this.subsCount = subsCount;
     }
 
     public void setBarModel(BarChartModel barModel) {

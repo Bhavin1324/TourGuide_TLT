@@ -30,6 +30,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "SubscriptionModel.findAll", query = "SELECT s FROM SubscriptionModel s"),
     @NamedQuery(name = "SubscriptionModel.findById", query = "SELECT s FROM SubscriptionModel s WHERE s.id = :id"),
     @NamedQuery(name = "SubscriptionModel.findByDurationInMonth", query = "SELECT s FROM SubscriptionModel s WHERE s.durationInMonth = :durationInMonth"),
+    @NamedQuery(name = "SubscriptionModel.calculateSubsRevenue", query = "SELECT s.cost FROM SubscriptionModel s INNER JOIN SubscriptionMaster sm on s.id = sm.subscriptionModelId.id WHERE sm.endDate >= :today"),
     @NamedQuery(name = "SubscriptionModel.findByCost", query = "SELECT s FROM SubscriptionModel s WHERE s.cost = :cost")})
 public class SubscriptionModel implements Serializable {
 

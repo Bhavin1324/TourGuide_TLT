@@ -35,6 +35,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "PlaceMaster.findAll", query = "SELECT p FROM PlaceMaster p"),
     @NamedQuery(name = "PlaceMaster.findById", query = "SELECT p FROM PlaceMaster p WHERE p.id = :id"),
+    @NamedQuery(name = "PlaceMaster.getPlaceCount", query = "SELECT Count(p) FROM PlaceMaster p"),
     @NamedQuery(name = "PlaceMaster.findByOpeningTime", query = "SELECT p FROM PlaceMaster p WHERE p.openingTime = :openingTime"),
     @NamedQuery(name = "PlaceMaster.findByClosingTime", query = "SELECT p FROM PlaceMaster p WHERE p.closingTime = :closingTime")})
 public class PlaceMaster implements Serializable {
