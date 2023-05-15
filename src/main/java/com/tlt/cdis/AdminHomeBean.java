@@ -40,7 +40,7 @@ public class AdminHomeBean implements Serializable {
     @EJB
     AdminLocal ad;
     long userCount, placeCount, subsCount;
-    String revenue;
+    Integer revenue;
 
     public AdminHomeBean() {
     }
@@ -67,7 +67,7 @@ public class AdminHomeBean implements Serializable {
         this.placeCount = placeCount;
     }
 
-    public String getRevenue() {
+    public Integer getRevenue() {
         return ad.getTotalIncome();
     }
 

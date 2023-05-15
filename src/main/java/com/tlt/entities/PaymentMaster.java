@@ -21,11 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "payment_master")
@@ -53,19 +52,18 @@ public class PaymentMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "payment_status")
     private String paymentStatus;
-    @JoinColumn(name = "guide_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private GuideMaster guideId;
     @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PaymentMethod paymentMethodId;
+    @JoinColumn(name = "guide_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private GuideMaster guideId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserMaster userId;
     @JoinColumn(name = "subscription_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionMaster subscriptionId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @CascadeOnDelete
-    private UserMaster userId;
 
     public PaymentMaster() {
     }
@@ -106,14 +104,6 @@ public class PaymentMaster implements Serializable {
         this.paymentStatus = paymentStatus;
     }
 
-    public GuideMaster getGuideId() {
-        return guideId;
-    }
-
-    public void setGuideId(GuideMaster guideId) {
-        this.guideId = guideId;
-    }
-
     public PaymentMethod getPaymentMethodId() {
         return paymentMethodId;
     }
@@ -122,12 +112,12 @@ public class PaymentMaster implements Serializable {
         this.paymentMethodId = paymentMethodId;
     }
 
-    public SubscriptionMaster getSubscriptionId() {
-        return subscriptionId;
+    public GuideMaster getGuideId() {
+        return guideId;
     }
 
-    public void setSubscriptionId(SubscriptionMaster subscriptionId) {
-        this.subscriptionId = subscriptionId;
+    public void setGuideId(GuideMaster guideId) {
+        this.guideId = guideId;
     }
 
     public UserMaster getUserId() {
@@ -136,6 +126,14 @@ public class PaymentMaster implements Serializable {
 
     public void setUserId(UserMaster userId) {
         this.userId = userId;
+    }
+
+    public SubscriptionMaster getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public void setSubscriptionId(SubscriptionMaster subscriptionId) {
+        this.subscriptionId = subscriptionId;
     }
 
     @Override
@@ -162,5 +160,5 @@ public class PaymentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.PaymentMaster[ id=" + id + " ]";
     }
-
+    
 }

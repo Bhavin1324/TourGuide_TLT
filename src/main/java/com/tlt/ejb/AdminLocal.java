@@ -108,6 +108,6 @@ public interface AdminLocal {
 
     long getUserCount();
     
-    String getTotalIncome();
+    Integer getTotalIncome();
 
 }

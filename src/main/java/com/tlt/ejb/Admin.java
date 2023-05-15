@@ -261,16 +261,15 @@ public class Admin implements AdminLocal {
         return (long) em.createNamedQuery("SubscriptionMaster.getActiveSubsCount").setParameter("today",today).getSingleResult();
     }
     @Override
-    public String getTotalIncome() {
+    public Integer getTotalIncome() {
         Date today = new Date();
 //        System.out.println("Today is " + today);
-        List<BigDecimal> costArray = em.createNamedQuery("SubscriptionModel.calculateSubsRevenue").setParameter("today",today).getResultList();
-        BigDecimal revenue = null;
-        BigDecimal sum = null;
-        for(BigDecimal c : costArray){
-        sum = revenue.add(c);
+        List<Integer> costArray = em.createNamedQuery("SubscriptionModel.calculateSubsRevenue").setParameter("today",today).getResultList();
+        int sum = 0;
+        for(int c : costArray){
+        sum += c;
         }
-        return sum.toString();
+        return sum;
     }
 
     @Override
