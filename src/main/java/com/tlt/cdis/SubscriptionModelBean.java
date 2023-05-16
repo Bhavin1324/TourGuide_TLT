@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -28,6 +29,7 @@ public class SubscriptionModelBean implements Serializable {
     @EJB
     AdminLocal ad;
     List<SubscriptionModel> pc;
+    Collection<SubscriptionModel> allSubscriptionModel;
     SubscriptionModel selectedSubModel;
     String subModelid;
     List<SubscriptionModel> selectedSubModels;
@@ -36,7 +38,17 @@ public class SubscriptionModelBean implements Serializable {
         pc = new ArrayList<>();
         selectedSubModels = new ArrayList<>();
         selectedSubModel = new SubscriptionModel();
+        allSubscriptionModel = new ArrayList<>();
         subModelid = "";
+    }
+
+    public Collection<SubscriptionModel> getSubscriptionModel() {
+                allSubscriptionModel = ad.getAllSubscriptionModel();
+        return allSubscriptionModel;
+    }
+
+    public void setSubscriptionModel(Collection<SubscriptionModel> allSubscriptionModel) {
+        this.allSubscriptionModel = allSubscriptionModel;
     }
 
     public String getSubModelid() {
