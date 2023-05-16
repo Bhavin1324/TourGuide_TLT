@@ -236,6 +236,37 @@
     width: 100%;
     display:block;
 }
+
+body .ui-menu{
+    border: 0px;
+    background: transparent;
+
+}
+body .ui-menu.ui-menubar{
+    background: transparent;
+}
+.responsive-ts{
+    display: block;
+}
+
+.bg-landing{
+    position: relative;
+    background-color: rgba(0,0,0,0.7);
+    height: 80vh;
+    width: 100vw;
+}
+.bg-landing::before{
+    background: url("../images/landing-background.jpg") no-repeat center center/cover;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 80vh;
+    width: 100vw;
+    z-index: -1;
+    background-blend-mode:darken;
+
+}
 @media(min-width:992px) {
     .l-card-desc {
         width: 150%;
@@ -259,6 +290,9 @@
     .l-card-form-heading-primary {
         font-size: 30px;
         font-weight: 500;
+    }
+    .responsive-ts{
+        display: none;
     }
 }
 
@@ -293,6 +327,9 @@
         width: 90%;
     }
     .fp-card-desc{
+        display: none;
+    }
+    .responsive-ts{
         display: none;
     }
 }

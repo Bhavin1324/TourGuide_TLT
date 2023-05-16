@@ -16,7 +16,6 @@ import javax.faces.context.FacesContext;
 public class LoginBean implements Serializable{
 
     private String errorStatus;
-
     public LoginBean() {
         errorStatus = KeepRecord.getErrorStatus();
     }
@@ -26,7 +25,6 @@ public class LoginBean implements Serializable{
     }
 
     public void setErrorStatus(String errorStatus) {
-        System.out.println("Error status" + errorStatus);
         this.errorStatus = errorStatus;
     }
 

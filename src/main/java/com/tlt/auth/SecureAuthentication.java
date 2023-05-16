@@ -77,6 +77,7 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                     KeepRecord.setPrincipal(result.getCallerPrincipal());
                     KeepRecord.setRoles(result.getCallerGroups());
                     KeepRecord.setCredential(credential);
+                    KeepRecord.setUsername(username);
                     if (result.getCallerGroups().contains(ROLE_ADMIN)) {
                         response.sendRedirect(TO_ADMIN);
                     }

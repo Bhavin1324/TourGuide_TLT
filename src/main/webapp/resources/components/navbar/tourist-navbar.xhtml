@@ -5,48 +5,38 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:sidebar="http://xmlns.jcp.org/jsf/composite/components/sidebar"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <!-- INTERFACE -->
     <cc:interface>
+        <cc:attribute name="loggedIn"/>
+        <cc:attribute name="user" />
+        <cc:attribute name="sideNavigationBean" />
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-            <h:form>
-                <p:growl id="messages"/>
-                <p:menubar styleClass="custom-menuflex">
-                    <div style="display: block">
-                        <p:menuitem styleClass="p-2">
-                            <p:graphicImage value="/images/tlt-logo.png" height="40"/>
-                        </p:menuitem>
-                        <p:menuitem style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" styleClass="pl-0 pr-6 text-xl branding font-italic" value="Landmark Tour"/>
-                    </div>
-                    <p:menuitem value="Home"/>
-                    <p:submenu label="Explor">
-                        <p:menuitem value="Nearby places" icon="pi pi-fw pi-map-marker"/>
-                        <p:menuitem value="Nearyby buses" icon="pi pi-fw pi-flag"/>
-                        <p:menuitem value="Recommand me" icon="pi pi-fw pi-star"/>
-                    </p:submenu>
-
-                    <p:submenu label="Guide">
-                        <p:menuitem value="Personal guide" icon="pi pi-fw pi-user"/>
-                        <p:menuitem value="Join guide" icon="pi pi-fw pi-users"/>
-                    </p:submenu>
-
-                    <p:menuitem value="Hotels">
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
+        <h:form>
+            <p:growl id="messages"/>
+            <p:menubar styleClass="custom-menuflex">
+                <div>
+                    <p:menuitem styleClass="p-2" onclick="PF('tourist_side_panel').show()">
+                        <p:graphicImage value="/images/tlt-logo.png" height="40"/>
                     </p:menuitem>
+                    <p:menuitem style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" styleClass="pl-0 pr-1 text-xl branding font-semibold" value="Landmark Tour" onclick="PF('tourist_side_panel').show()" />
+                </div>
 
-                    <p:divider layout="vertical"/>
+                <f:facet name="options">
+                    <div class="flex align-items-center">
+                            <i class="text-3xl pi pi-bars text-purple-600 cursor-pointer p-2 mt-2" onclick="PF('tourist_side_panel').show()"></i>
+                    </div>
+                </f:facet>
+            </p:menubar>
 
-                    <p:menuitem value="Gallary"/>
-                    <p:menuitem value="About us"/>
-                    
-                    <f:facet name="options">
-                        <p:button value="Landmark Tour prime" icon="pi pi-fw pi-verified" styleClass="ui-button-raised ui-button-help ui-button-flat my-2 mx-2"/>
-                        <p:button value="Sign in" styleClass="ui-button-raised ui-button-help my-2 mx-2"/>
-                    </f:facet>
-                </p:menubar>
-            </h:form>
+        </h:form>
+        <sidebar:tourist-sidebar bean="#{cc.attrs.sideNavigationBean}" user="${cc.attrs.user}"/>
+
     </cc:implementation>
 </html>
