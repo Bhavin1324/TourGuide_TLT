@@ -9,7 +9,10 @@ import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
+import com.tlt.utils.GraphUtils;
+import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import javax.ejb.Local;
 
 @Local
@@ -98,8 +101,19 @@ public interface AdminLocal {
 
     Cities getCityById(Integer cityid);
 
-    Collection<SubscriptionMaster> getSubscriptionCount();
-
     Cities getCityOfStateByName(Integer state_id, String name);
+
+    //get counts 
+    long getPlacesCount();
+
+    long getActiveSubsCount();
+
+    long getUserCount();
+    
+    long getTotalIncome();
+    
+    //graphs
+    List<GraphUtils> getMonthlySubscriptionData();
+    List<GraphUtils> getMonthlyRevenueData();
 
 }

@@ -11,12 +11,18 @@ import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
+import com.tlt.utils.GraphUtils;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import javax.annotation.security.DeclareRoles;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 @DeclareRoles("Admin")
 @Stateful
@@ -241,8 +247,27 @@ public class Admin implements AdminLocal {
     }
 
     @Override
-    public Collection<SubscriptionMaster> getSubscriptionCount() {
-        return em.createNativeQuery("Select s.subscriptionModelId Count(*) from SubscriptionMaster s").getResultList();
+    public long getUserCount() {
+        return (long) em.createNamedQuery("UserMaster.getUserCount").getSingleResult();
+    }
+
+    @Override
+    public long getPlacesCount() {
+        return (long) em.createNamedQuery("PlaceMaster.getPlaceCount").getSingleResult();
+    }
+
+    @Override
+    public long getActiveSubsCount() {
+        Date today = new Date();
+//        System.out.println("Today is " + today);
+        return (long) em.createNamedQuery("SubscriptionMaster.getActiveSubsCount").setParameter("today",today).getSingleResult();
+    
+    }
+    @Override
+    public long getTotalIncome() {
+         Query obj = em.createNativeQuery("SELECT SUM(s.cost) FROM subscription_model s INNER JOIN subscription_master sm on s.id = sm.subscription_model_id;");
+        long active = Long.parseLong(obj.getSingleResult().toString());
+        return active;
     }
 
     @Override
@@ -291,6 +316,39 @@ public class Admin implements AdminLocal {
     @Override
     public void insertUser(UserMaster user) {
         em.persist(user);
+    }
+
+    @Override
+    public List<GraphUtils> getMonthlySubscriptionData() {
+       List<Object[]> list = new ArrayList<>();
+       
+      list =  em.createNativeQuery("SELECT DISTINCT MONTHNAME(s.start_date), COUNT(*) AS 'subsCount' FROM `subscription_master` s GROUP BY MONTH(s.start_date) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(s.start_date), ' 01'), '%Y %M %d') ASC;").getResultList();
+      
+      List<GraphUtils> graphData = new ArrayList<>();
+        for(Object[] g : list){
+            GraphUtils gd = new GraphUtils();
+            gd.setMonth(g[0].toString());
+            gd.setCount(Long.parseLong(g[1].toString()));
+            System.out.println(gd.getMonth() + " --- > " + gd.getCount());
+            graphData.add(gd);
+        }
+       return graphData;
+    }
+    @Override
+    public List<GraphUtils> getMonthlyRevenueData() {
+       List<Object[]> list = new ArrayList<>();
+       
+      list =  em.createNativeQuery("SELECT MONTHNAME(sm.start_date), SUM(s.cost) FROM `subscription_model` s INNER JOIN subscription_master sm ON s.id = sm.subscription_model_id GROUP BY MONTHNAME(sm.start_date) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(sm.start_date), ' 01'), '%Y %M %d') ASC;").getResultList();
+      
+      List<GraphUtils> graphData = new ArrayList<>();
+        for(Object[] g : list){
+            GraphUtils gd = new GraphUtils();
+            gd.setMonth(g[0].toString());
+            gd.setCount(Long.parseLong(g[1].toString()));
+//            System.out.println(gd.getMonth() + " --- > " + gd.getCount());
+            graphData.add(gd);
+        }
+       return graphData;
     }
 
 }

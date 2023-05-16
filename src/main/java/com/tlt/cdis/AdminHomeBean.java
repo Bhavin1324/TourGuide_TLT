@@ -4,12 +4,15 @@
  */
 package com.tlt.cdis;
 
+import com.tlt.ejb.AdminLocal;
+import com.tlt.utils.GraphUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.axes.cartesian.CartesianScales;
 import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
@@ -32,20 +35,66 @@ import org.primefaces.model.charts.pie.PieChartModel;
 @SessionScoped
 public class AdminHomeBean implements Serializable {
 
+    @EJB
+    AdminLocal ad;
+    private List<GraphUtils> barGraphData;
+    private List<GraphUtils> pieGraphData;
     private BarChartModel barModel;
     private PieChartModel pieModel;
+    long userCount, placeCount, subsCount;
+    long revenue;
+
+    public AdminHomeBean() {
+        barGraphData = new ArrayList<>();
+        pieGraphData = new ArrayList<>();
+    }
 
     @PostConstruct
     public void init() {
+        barGraphData = ad.getMonthlySubscriptionData();
+        pieGraphData = ad.getMonthlyRevenueData();
         createBarModel();
         createPirChart();
     }
 
-    public AdminHomeBean() {
+    public List<GraphUtils> getGraphData() {
+        return barGraphData;
+    }
+
+    public void setGraphData(List<GraphUtils> graphData) {
+        this.barGraphData = graphData;
+    }
+
+    public long getUserCount() {
+        return ad.getUserCount();
+    }
+
+    public void setUserCount(long userCount) {
+        this.userCount = userCount;
+    }
+
+    public long getPlaceCount() {
+        return ad.getPlacesCount();
+    }
+
+    public void setPlaceCount(long placeCount) {
+        this.placeCount = placeCount;
+    }
+
+    public long getRevenue() {
+        return ad.getTotalIncome();
     }
 
     public BarChartModel getBarModel() {
         return barModel;
+    }
+
+    public long getSubsCount() {
+        return ad.getActiveSubsCount();
+    }
+
+    public void setSubsCount(long subsCount) {
+        this.subsCount = subsCount;
     }
 
     public void setBarModel(BarChartModel barModel) {
@@ -65,49 +114,58 @@ public class AdminHomeBean implements Serializable {
         ChartData data = new ChartData();
 
         BarChartDataSet barDataSet = new BarChartDataSet();
-        barDataSet.setLabel("My First Dataset");
+        barDataSet.setLabel("Subscriptions");
 
         List<Number> values = new ArrayList<>();
-        values.add(65);
-        values.add(59);
-        values.add(80);
-        values.add(81);
-        values.add(56);
-        values.add(55);
-        values.add(40);
-        barDataSet.setData(values);
+        
+//        values.add(65);
+//        values.add(59);
+//        values.add(80);
+//        values.add(81);
+//        values.add(56);
+//        values.add(55);
+//        values.add(40);
+//        values.add(40);
+//        values.add(40);
+//        values.add(40);
+//        values.add(40);
+//        values.add(40);
 
         List<String> bgColor = new ArrayList<>();
-        bgColor.add("rgba(255, 99, 132, 0.2)");
-        bgColor.add("rgba(255, 159, 64, 0.2)");
-        bgColor.add("rgba(255, 205, 86, 0.2)");
-        bgColor.add("rgba(75, 192, 192, 0.2)");
-        bgColor.add("rgba(54, 162, 235, 0.2)");
-        bgColor.add("rgba(153, 102, 255, 0.2)");
-        bgColor.add("rgba(201, 203, 207, 0.2)");
+        bgColor.add("rgb(255, 99, 132)");
+        bgColor.add("rgb(255, 159, 64)");
+        bgColor.add("rgb(255, 205, 86)");
+        bgColor.add("rgb(75, 192, 192)");
+        bgColor.add("rgb(54, 162, 235)");
+        bgColor.add("rgb(153, 102, 255)");
+        bgColor.add("rgb(71, 99, 255)");
+        bgColor.add("rgb(249, 78, 78)");
+        bgColor.add("rgb(42, 152, 42)");
+        bgColor.add("rgb(237, 119, 204)");
+        bgColor.add("rgb(203, 204, 37)");
+        bgColor.add("rgb(255, 217, 82)");
         barDataSet.setBackgroundColor(bgColor);
-
-        List<String> borderColor = new ArrayList<>();
-        borderColor.add("rgb(255, 99, 132)");
-        borderColor.add("rgb(255, 159, 64)");
-        borderColor.add("rgb(255, 205, 86)");
-        borderColor.add("rgb(75, 192, 192)");
-        borderColor.add("rgb(54, 162, 235)");
-        borderColor.add("rgb(153, 102, 255)");
-        borderColor.add("rgb(201, 203, 207)");
-        barDataSet.setBorderColor(borderColor);
-        barDataSet.setBorderWidth(1);
 
         data.addChartDataSet(barDataSet);
 
         List<String> labels = new ArrayList<>();
-        labels.add("January");
-        labels.add("February");
-        labels.add("March");
-        labels.add("April");
-        labels.add("May");
-        labels.add("June");
-        labels.add("July");
+        for(GraphUtils g : barGraphData){
+            values.add(g.getCount());
+            labels.add(g.getMonth());
+        }
+//        labels.add("January");
+//        labels.add("February");
+//        labels.add("March");
+//        labels.add("April");
+//        labels.add("May");
+//        labels.add("June");
+//        labels.add("July");
+//        labels.add("August");
+//        labels.add("September");
+//        labels.add("October");
+//        labels.add("November");
+//        labels.add("December");
+        barDataSet.setData(values);
         data.setLabels(labels);
         barModel.setData(data);
 
@@ -151,24 +209,55 @@ public class AdminHomeBean implements Serializable {
 
         PieChartDataSet dataSet = new PieChartDataSet();
         List<Number> values = new ArrayList<>();
-        values.add(300);
-        values.add(50);
-        values.add(100);
-        dataSet.setData(values);
+//        values.add(300);
+//        values.add(50);
+//        values.add(13);
+//        values.add(45);
+//        values.add(98);
+//        values.add(11);
+//        values.add(14);
+//        values.add(1);
+//        values.add(40);
+//        values.add(30);
+//        values.add(30);
+//        values.add(10);
 
         List<String> bgColors = new ArrayList<>();
         bgColors.add("rgb(255, 99, 132)");
-        bgColors.add("rgb(54, 162, 235)");
+        bgColors.add("rgb(255, 159, 64)");
         bgColors.add("rgb(255, 205, 86)");
+        bgColors.add("rgb(75, 192, 192)");
+        bgColors.add("rgb(54, 162, 235)");
+        bgColors.add("rgb(153, 102, 255)");
+        bgColors.add("rgb(71, 99, 255)");
+        bgColors.add("rgb(249, 78, 78)");
+        bgColors.add("rgb(42, 152, 42)");
+        bgColors.add("rgb(237, 119, 204)");
+        bgColors.add("rgb(203, 204, 37)");
+        bgColors.add("rgb(255, 217, 82)");
         dataSet.setBackgroundColor(bgColors);
 
         data.addChartDataSet(dataSet);
         List<String> labels = new ArrayList<>();
-        labels.add("Red");
-        labels.add("Blue");
-        labels.add("Yellow");
-        data.setLabels(labels);
+         for(GraphUtils g : pieGraphData){
+            values.add(g.getCount());
+            labels.add(g.getMonth());
+        }
+//        labels.add("January");
+//        labels.add("February");
+//        labels.add("March");
+//        labels.add("April");
+//        labels.add("May");
+//        labels.add("June");
+//        labels.add("July");
+//        labels.add("August");
+//        labels.add("September");
+//        labels.add("October");
+//        labels.add("November");
+//        labels.add("December");
 
+        dataSet.setData(values);
+        data.setLabels(labels);
         pieModel.setData(data);
     }
 

@@ -23,18 +23,17 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "subscription_master")
 @NamedQueries({
     @NamedQuery(name = "SubscriptionMaster.findAll", query = "SELECT s FROM SubscriptionMaster s"),
     @NamedQuery(name = "SubscriptionMaster.findById", query = "SELECT s FROM SubscriptionMaster s WHERE s.id = :id"),
-    @NamedQuery(name = "SubscriptionMaster.getAllCount", query = "SELECT COUNT(s) FROM SubscriptionMaster s WHERE s.startDate = :startDate and s.endDate = :endDate GROUP BY s.subscriptionModelId"),
+    @NamedQuery(name = "SubscriptionMaster.getActiveSubsCount", query = "SELECT COUNT(s) FROM SubscriptionMaster s WHERE s.endDate >= :today"),
     @NamedQuery(name = "SubscriptionMaster.findByStartDate", query = "SELECT s FROM SubscriptionMaster s WHERE s.startDate = :startDate"),
     @NamedQuery(name = "SubscriptionMaster.findByEndDate", query = "SELECT s FROM SubscriptionMaster s WHERE s.endDate = :endDate")})
 public class SubscriptionMaster implements Serializable {
@@ -53,7 +52,6 @@ public class SubscriptionMaster implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     @ManyToMany(mappedBy = "subscriptionMasterCollection", fetch = FetchType.LAZY)
-    @CascadeOnDelete
     private Collection<UserMaster> userMasterCollection;
     @JoinColumn(name = "subscription_model_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -140,5 +138,5 @@ public class SubscriptionMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.SubscriptionMaster[ id=" + id + " ]";
     }
-
+    
 }

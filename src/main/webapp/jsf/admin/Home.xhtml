@@ -3,7 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
@@ -15,80 +14,79 @@
     </h:head>
     <h:body class="bg-gray-200">
         <navbar:admin-navbar sideNavigationBean="#{navigationBean}"/>
+        
+        <!--Counts cards-->
+
         <div class="container-fluid p-5" >
-            <div class="grid">
+            <div class="grid" style="font-family: sans-serif">
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card shadow-2 p-5 border-round">
-                        <div class="flex justify-content-between mb-3">
-                            <div>
-                                <span class="block text-500 font-medium mb-3">Subscription</span>
-                                <div class="text-900 font-medium text-xl">152</div>
+                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                        <div class="flex justify-content-center mb-3">
+                            <div class="flex align-items-center justify-content-center bg-orange-100 border-round-3xl"
+                                 style="width:5rem;height:5rem">
+                                <i class="pi pi-user text-orange-500 " style="font-size: 3rem"/>
                             </div>
-                            <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                                 style="width:2.5rem;height:2.5rem">
-                                <i class="pi pi-shopping-cart text-blue-500 text-2xl"/>
+                            <div class="ml-7">
+                                <div class="text-orange-500 font-medium text-4xl mb-3"> #{adminHomeBean.userCount} </div>
+                                <span class="block text-orange-500">Registered Users</span>
                             </div>
                         </div>
-                        <span class="text-green-500 font-medium">24 new </span>
-                        <span class="text-500">since last visit</span>
                     </div>
                 </div>
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card shadow-2 p-5 border-round">
-                        <div class="flex justify-content-between mb-3">
-                            <div>
-                                <span class="block text-500 font-medium mb-3">Revenue</span>
-                                <div class="text-900 font-medium text-xl">$2.100</div>
+                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                        <div class="flex justify-content-center mb-3">
+                            <div class="flex align-items-center justify-content-center bg-blue-100 border-round-3xl"
+                                 style="width:5rem;height:5rem">
+                                <i class="pi pi-map-marker text-blue-500 " style="font-size: 3rem"/>
                             </div>
-                            <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                                 style="width:2.5rem;height:2.5rem">
-                                <i class="pi pi-map-marker text-orange-500 text-2xl"/>
+                            <div class="ml-7">
+                                <div class="text-blue-500 font-medium text-4xl mb-3"> #{adminHomeBean.placeCount} </div>
+                                <span class="block text-blue-500">Places Offered</span>
                             </div>
+
                         </div>
-                        <span class="text-green-500 font-medium">%52+ </span>
-                        <span class="text-500">since last week</span>
                     </div>
                 </div>
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card shadow-2 p-5 border-round">
-                        <div class="flex justify-content-between mb-3">
-                            <div>
-                                <span class="block text-500 font-medium mb-3">Customers</span>
-                                <div class="text-900 font-medium text-xl">28441</div>
+                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                        <div class="flex justify-content-center mb-3">
+                            <div class="flex align-items-center justify-content-center bg-green-100 border-round-3xl"
+                                 style="width:5rem;height:5rem">
+                                <i class="pi pi-verified text-green-500 " style="font-size: 3rem"/>
                             </div>
-                            <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                                 style="width:2.5rem;height:2.5rem">
-                                <i class="pi pi-inbox text-cyan-500 text-2xl"/>
+                            <div class="ml-7">
+                                <div class="text-green-500 font-medium text-4xl mb-3"> #{adminHomeBean.subsCount} </div>
+                                <span class="block text-green-500 ">Subscriptions</span>
                             </div>
+
                         </div>
-                        <span class="text-green-500 font-medium">520  </span>
-                        <span class="text-500">newly registered</span>
                     </div>
                 </div>
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card shadow-2 p-5 border-round">
-                        <div class="flex justify-content-between mb-3">
-                            <div>
-                                <span class="block text-500 font-medium mb-3">Comments</span>
-                                <div class="text-900 font-medium text-xl">152 Unread</div>
+                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                        <div class="flex justify-content-center mb-3">
+                            <div class="flex align-items-center justify-content-center bg-red-100 border-round-3xl"
+                                 style="width:5rem;height:5rem">
+                                <i class="material-symbols-outlined text-red-500 " style="font-size: 3rem">currency_rupee</i>
                             </div>
-                            <div class="flex align-items-center justify-content-center bg-purple-100 border-round"
-                                 style="width:2.5rem;height:2.5rem">
-                                <i class="pi pi-comment text-purple-500 text-2xl"/>
+                            <div class="ml-7">
+                                <div class="text-red-500 font-medium text-4xl mb-3">#{adminHomeBean.revenue}</div>
+                                <span class="block text-red-500">Total Income</span>
                             </div>
+
                         </div>
-                        <span class="text-green-500 font-medium">85 </span>
-                        <span class="text-500">responded</span>
                     </div>
                 </div>
             </div>
         </div>
-        <!--<p:card>-->
+
+        <!--Graphs-->
         <div class="container-fluid p-5">
             <div class="flex flex-wrap justify-content-evenly">
                 <div class="card">
                     <h5>Subscription</h5>
-                    <p:barChart model="#{adminHomeBean.barModel}" style="width: 70%; height: 500px;"/>
+                    <p:barChart model="#{adminHomeBean.barModel}" style="width: 90%; height: 500px;"/>
                 </div>
                 <div class="card">
                     <h5>Revenue</h5>
