@@ -211,6 +211,11 @@
     width: 100%;
     display:block;
 }
+
+.ui-chart > canvas{
+    width: 100px;
+    height: 100px;
+}
 @media(min-width:992px) {
     .card-desc {
         width: 150%;

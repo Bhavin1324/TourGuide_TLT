@@ -9,8 +9,10 @@ import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
+import com.tlt.utils.GraphUtils;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import javax.ejb.Local;
 
 @Local
@@ -108,6 +110,10 @@ public interface AdminLocal {
 
     long getUserCount();
     
-    Integer getTotalIncome();
+    long getTotalIncome();
+    
+    //graphs
+    List<GraphUtils> getMonthlySubscriptionData();
+    List<GraphUtils> getMonthlyRevenueData();
 
 }
