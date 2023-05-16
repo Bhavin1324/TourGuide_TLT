@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      >
+
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Subscription</title>
         <meta charset="UTF-8"/>
@@ -11,11 +12,86 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
-        
+
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div>Subscription cards</div>
+        <h:form>
+            <div class="container p-5">
+                <div class="flex justify-content-center my-3">
+
+                    <div class="py-2 px-7 card bg-purple-100 border-round-3xl w-fit">
+                        <div class="text-900 font-bold text-5xl mt-8 mb-4 text-center">Subscription Plans</div>
+                        <div class="text-700 text-xl mb-6 text-center line-height-3">These are the Subscriptions provided for you.</div>
+                    </div>
+                </div>
+
+                <div class="container-fluid ">
+                    <div class="grid justify-content-center">
+                        <div class="col-12 lg:col-4">
+                            <div class="p-3 h-full">
+                                <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
+                                    <div class="font-medium text-2xl mb-2">Basic</div>
+                                    <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                    <div class="flex align-items-center">
+                                        <span class="font-bold text-3xl text-900">$9</span>
+                                        <span class="ml-2 font-medium text-600">per month</span>
+                                    </div>
+                                    <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                    <ul class="list-none p-0 m-0 flex-grow-1">
+                                        <li class="flex align-items-center mb-3">
+                                            <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                            <span>Arcu vitae elementum</span>
+                                        </li>
+                                        <li class="flex align-items-center mb-3">
+                                            <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                            <span>Dui faucibus in ornare</span>
+                                        </li>
+                                        <li class="flex align-items-center mb-3">
+                                            <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                            <span>Morbi tincidunt augue</span>
+                                        </li>
+                                    </ul>
+                                    <hr class="mb-3 mx-0 border-top-1 border-bottom-none surface-border mt-auto"/>
+                                    <p:commandButton type="button" value="Buy Now" styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col-4">
+                            <div class="p-3 h-full">
+                                <div class="shadow-2 p-3 h-full flex flex-column surface-card" style="border-radius: 6px">
+                                    <div class="font-medium text-2xl mb-2">Basic</div>
+                                    <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                    <div class="flex align-items-center">
+                                        <span class="font-bold text-3xl text-900">$9</span>
+                                        <span class="ml-2 font-medium text-600">per month</span>
+                                    </div>
+                                    <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                    <ul class="list-none p-0 m-0 flex-grow-1">
+                                        <li class="flex align-items-center mb-3">
+                                            <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                            <span>Arcu vitae elementum</span>
+                                        </li>
+                                        <li class="flex align-items-center mb-3">
+                                            <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                            <span>Dui faucibus in ornare</span>
+                                        </li>
+                                        <li class="flex align-items-center mb-3">
+                                            <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                            <span>Morbi tincidunt augue</span>
+                                        </li>
+                                    </ul>
+                                    <hr class="mb-3 mx-0 border-top-1 border-bottom-none surface-border mt-auto"/>
+                                    <p:commandButton type="button" value="Buy Now" styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+
     </h:body>
 </html>
 
