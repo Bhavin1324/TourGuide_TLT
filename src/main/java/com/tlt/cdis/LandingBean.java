@@ -33,7 +33,9 @@ public class LandingBean implements Serializable {
     }
 
     public Collection<PlaceMaster> getRecommandedPlaces() {
-        return adminLogic.getAllPlaces();
+        recommandedPlaces = adminLogic.getAllPlaces();
+        ArrayList<PlaceMaster> recPlace = new ArrayList<>(recommandedPlaces);
+        return recPlace.subList(recPlace.size() - 4, recPlace.size());
     }
 
     public void setRecommandedPlaces(Collection<PlaceMaster> recommandedPlaces) {
@@ -48,6 +50,6 @@ public class LandingBean implements Serializable {
         for(PlaceMaster place : places){
             namesOfPlaces.add(place.getName());
         }
-        return namesOfPlaces.stream().filter(place -> place.toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList()).subList(namesOfPlaces.size() - 4, namesOfPlaces.size());
+        return namesOfPlaces.stream().filter(place -> place.toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList());
     }
 }
