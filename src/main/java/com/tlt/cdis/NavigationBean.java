@@ -28,24 +28,6 @@ public class NavigationBean implements Serializable {
         roles = KeepRecord.getRoles();
     }
 
-    public void toHome() {
-        try {
-
-            if (roles.contains("admin")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(TO_ADMIN);
-            }
-            if (roles.contains("tourist")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(TO_TOURIST);
-            }
-            if (roles.contains("guide")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(TO_GUIDE);
-            }
-        } catch (Exception ex) {
-            System.out.println("Exception in redirection from context");
-            ex.printStackTrace();
-        }
-    }
-
     public void redirectTo(String destination) {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(destination);

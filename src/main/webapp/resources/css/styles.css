@@ -239,21 +239,22 @@
 
 body .ui-menu{
     border: 0px;
-    background: transparent;
-
 }
 body .ui-menu.ui-menubar{
-    background: transparent;
+    background-color: #e9ecef;
 }
 .responsive-ts{
     display: block;
 }
-
+.ui-chart > canvas{
+    width: 100px;
+    height: 100px;
+}
 .bg-landing{
     position: relative;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0,0,0,0.5);
     height: 80vh;
-    width: 100vw;
+    width: 100%;
 }
 .bg-landing::before{
     background: url("../images/landing-background.jpg") no-repeat center center/cover;
@@ -262,13 +263,19 @@ body .ui-menu.ui-menubar{
     top: 0;
     left: 0;
     height: 80vh;
-    width: 100vw;
+    width: 100%;
     z-index: -1;
     background-blend-mode:darken;
+    overflow: hidden
 }
-.ui-chart > canvas{
-    width: 100px;
-    height: 100px;
+.ui-autocomplete > .ui-autocomplete-input{
+    width: 100%;
+}
+.hero-l-responsive{
+    font-size: 4rem
+}
+.ls-responsive-1{
+    width: 700px
 }
 @media(min-width:992px) {
     .l-card-desc {
@@ -296,6 +303,9 @@ body .ui-menu.ui-menubar{
     }
     .responsive-ts{
         display: none;
+    }
+    .ls-responsive-1{
+        width: 500px
     }
 }
 
@@ -334,5 +344,11 @@ body .ui-menu.ui-menubar{
     }
     .responsive-ts{
         display: none;
+    }
+    .ls-responsive-1{
+        width: 90%
+    }
+    .hero-l-responsive{
+        font-size: 50px
     }
 }

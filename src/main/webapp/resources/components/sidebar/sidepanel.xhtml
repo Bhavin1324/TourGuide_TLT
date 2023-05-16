@@ -21,7 +21,7 @@
                     <p:growl id="messages" showDetail="true"/>
                     <div class="card">
                         <p:menu toggleable="true" styleClass="border-0 w-full">
-                            <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.toHome()}"/>
+                            <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_ADMIN)}"/>
                             <p:submenu label="Manage places">
                                 <p:menuitem styleClass="px-5" value="Place category" action="#{cc.attrs.bean.redirectTo(uc.TO_PLACE_CATEGORY)}" update="messages" icon="pi pi-th-large"/>
                                 <p:menuitem styleClass="px-5" value="Places" action="#{cc.attrs.bean.redirectTo(uc.TO_PLACE)}" update="messages" icon="pi pi-map-marker"/>
