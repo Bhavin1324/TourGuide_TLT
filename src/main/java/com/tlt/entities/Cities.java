@@ -28,7 +28,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "cities")
@@ -36,7 +36,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Cities.findAll", query = "SELECT c FROM Cities c"),
     @NamedQuery(name = "Cities.findById", query = "SELECT c FROM Cities c WHERE c.id = :id"),
     @NamedQuery(name = "Cities.findByName", query = "SELECT c FROM Cities c WHERE c.name = :name"),
-    @NamedQuery(name = "Cities.findByStateId", query = "SELECT c FROM Cities c WHERE c.stateId = :stateId"),
+    @NamedQuery(name = "Cities.findByStateCode", query = "SELECT c FROM Cities c WHERE c.stateCode = :stateCode"),
     @NamedQuery(name = "Cities.findByCountryCode", query = "SELECT c FROM Cities c WHERE c.countryCode = :countryCode"),
     @NamedQuery(name = "Cities.findByLatitude", query = "SELECT c FROM Cities c WHERE c.latitude = :latitude"),
     @NamedQuery(name = "Cities.findByLongitude", query = "SELECT c FROM Cities c WHERE c.longitude = :longitude"),
@@ -93,12 +93,12 @@ public class Cities implements Serializable {
     @Size(max = 255)
     @Column(name = "wikiDataId")
     private String wikiDataId;
-    @JoinColumn(name = "country_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Countries countryId;
     @JoinColumn(name = "state_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private States stateId;
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Countries countryId;
     @OneToMany(mappedBy = "cityId", fetch = FetchType.LAZY)
     private Collection<PlaceMaster> placeMasterCollection;
 
@@ -201,20 +201,20 @@ public class Cities implements Serializable {
         this.wikiDataId = wikiDataId;
     }
 
-    public Countries getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Countries countryId) {
-        this.countryId = countryId;
-    }
-
     public States getStateId() {
         return stateId;
     }
 
     public void setStateId(States stateId) {
         this.stateId = stateId;
+    }
+
+    public Countries getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Countries countryId) {
+        this.countryId = countryId;
     }
 
     public Collection<PlaceMaster> getPlaceMasterCollection() {

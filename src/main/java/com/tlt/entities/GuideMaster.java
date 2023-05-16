@@ -21,11 +21,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "guide_master")
@@ -64,7 +63,6 @@ public class GuideMaster implements Serializable {
     private BigInteger phoneNumber;
     @Column(name = "is_appointed")
     private Boolean isAppointed;
-    @CascadeOnDelete
     @ManyToMany(mappedBy = "guideMasterCollection", fetch = FetchType.LAZY)
     private Collection<UserMaster> userMasterCollection;
     @ManyToMany(mappedBy = "guideMasterCollection", fetch = FetchType.LAZY)
@@ -193,5 +191,5 @@ public class GuideMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.GuideMaster[ id=" + id + " ]";
     }
-
+    
 }

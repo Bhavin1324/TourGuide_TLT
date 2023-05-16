@@ -16,14 +16,13 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "user_role")
 @NamedQueries({
     @NamedQuery(name = "UserRole.findAll", query = "SELECT u FROM UserRole u"),
     @NamedQuery(name = "UserRole.findByUsername", query = "SELECT u FROM UserRole u WHERE u.userRolePK.username = :username"),
-    @NamedQuery(name = "UserRole.deleteByUsername", query = "DELETE FROM UserRole u WHERE u.userRolePK.username = :username"),
     @NamedQuery(name = "UserRole.findByRole", query = "SELECT u FROM UserRole u WHERE u.userRolePK.role = :role")})
 public class UserRole implements Serializable {
 

@@ -21,11 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "appointment_master")
@@ -53,16 +52,15 @@ public class AppointmentMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "appointment_status")
     private String appointmentStatus;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserMaster userId;
     @JoinColumn(name = "guide_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
     @JoinColumn(name = "place_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PlaceMaster placeId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @CascadeOnDelete
-    private UserMaster userId;
 
     public AppointmentMaster() {
     }
@@ -103,6 +101,14 @@ public class AppointmentMaster implements Serializable {
         this.appointmentStatus = appointmentStatus;
     }
 
+    public UserMaster getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserMaster userId) {
+        this.userId = userId;
+    }
+
     public GuideMaster getGuideId() {
         return guideId;
     }
@@ -117,14 +123,6 @@ public class AppointmentMaster implements Serializable {
 
     public void setPlaceId(PlaceMaster placeId) {
         this.placeId = placeId;
-    }
-
-    public UserMaster getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UserMaster userId) {
-        this.userId = userId;
     }
 
     @Override
@@ -151,5 +149,5 @@ public class AppointmentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.AppointmentMaster[ id=" + id + " ]";
     }
-
+    
 }

@@ -5,7 +5,6 @@
 package com.tlt.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -22,7 +21,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "subscription_model")
@@ -30,6 +29,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "SubscriptionModel.findAll", query = "SELECT s FROM SubscriptionModel s"),
     @NamedQuery(name = "SubscriptionModel.findById", query = "SELECT s FROM SubscriptionModel s WHERE s.id = :id"),
     @NamedQuery(name = "SubscriptionModel.findByDurationInMonth", query = "SELECT s FROM SubscriptionModel s WHERE s.durationInMonth = :durationInMonth"),
+    @NamedQuery(name = "SubscriptionModel.calculateSubsRevenue", query = "SELECT s.cost FROM SubscriptionModel s INNER JOIN SubscriptionMaster sm on s.id = sm.subscriptionModelId.id WHERE sm.endDate >= :today"),
     @NamedQuery(name = "SubscriptionModel.findByCost", query = "SELECT s FROM SubscriptionModel s WHERE s.cost = :cost")})
 public class SubscriptionModel implements Serializable {
 
@@ -46,9 +46,8 @@ public class SubscriptionModel implements Serializable {
     private String name;
     @Column(name = "duration_in_month")
     private Integer durationInMonth;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "cost")
-    private BigDecimal cost;
+    private Integer cost;
     @Lob
     @Size(max = 65535)
     @Column(name = "details")
@@ -87,11 +86,11 @@ public class SubscriptionModel implements Serializable {
         this.durationInMonth = durationInMonth;
     }
 
-    public BigDecimal getCost() {
+    public Integer getCost() {
         return cost;
     }
 
-    public void setCost(BigDecimal cost) {
+    public void setCost(Integer cost) {
         this.cost = cost;
     }
 

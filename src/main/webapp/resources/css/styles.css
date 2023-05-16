@@ -265,7 +265,10 @@ body .ui-menu.ui-menubar{
     width: 100vw;
     z-index: -1;
     background-blend-mode:darken;
-
+}
+.ui-chart > canvas{
+    width: 100px;
+    height: 100px;
 }
 @media(min-width:992px) {
     .l-card-desc {
