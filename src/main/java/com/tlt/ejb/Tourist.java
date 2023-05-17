@@ -1,7 +1,10 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.SubscriptionMaster;
+import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import java.util.Collection;
+import java.util.Date;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -71,4 +74,37 @@ public class Tourist implements TouristLocal {
         }
         return null;
     }
+
+    @Override
+    public void subscribeToPlan(SubscriptionModel model,UserMaster user) {
+
+        UserMaster usermaster = em.find(UserMaster.class,user.getId());
+        Collection<SubscriptionMaster> usersubs = usermaster.getSubscriptionMasterCollection();
+        
+//        create new sub
+        SubscriptionMaster smaster = new SubscriptionMaster();
+//        smaster.setStartDate(new Date());
+//        smaster.setEndDate();
+        smaster.setSubscriptionModelId(model);
+        
+        //persist new sub
+        em.persist(smaster);
+        
+        //add this sub to user's subscription collection
+        usersubs.add(smaster);
+        
+        SubscriptionMaster sm  = em.find(SubscriptionMaster.class,smaster.getId());
+        
+        //get all users from submaster's usercollection
+        Collection<UserMaster> users = sm.getUserMasterCollection();
+        
+        //add that user to the collection
+        users.add(usermaster);
+        
+        em.merge(usermaster);
+        em.merge(sm);
+//        usermaster.setSubscriptionMasterCollection();
+        
+    }
+    
 }

@@ -42,8 +42,9 @@ public class SubscriptionModelBean implements Serializable {
         subModelid = "";
     }
 
+    
     public Collection<SubscriptionModel> getSubscriptionModel() {
-                allSubscriptionModel = ad.getAllSubscriptionModel();
+        allSubscriptionModel = ad.getAllSubscriptionModel();
         return allSubscriptionModel;
     }
 
@@ -142,4 +143,8 @@ public class SubscriptionModelBean implements Serializable {
         }
     }
 
+    public void Subscribe(SubscriptionModel model){
+        
+
+    }
 }

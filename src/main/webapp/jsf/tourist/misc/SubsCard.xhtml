@@ -5,7 +5,8 @@
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
 
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Subscription</title>
         <meta charset="UTF-8"/>
@@ -20,6 +21,7 @@
         <h:form>
             <div class="container p-5">
                 <div class="container-fluid ">
+                    <div class="grid justify-content-center my-4 text-5xl font-semibold">Pricing Plans</div>
                     <div class="grid justify-content-center">
                         <ui:repeat var="item" value="${subsModelBean.subscriptionModel}">
                             <div class="col-12 lg:col-4">
@@ -37,21 +39,15 @@
                                         </div>
                                         <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
                                         <ul class="list-none p-0 m-0 flex-grow-1">
-                                            <li class="flex align-items-center mb-3">
-                                                <i class="pi pi-check-circle text-green-500 mr-2"/>
-                                                <span>Arcu vitae elementum</span>
-                                            </li>
-                                            <li class="flex align-items-center mb-3">
-                                                <i class="pi pi-check-circle text-green-500 mr-2"/>
-                                                <span>Dui faucibus in ornare</span>
-                                            </li>
-                                            <li class="flex align-items-center mb-3">
-                                                <i class="pi pi-check-circle text-green-500 mr-2"/>
-                                                <span>Morbi tincidunt augue</span>
-                                            </li>
+                                            <ui:repeat var="desc" value="#{item.details.split('\\.')}" >    
+                                                <li class="flex align-items-center mb-3">
+                                                    <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                                    <span>${desc}</span>
+                                                </li>
+                                            </ui:repeat>
                                         </ul>
                                         <hr class="mb-3 mx-0 border-top-1 border-bottom-none surface-border mt-auto"/>
-                                        <p:commandButton type="button" value="Buy Now" styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help rounded-button"/>
+                                        <p:commandButton action="#{subsModelBean.Subscribe(item)}" value="Buy Now" styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help rounded-button"/>
                                     </div>
                                 </div>
                             </div>
