@@ -16,9 +16,11 @@ import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.PrimeFaces;
+import org.primefaces.component.outputlabel.OutputLabel;
 
 /**
  *
@@ -36,6 +38,10 @@ public class SubscriptionModelBean implements Serializable {
     Collection<SubscriptionModel> allSubscriptionModel;
     SubscriptionModel selectedSubModel;
     String subModelid;
+
+    Integer currentCost;
+    private UIComponent costLabel;
+
     List<SubscriptionModel> selectedSubModels;
 
     public SubscriptionModelBean() {
@@ -44,9 +50,20 @@ public class SubscriptionModelBean implements Serializable {
         selectedSubModel = new SubscriptionModel();
         allSubscriptionModel = new ArrayList<>();
         subModelid = "";
+
     }
 
-    
+    public void onModalAction(SubscriptionModel subModel) {
+        this.currentCost = subModel.getCost();
+        System.out.println(this.currentCost);
+        UIComponent outputText = new OutputLabel();
+        outputText.setId("total-cost");
+        ((OutputLabel) outputText).setValue(String.valueOf(currentCost)); // Set the value
+        costLabel = outputText;
+        PrimeFaces.current().executeScript("PF('paymentModal').show()");
+        PrimeFaces.current().ajax().update(":dialog:payment-modal");
+    }
+
     public Collection<SubscriptionModel> getSubscriptionModel() {
         allSubscriptionModel = ad.getAllSubscriptionModel();
         return allSubscriptionModel;
@@ -90,6 +107,16 @@ public class SubscriptionModelBean implements Serializable {
 
     public void openNew() {
         this.selectedSubModel = new SubscriptionModel();
+    }
+
+    public Integer getCurrentCost() {
+        System.out.println("Current cost getter: " + currentCost);
+        return currentCost;
+    }
+
+    public void setCurrentCost(Integer currentCost) {
+        System.out.println("Current cost setter: " + currentCost);
+        this.currentCost = currentCost;
     }
 
     public void saveSubModel() {
@@ -147,8 +174,8 @@ public class SubscriptionModelBean implements Serializable {
         }
     }
 
-    public void Subscribe(SubscriptionModel model){
-        
+    public void Subscribe(SubscriptionModel model) {
+
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String uname = req.getSession().getAttribute("username").toString();
         System.out.println(uname);
