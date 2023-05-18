@@ -55,7 +55,6 @@ public class SubscriptionModelBean implements Serializable {
 
     public void onModalAction(SubscriptionModel subModel) {
         this.currentCost = subModel.getCost();
-        System.out.println(this.currentCost);
         UIComponent outputText = new OutputLabel();
         outputText.setId("total-cost");
         ((OutputLabel) outputText).setValue(String.valueOf(currentCost)); // Set the value

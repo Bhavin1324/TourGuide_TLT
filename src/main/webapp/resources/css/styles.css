@@ -49,12 +49,7 @@
     padding: 0;
     box-sizing: border-box;
 }
-.custom-marker{
-    width: 35px;
-    height: 35px;
-    background-size: cover;
-    border-radius: 50%;
-}
+
 .branding{
     font-family: serif;
 }
@@ -364,8 +359,10 @@ body .ui-menu.ui-menubar{
     transform: scale(1.03);
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
 }
-/* category cards*/
 
+
+
+/* category cards*/
 :root{
     --background-dark: #2d3548;
     --text-light: rgba(255,255,255,0.6);

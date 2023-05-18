@@ -76,12 +76,11 @@ public class ForgetPasswordBean implements Serializable {
 
     public void verifyAndChange() {
         if (!enteredOtp.equals(generatedOtp)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Entered OTP is invalid", ""));
+            FacesContext.getCurrentInstance().addMessage("otp-form:otp-dialog:otp-panel:single-message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Entered OTP is invalid", ""));
             return;
         }
 
         String hashedPassword = Utils.generateHash(userMaster.getPassword().toString());
-        System.out.println("Exisiting user: " + existedUser);
         existedUser.setPassword(hashedPassword);
         userLogic.updateUser(existedUser.getId(), existedUser);
 

@@ -42,12 +42,13 @@
                         let latitude = position.coords.latitude;
                         let longitude = position.coords.longitude;
                         let marker = new google.maps.Marker({
+                            center: {lat:  latitude, lng: longitude},
                             position: new google.maps.LatLng(latitude, longitude),
-                            map: PF('map').getMap(),
+                            map:  PF('map').getMap(),
                             title: "Your location",
                             className: 'custom-marker',
                             icon: {
-                                url: `../../uploads/profiles/${cc.attrs.markerSign}`,
+                                url: "../../uploads/profiles/#{cc.attrs.markerSign}",
                                 scaledSize: new google.maps.Size(35, 35),
                                 anchor: new google.maps.Point(16, 32),
                             }
