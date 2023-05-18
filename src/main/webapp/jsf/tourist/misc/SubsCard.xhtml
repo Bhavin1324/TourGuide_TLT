@@ -5,7 +5,9 @@
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
 
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Subscription</title>
         <meta charset="UTF-8"/>
@@ -17,9 +19,10 @@
     </h:head>
     <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <h:form>
+        <h:form id="form">
             <div class="container p-5">
                 <div class="container-fluid ">
+                    <div class="grid justify-content-center my-4 text-5xl font-semibold">Pricing Plans</div>
                     <div class="grid justify-content-center">
                         <ui:repeat var="item" value="${subsModelBean.subscriptionModel}">
                             <div class="col-12 lg:col-4">
@@ -37,21 +40,18 @@
                                         </div>
                                         <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
                                         <ul class="list-none p-0 m-0 flex-grow-1">
-                                            <li class="flex align-items-center mb-3">
-                                                <i class="pi pi-check-circle text-green-500 mr-2"/>
-                                                <span>Arcu vitae elementum</span>
-                                            </li>
-                                            <li class="flex align-items-center mb-3">
-                                                <i class="pi pi-check-circle text-green-500 mr-2"/>
-                                                <span>Dui faucibus in ornare</span>
-                                            </li>
-                                            <li class="flex align-items-center mb-3">
-                                                <i class="pi pi-check-circle text-green-500 mr-2"/>
-                                                <span>Morbi tincidunt augue</span>
-                                            </li>
+                                            <ui:repeat var="desc" value="#{item.details.split('\\.')}" >    
+                                                <li class="flex align-items-center mb-3">
+                                                    <i class="pi pi-check-circle text-green-500 mr-2"/>
+                                                    <span>${desc}</span>
+                                                </li>
+                                            </ui:repeat>
                                         </ul>
                                         <hr class="mb-3 mx-0 border-top-1 border-bottom-none surface-border mt-auto"/>
-                                        <p:commandButton type="button" value="Buy Now" styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help rounded-button"/>
+                                        <p:commandButton action="#{subsModelBean.onModalAction(item)}" value="Buy Now"
+                                           styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help rounded-button">
+                                            <f:setPropertyActionListener target="#{subsModelBean.currentCost}" value="#{item.cost}" />
+                                        </p:commandButton>
                                     </div>
                                 </div>
                             </div>
@@ -60,6 +60,66 @@
                 </div>
             </div>
 
+        </h:form>
+        <h:form id="dialog">
+            <p:dialog widgetVar="paymentModal" id="payment-modal" showEffect="fade" header="Make your Payment" modal="true" class="w-10 md:w-5 border-round-xl">
+                <p:outputPanel id="manage-payment-content">
+                    <div class="p-4 border-round">
+                        <div class="font-medium">
+                            <div class="container">
+                                <div class="ui-fluid">
+                                    <div class=" mx-1 grid justify-content-between">
+                                        <div class="ui-input-icon-right field"> 
+                                            <i class="pi pi-credit-card text-2xl" style="margin-top: 0px;"/>
+                                            <p:outputLabel for="cardNumber">Card Number</p:outputLabel>
+                                            <p:inputMask id="cardNumber" placeholder="XXXX XXXX XXXX XXXX"
+                                                         class="my-2" mask="9999 9999 9999 9999" required="true" >
+                                            </p:inputMask>
+                                        </div> 
+                                        <div> 
+                                            <p:outputLabel for="cvv">CVV</p:outputLabel>
+                                            <p:password id="cvv" required="true" class="my-2" />
+                                        </div> 
+                                    </div>
+                                    <div class=" mx-1 grid justify-content-between my-2">
+                                        <div class="ui-input-icon-right"> 
+                                            <p:outputLabel for="expiryDate">Expiry Date</p:outputLabel>
+                                            <p:datePicker id="expiryDate" showIcon="true" inline="false" 
+                                                class="mt-2" view="month" pattern="MM/yyyy" yearNavigator="true" 
+                                                yearRange="2023:2090" required="true"/>
+                                        </div>
+                                        <div> 
+                                            <p:graphicImage value="/images/PaymentCards.png"  style="width: 200px;height: 50px;margin-top: 20px"/>
+                                        </div>
+                                    </div> 
+                                    <div class="mx-1 mt-1 ">
+                                        <div class="ui-input-icon-right "> 
+                                            <i class="pi pi-user text-2xl" style="margin-top:2px" />
+                                            <p:outputLabel for="nameOnCard">Card Holder's Name</p:outputLabel>
+                                            <p:inputText id="nameOnCard" class="mt-2 w-full" required="true"/>
+                                        </div> 
+                                    </div>
+                                    <div class="mx-1 mt-3 mb-1">
+                                        <span class="text-2xl font-semibold" >Total Amount: #{subsModelBean.currentCost}</span>
+                                    </div>
+                                    <div class=" mt-2 grid justify-content-start col-12 md:col-6">
+                                        <div class="mx-2">
+                                            <p:commandButton id="payBtn" icon="pi pi-check" 
+                                                value="Pay Now" styleClass="ui-button-success border-round-xl"/>
+                                        </div>
+                                        <div>
+                                            <p:commandButton id="cancelBtn" type="button" 
+                                                onclick="PF('paymentModal').hide()" icon="pi pi-times" value="Cancel"
+                                                styleClass="ui-button-danger border-round-xl"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </p:outputPanel>
+            </p:dialog>
         </h:form>
 
     </h:body>

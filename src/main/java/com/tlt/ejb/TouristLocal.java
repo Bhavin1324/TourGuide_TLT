@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import java.util.Collection;
 import javax.ejb.Local;
@@ -20,4 +21,6 @@ public interface TouristLocal {
     UserMaster findUserByUsername(String username);
 
     UserMaster findUserByEmail(String email);
+    
+    void subscribeToPlan(SubscriptionModel model,String  username);
 }
