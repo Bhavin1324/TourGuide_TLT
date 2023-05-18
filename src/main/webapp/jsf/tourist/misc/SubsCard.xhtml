@@ -3,10 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Subscription</title>
@@ -19,6 +17,9 @@
     </h:head>
     <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
+        
+        <!--Subscription Cards-->
+        
         <h:form id="form">
             <div class="container p-5">
                 <div class="container-fluid ">
@@ -27,7 +28,8 @@
                         <ui:repeat var="item" value="${subsModelBean.subscriptionModel}">
                             <div class="col-12 lg:col-4">
                                 <div class="p-3 h-full">
-                                    <div class="shadow-2 p-3 h-full flex flex-column surface-card border-round-3xl" style="border-radius: 6px">
+                                    <div class="shadow-2 p-3 h-full flex flex-column surface-card border-round-3xl"
+                                         style="border-radius: 6px">
                                         <div class="font-medium text-2xl mb-2">#{item.name}</div>
                                         <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
                                         <div class="flex align-items-center">
@@ -36,7 +38,9 @@
                                                     currency_rupee
                                                 </span>
                                             </span>
-                                            <span class="ml-2 font-medium text-600">for #{item.durationInMonth} month</span>
+                                            <span class="ml-2 font-medium text-600">
+                                                for #{item.durationInMonth} month
+                                            </span>
                                         </div>
                                         <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
                                         <ul class="list-none p-0 m-0 flex-grow-1">
@@ -49,8 +53,10 @@
                                         </ul>
                                         <hr class="mb-3 mx-0 border-top-1 border-bottom-none surface-border mt-auto"/>
                                         <p:commandButton action="#{subsModelBean.onModalAction(item)}" value="Buy Now"
-                                           styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help rounded-button">
-                                            <f:setPropertyActionListener target="#{subsModelBean.currentCost}" value="#{item.cost}" />
+                                                         styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help rounded-button">
+                                            <f:setPropertyActionListener target="#{subsModelBean.modelForPayment}" value="${item}"/>
+                                            <f:setPropertyActionListener target="#{subsModelBean.currentCost}" 
+                                                                         value="#{item.cost}" />
                                         </p:commandButton>
                                     </div>
                                 </div>
@@ -60,57 +66,74 @@
                 </div>
             </div>
 
+       <!--Payment Modal-->
+       
         </h:form>
         <h:form id="dialog">
-            <p:dialog widgetVar="paymentModal" id="payment-modal" showEffect="fade" header="Make your Payment" modal="true" class="w-10 md:w-5 border-round-xl">
+            <p:dialog widgetVar="paymentModal" id="payment-modal" showEffect="fade" 
+                      header="Make your Payment" modal="true" class="w-10 md:w-5 border-round-xl">
                 <p:outputPanel id="manage-payment-content">
+
                     <div class="p-4 border-round">
                         <div class="font-medium">
                             <div class="container">
+                                <p:messages id="msgs"/>
                                 <div class="ui-fluid">
                                     <div class=" mx-1 grid justify-content-between">
-                                        <div class="ui-input-icon-right field"> 
+                                        <div class="ui-input-icon-right"> 
                                             <i class="pi pi-credit-card text-2xl" style="margin-top: 0px;"/>
                                             <p:outputLabel for="cardNumber">Card Number</p:outputLabel>
                                             <p:inputMask id="cardNumber" placeholder="XXXX XXXX XXXX XXXX"
-                                                         class="my-2" mask="9999 9999 9999 9999" required="true" >
+                                                         class="my-2" mask="9999 9999 9999 9999" 
+                                                         required="true" requiredMessage="Card number is required" >
                                             </p:inputMask>
                                         </div> 
                                         <div> 
                                             <p:outputLabel for="cvv">CVV</p:outputLabel>
-                                            <p:password id="cvv" required="true" class="my-2" />
+                                            <p:password id="cvv" class="my-2" required="true" 
+                                                        requiredMessage="CVV number is required" />
                                         </div> 
                                     </div>
                                     <div class=" mx-1 grid justify-content-between my-2">
                                         <div class="ui-input-icon-right"> 
                                             <p:outputLabel for="expiryDate">Expiry Date</p:outputLabel>
                                             <p:datePicker id="expiryDate" showIcon="true" inline="false" 
-                                                class="mt-2" view="month" pattern="MM/yyyy" yearNavigator="true" 
-                                                yearRange="2023:2090" required="true"/>
+                                                          class="mt-2" view="month" pattern="MM/yyyy" 
+                                                          yearNavigator="true" 
+                                                          yearRange="2023:2090" required="true" 
+                                                          requiredMessage="Expiry Date is required"/>
                                         </div>
                                         <div> 
-                                            <p:graphicImage value="/images/PaymentCards.png"  style="width: 200px;height: 50px;margin-top: 20px"/>
+                                            <p:graphicImage value="/images/PaymentCards.png"  
+                                                            style="width: 200px;height: 50px;margin-top: 20px"/>
                                         </div>
                                     </div> 
                                     <div class="mx-1 mt-1 ">
                                         <div class="ui-input-icon-right "> 
                                             <i class="pi pi-user text-2xl" style="margin-top:2px" />
                                             <p:outputLabel for="nameOnCard">Card Holder's Name</p:outputLabel>
-                                            <p:inputText id="nameOnCard" class="mt-2 w-full" required="true"/>
+                                            <p:inputText id="nameOnCard" class="mt-2 w-full" required="true"
+                                                         requiredMessage="Name is required"/>
                                         </div> 
                                     </div>
                                     <div class="mx-1 mt-3 mb-1">
-                                        <span class="text-2xl font-semibold" >Total Amount: #{subsModelBean.currentCost}</span>
+                                        <span class="text-2xl font-semibold" >
+                                            Total Amount: #{subsModelBean.currentCost}
+                                        </span>
                                     </div>
                                     <div class=" mt-2 grid justify-content-start col-12 md:col-6">
                                         <div class="mx-2">
                                             <p:commandButton id="payBtn" icon="pi pi-check" 
-                                                value="Pay Now" styleClass="ui-button-success border-round-xl"/>
+                                                             action="#{subsModelBean.Subscribe()}" 
+                                                             onclick="PF('success_dlg').show()"
+                                                             update="manage-payment-content" 
+                                                             process="manage-payment-content @this" value="Pay Now"
+                                                             styleClass="ui-button-success border-round-xl"/>
                                         </div>
                                         <div>
-                                            <p:commandButton id="cancelBtn" type="button" 
-                                                onclick="PF('paymentModal').hide()" icon="pi pi-times" value="Cancel"
-                                                styleClass="ui-button-danger border-round-xl"/>
+                                            <p:commandButton id="cancelBtn" icon="pi pi-times" type="button"  
+                                                             onclick="PF('paymentModal').hide()" value="Cancel"
+                                                             styleClass="ui-button-danger border-round-xl"/>
                                         </div>
                                     </div>
                                 </div>
@@ -121,7 +144,17 @@
                 </p:outputPanel>
             </p:dialog>
         </h:form>
-
+        
+        <!--Success Dialog-->
+        
+        <h:form>
+            <p:dialog id="success-dialog" header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade">
+                <p class="m-0">Subscribed successfully!</p>
+                <f:facet name="footer">
+                    <p:commandButton value="Close" class="ui-button-success" icon="pi pi-times" type="button" onclick="PF('success_dlg').hide()"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </h:body>
 </html>
 
