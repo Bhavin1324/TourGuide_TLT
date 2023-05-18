@@ -23,3 +23,4 @@ document.getElementById('ask-otp').addEventListener('click', () => {
     startTimer(duration, display);
 });
 
+

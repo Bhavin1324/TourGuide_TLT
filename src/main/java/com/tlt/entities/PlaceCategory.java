@@ -5,7 +5,9 @@
 package com.tlt.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,7 +72,9 @@ public class PlaceCategory implements Serializable {
     public Collection<PlaceMaster> getPlaceMasterCollection() {
         return placeMasterCollection;
     }
-
+    public List<PlaceMaster> getPlaceMasterList(){
+        return new ArrayList(placeMasterCollection);
+    }
     public void setPlaceMasterCollection(Collection<PlaceMaster> placeMasterCollection) {
         this.placeMasterCollection = placeMasterCollection;
     }

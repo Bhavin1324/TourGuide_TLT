@@ -29,6 +29,7 @@ public final class UrlConstants {
     public static final String TO_NEARBY_PLACES = BASE_URL + "tourist/explore/NearbyPlaces.jsf";
     public static final String TO_NEARBY_TRANSPORT = BASE_URL + "tourist/explore/NearbyTransport.jsf";
     public static final String TO_RECOMMENDATION = BASE_URL + "tourist/explore/RecommendMe.jsf";
+    public static final String TO_CHOSEN_PLACES = BASE_URL + "tourist/explore/Place.jsf";
     
     public static final String TO_GUIDE_GROUP = BASE_URL + "tourist/comguide/JoinGroup.jsf";
     public static final String TO_PERSONAL_GUIDE = BASE_URL + "tourist/comguide/PersonalGuide.jsf";

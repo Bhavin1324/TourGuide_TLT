@@ -1,83 +1,123 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar" xmlns:p="http://primefaces.org/ui"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
-    <title>Home</title>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <h:outputStylesheet library="css" name="styles.css" />
-    <h:outputStylesheet library="css" name="primeflex.min.css" />
-    <p:importConstants type="com.tlt.constants.UrlConstants" var="uc" />
-</h:head>
-<h:body style="font-family: sans-serif">
-    <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}" />
-    <div class="bg-landing">
-        <section class="h-full">
-            <div style="font-family: sans-serif"
-                class="ls-responsive-1 text-white h-full px-2 mx-auto flex flex-column justify-content-center">
-                <div>
-                    <div class="text-6xl font-semibold">Lets <span class="text-purple-200 ">explore, </span></div>
-                    <div class="text-6xl font-semibold"><span class="text-purple-200 hero-l-responsive">Landmarks</span>
-                        around you</div>
-                    <div class="text-lg my-2">The landmark tour offers unique sightseeing experiences! Explore the
-                        city's vibrant culture and historic landmark with our knowladgeble guides </div>
-                </div>
-                <div class="pb-4 pt-6 w-full">
-                    <h:form>
-                        <div class="ui-inputgroup">
-                            <p:autoComplete value="#{landingBean.placeName}"
-                                completeMethod="#{landingBean.placesNameList}" placeholder="Find places nearby"
-                                styleClass="w-full" />
-                            <p:commandButton value="Search" icon="pi pi-search" styleClass="ui-button-help" />
-                        </div>
-                    </h:form>
-                </div>
-            </div>
-        </section>
-        <section class="h-full">
-            <div class="grid mx-5 mt-4">
-                <div class="mt-4 col-12 text-4xl">Popular places around you</div>
-            </div>
-            <div class="mx-5 px-2 mb-4 text-lg text-gray-800">Get started with the most visited events, and places
-                around you!
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:map="http://xmlns.jcp.org/jsf/composite/components/map"
 
-            </div>
-            <div class="grid mx-5 my-3">
-                <ui:repeat value="${landingBean.recommandedPlaces}" var="item">
-                    <div class="col-12 md:col-6 lg:col-3">
-                        <h:form class="flex justify-content-center">
-                            <p:card style="width: 90%; height: 35rem" class="overflow-auto border-round-2xl relative">
-                                <f:facet name="header">
-                                    <p:graphicImage value="/uploads/places/#{item.images}" />
-                                </f:facet>
-                                <f:facet name="title">
-                                    #{item.name}
-                                </f:facet>
-                                <f:facet name="subtitle">
-                                    #{item.address}
-                                </f:facet>
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Home</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <h:outputStylesheet library="css" name="styles.css" />
+        <h:outputStylesheet library="css" name="primeflex.min.css" />
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc" />
+        <f:loadBundle basename="properties.config" var="conf"/>
+        <script src="https://maps.google.com/maps/api/js?key=#{conf.MAPS_API_KEY}"></script>
 
-                                <p>#{item.description}</p>
-
-                                <f:facet name="footer">
-                                    <div
-                                        class="flex justify-content-end align-items-end absolute bottom-0 right-0 mb-4 mr-4">
-                                        <p:commandButton value="Chekout place"
-                                            styleClass="ui-button-help rounded-button" />
-                                    </div>
-                                </f:facet>
-                            </p:card>
+    </h:head>
+    <h:body style="font-family: sans-serif">
+        <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}" />
+        <div class="bg-landing">
+            <section class="h-full">
+                <div style="font-family: sans-serif"
+                     class="ls-responsive-1 text-white h-full px-2 mx-auto flex flex-column justify-content-center">
+                    <div>
+                        <div class="text-6xl font-semibold">Lets <span class="text-purple-200 ">explore, </span></div>
+                        <div class="text-6xl font-semibold"><span class="text-purple-200 hero-l-responsive">Landmarks</span>
+                            around you</div>
+                        <div class="text-lg my-2">The landmark tour offers unique sightseeing experiences! Explore the
+                            city's vibrant culture and historic landmark with our knowledgeable guides </div>
+                    </div>
+                    <div class="pb-4 pt-6 w-full">
+                        <h:form>
+                            <div class="ui-inputgroup">
+                                <p:autoComplete value="#{landingBean.placeName}"
+                                                completeMethod="#{landingBean.placesNameList}" placeholder="Find places nearby"
+                                                styleClass="w-full" />
+                                <p:commandButton value="Search" icon="pi pi-search" styleClass="ui-button-help" />
+                            </div>
                         </h:form>
                     </div>
-                </ui:repeat>
+                </div>
+            </section>
 
+            <div class="section">
+                <div class="grid mx-5 mt-4">
+                    <div class="mt-4 col-12 text-4xl text-center">Popular places around you</div>
+                </div>
+                <div class="mx-5 px-2 mb-4 text-lg text-gray-800 text-center">Get started with the most visited events, and places
+                    around you!</div>
+                <div class="grid mx-5 my-3">
+                    <ui:repeat value="${landingBean.recommandedPlaces}" var="item">
+                        <div class="col-12 md:col-6 lg:col-3">
+                            <h:form class="flex justify-content-center">
+                                <p:card style="width: 90%; height: 35rem" class="card-select overflow-auto border-round-2xl relative">
+                                    <f:facet name="header">
+                                        <p:graphicImage value="/uploads/places/#{item.images}" height="200px"/>
+                                    </f:facet>
+                                    <f:facet name="title">
+                                        #{item.name}
+                                    </f:facet>
+                                    <f:facet name="subtitle">
+                                        #{item.address}
+                                    </f:facet>
+
+                                    <p>#{item.description}</p>
+
+                                    <f:facet name="footer">
+                                        <div
+                                            class="flex justify-content-end align-items-end absolute bottom-0 right-0 mb-4 mr-4">
+                                            <p:commandButton value="Chekout place"
+                                                             styleClass="ui-button-help rounded-button" />
+                                        </div>
+                                    </f:facet>
+                                </p:card>
+                            </h:form>
+                        </div>
+                    </ui:repeat>
+                </div>
             </div>
-        </section>
-    </div>
-</h:body>
+            <div class="section">
+                <div class="grid mx-5 mt-5">
+                    <div class="mt-4 col-12 text-4xl text-center">Bird eye view</div>
+                </div>
+                <div class="mx-5 px-2 mb-4 text-lg text-gray-800 text-center">Bird eye view of the places you can explore</div>
+                <div class="grid mx-5 my-3">
+                    <div class="col-12">
+                        <map:place-map mapModel="#{landingBean.advancedModel}" marker="#{landingBean.marker}" markerSign="#{landingBean.currentUser.profileImage}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="grid mx-5 mt-4">
+                    <div class="mt-4 col-12 text-4xl text-center">Categories</div>
+                </div>
+                <div class="mx-5 px-2 mb-4 text-lg text-gray-800 text-center">Don't know where to go ? Pick your favorite adventure and we will help you find an amazing experience.
+                </div>
+                <section class="hero-section">
+                    <div class="card-grid">
+                        <ui:repeat value="#{landingBean.placeCategories}" var="item" varStatus="status">
+                            <a class="cat-card" href="#">
+                                <div class="card__background" style="background-image:url(../../uploads/places/#{item.placeMasterList.get(0).images})"></div>
+                                <div class="card__content">
+                                    <p class="card__category">Category</p>
+                                    <h3 class="card__heading">#{item.name}</h3>
+                                </div>
+                            </a>
+                        </ui:repeat>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </h:body>
+
 
 </html>
