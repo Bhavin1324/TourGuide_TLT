@@ -329,7 +329,6 @@ public class Admin implements AdminLocal {
             GraphUtils gd = new GraphUtils();
             gd.setMonth(g[0].toString());
             gd.setCount(Long.parseLong(g[1].toString()));
-            System.out.println(gd.getMonth() + " --- > " + gd.getCount());
             graphData.add(gd);
         }
        return graphData;
@@ -345,7 +344,6 @@ public class Admin implements AdminLocal {
             GraphUtils gd = new GraphUtils();
             gd.setMonth(g[0].toString());
             gd.setCount(Long.parseLong(g[1].toString()));
-//            System.out.println(gd.getMonth() + " --- > " + gd.getCount());
             graphData.add(gd);
         }
        return graphData;

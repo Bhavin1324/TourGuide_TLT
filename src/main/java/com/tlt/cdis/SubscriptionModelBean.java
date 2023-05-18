@@ -5,6 +5,7 @@
 package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
+import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.utils.Utils;
 import javax.inject.Named;
@@ -16,6 +17,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -28,6 +30,8 @@ public class SubscriptionModelBean implements Serializable {
 
     @EJB
     AdminLocal ad;
+    @EJB
+    TouristLocal tb;
     List<SubscriptionModel> pc;
     Collection<SubscriptionModel> allSubscriptionModel;
     SubscriptionModel selectedSubModel;
@@ -145,6 +149,10 @@ public class SubscriptionModelBean implements Serializable {
 
     public void Subscribe(SubscriptionModel model){
         
-
+        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String uname = req.getSession().getAttribute("username").toString();
+        System.out.println(uname);
+        System.out.println(model.getName());
+        tb.subscribeToPlan(model, uname);
     }
 }

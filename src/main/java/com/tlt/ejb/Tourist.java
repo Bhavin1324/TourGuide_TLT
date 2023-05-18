@@ -3,6 +3,9 @@ package com.tlt.ejb;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
+import com.tlt.utils.Utils;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import javax.ejb.Stateful;
@@ -76,35 +79,37 @@ public class Tourist implements TouristLocal {
     }
 
     @Override
-    public void subscribeToPlan(SubscriptionModel model,UserMaster user) {
+    public void subscribeToPlan(SubscriptionModel model, String username) {
 
-        UserMaster usermaster = em.find(UserMaster.class,user.getId());
+        UserMaster usermaster = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        
+        //get all user's subscription list
         Collection<SubscriptionMaster> usersubs = usermaster.getSubscriptionMasterCollection();
+
+        // create A New Subscription
+        SubscriptionMaster submaster = new SubscriptionMaster();
+        String id = Utils.getUUID();
+        submaster.setId(id);
+
+        Date startDate = new Date();
+        submaster.setStartDate(startDate);
+
+        //add months of subscription model 
+        Calendar calEndDate = Calendar.getInstance();;
+        calEndDate.add(Calendar.MONTH, model.getDurationInMonth());
+        Date endDate = calEndDate.getTime();
+        submaster.setEndDate(endDate);
+        submaster.setSubscriptionModelId(model);
+        submaster.setUserMasterCollection(new ArrayList<>());
         
-//        create new sub
-        SubscriptionMaster smaster = new SubscriptionMaster();
-//        smaster.setStartDate(new Date());
-//        smaster.setEndDate();
-        smaster.setSubscriptionModelId(model);
+        //add the subcription to user's subscriptionCollection
+        usersubs.add(submaster);
         
-        //persist new sub
-        em.persist(smaster);
-        
-        //add this sub to user's subscription collection
-        usersubs.add(smaster);
-        
-        SubscriptionMaster sm  = em.find(SubscriptionMaster.class,smaster.getId());
-        
-        //get all users from submaster's usercollection
-        Collection<UserMaster> users = sm.getUserMasterCollection();
-        
-        //add that user to the collection
-        users.add(usermaster);
-        
+        //add the user to the subscriptionMaster's user collection
+        Collection<UserMaster> userColl = submaster.getUserMasterCollection();
+        userColl.add(usermaster);
+        em.persist(submaster);
         em.merge(usermaster);
-        em.merge(sm);
-//        usermaster.setSubscriptionMasterCollection();
-        
     }
-    
+
 }

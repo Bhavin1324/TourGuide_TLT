@@ -22,5 +22,5 @@ public interface TouristLocal {
 
     UserMaster findUserByEmail(String email);
     
-    void subscribeToPlan(SubscriptionModel model,UserMaster user);
+    void subscribeToPlan(SubscriptionModel model,String  username);
 }
