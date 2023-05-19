@@ -36,7 +36,7 @@ public class RegisterUserBean implements Serializable {
 
     UploadedFile file;
     String fileName;
-    
+
     boolean showDialog;
 
     public RegisterUserBean() {
@@ -85,8 +85,6 @@ public class RegisterUserBean implements Serializable {
         this.showDialog = showDialog;
     }
 
-    
-    
     public void register() throws IOException {
 
         boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE, PROFILE_IMG_DEST);
@@ -99,7 +97,10 @@ public class RegisterUserBean implements Serializable {
         } else {
             this.fileName = Utils.FileName;
         }
-
+        if (tejb.findUserByEmail(userMaster.getEmail()) != null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "This email is alredy registered", ""));
+            return;
+        }
         if (tejb.findUserByUsername(userMaster.getUsername()) != null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username: This username is already taken. Try to make new.", "Create new username which is unique"));
             return;

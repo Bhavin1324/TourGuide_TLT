@@ -1,66 +1,66 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+    xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <!-- INTERFACE -->
-    <cc:interface>
-        <cc:attribute name="marker"/>
-        <cc:attribute name="mapModel"/>
-        <cc:attribute name="markerSign"/>
-    </cc:interface>
+<!-- INTERFACE -->
+<cc:interface>
+    <cc:attribute name="marker" />
+    <cc:attribute name="mapModel" />
+    <cc:attribute name="markerSign" />
+</cc:interface>
 
-    <!-- IMPLEMENTATION -->
-    <cc:implementation>
-        <h:outputStylesheet library="css" name="styles.css"/>
-        <div class="card" ondblclick="getLocation()">
-            <h:form prependId="false">
-                <p:gmap id="gmap" center="0,0" zoom="13" type="roadmap"
-                        model="#{cc.attrs.mapModel}" style="width:100%;height:600px" widgetVar="map">
+<!-- IMPLEMENTATION -->
+<cc:implementation>
+    <h:outputStylesheet library="css" name="styles.css" />
+    <div class="card" ondblclick="getLocation()">
+        <h:form prependId="false">
+            <p:gmap id="gmap" center="0,0" zoom="13" type="roadmap" model="#{cc.attrs.mapModel}"
+                style="width:100%;height:600px" widgetVar="map">
 
-                    <p:ajax event="overlaySelect" listener="#{landingBean.onMarkerSelect}"/>
+                <p:ajax event="overlaySelect" listener="#{landingBean.onMarkerSelect}" />
 
-                    <p:gmapInfoWindow id="infoWindow">
-                        <p:outputPanel style="text-align: center; display: block; margin: auto">
+                <p:gmapInfoWindow id="infoWindow">
+                    <p:outputPanel style="text-align: center; display: block; margin: auto">
 
-                            <p:graphicImage value="/uploads/places/#{cc.attrs.marker.data}" height="150"/>
-                            <br/>
-                            <h:outputText value="#{cc.attrs.marker.title}"/>
+                        <p:graphicImage value="/uploads/places/#{cc.attrs.marker.data}" height="150" />
+                        <br />
+                        <h:outputText value="#{cc.attrs.marker.title}" />
 
-                        </p:outputPanel>
-                    </p:gmapInfoWindow>
-                </p:gmap>
-            </h:form>
-        </div>
-        <script>
-            console.log("Script invoked");
-            function getLocation() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition((position) => {
-                        let latitude = position.coords.latitude;
-                        let longitude = position.coords.longitude;
-                        let marker = new google.maps.Marker({
-                            center: {lat:  latitude, lng: longitude},
-                            position: new google.maps.LatLng(latitude, longitude),
-                            map:  PF('map').getMap(),
-                            title: "Your location",
-                            className: 'custom-marker',
-                            icon: {
-                                url: "../../uploads/profiles/#{cc.attrs.markerSign}",
-                                scaledSize: new google.maps.Size(35, 35),
-                                anchor: new google.maps.Point(16, 32),
-                            }
-                        });
-            
-                        PF('map').getMap().setCenter(marker.getPosition());
+                    </p:outputPanel>
+                </p:gmapInfoWindow>
+            </p:gmap>
+        </h:form>
+    </div>
+    <script>
+        console.log("Script invoked");
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    let marker = new google.maps.Marker({
+                        center: { lat: latitude, lng: longitude },
+                        position: new google.maps.LatLng(latitude, longitude),
+                        map: PF('map').getMap(),
+                        title: "Your location",
+                        className: 'custom-marker',
+                        icon: {
+                            url: "../../uploads/profiles/#{cc.attrs.markerSign}",
+                            scaledSize: new google.maps.Size(40, 40),
+                            anchor: new google.maps.Point(16, 32),
+                        }
                     });
-                } else {
-                    console.log("Geo location is not supported by this browser!");
-                }
+
+                    PF('map').getMap().setCenter(marker.getPosition());
+                });
+            } else {
+                console.log("Geo location is not supported by this browser!");
             }
-            getLocation();
-        </script>
-    </cc:implementation>
+        }
+        getLocation();
+    </script>
+</cc:implementation>
+
 </html>
