@@ -37,8 +37,9 @@ public class SubscriptionModelBean implements Serializable {
     List<SubscriptionModel> pc;
     Collection<SubscriptionModel> allSubscriptionModel;
     SubscriptionModel selectedSubModel;
+    SubscriptionModel modelForPayment;
     String subModelid;
-
+    
     Integer currentCost;
     private UIComponent costLabel;
 
@@ -53,12 +54,17 @@ public class SubscriptionModelBean implements Serializable {
 
     }
 
+    public SubscriptionModel getModelForPayment() {
+        return modelForPayment;
+    }
+
+    public void setModelForPayment(SubscriptionModel modelForPayment) {
+        this.modelForPayment = modelForPayment;
+    }
+
     public void onModalAction(SubscriptionModel subModel) {
         this.currentCost = subModel.getCost();
-        UIComponent outputText = new OutputLabel();
-        outputText.setId("total-cost");
-        ((OutputLabel) outputText).setValue(String.valueOf(currentCost)); // Set the value
-        costLabel = outputText;
+        System.out.println(this.currentCost);
         PrimeFaces.current().executeScript("PF('paymentModal').show()");
         PrimeFaces.current().ajax().update(":dialog:payment-modal");
     }
@@ -173,12 +179,14 @@ public class SubscriptionModelBean implements Serializable {
         }
     }
 
-    public void Subscribe(SubscriptionModel model) {
+    public void Subscribe() {
 
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String uname = req.getSession().getAttribute("username").toString();
         System.out.println(uname);
-        System.out.println(model.getName());
-        tb.subscribeToPlan(model, uname);
+        System.out.println(this.modelForPayment.getName());
+        tb.subscribeToPlan(this.modelForPayment, uname);
+        PrimeFaces.current().executeScript("PF('success_dlg').show()");
+        PrimeFaces.current().executeScript("PF('paymentModal').hide()");
     }
 }
