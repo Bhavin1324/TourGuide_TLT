@@ -82,7 +82,7 @@ public class Tourist implements TouristLocal {
     public void subscribeToPlan(SubscriptionModel model, String username) {
 
         UserMaster usermaster = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
-        
+
         //get all user's subscription list
         Collection<SubscriptionMaster> usersubs = usermaster.getSubscriptionMasterCollection();
 
@@ -101,15 +101,22 @@ public class Tourist implements TouristLocal {
         submaster.setEndDate(endDate);
         submaster.setSubscriptionModelId(model);
         submaster.setUserMasterCollection(new ArrayList<>());
-        
+
         //add the subcription to user's subscriptionCollection
         usersubs.add(submaster);
-        
+
         //add the user to the subscriptionMaster's user collection
         Collection<UserMaster> userColl = submaster.getUserMasterCollection();
         userColl.add(usermaster);
         em.persist(submaster);
         em.merge(usermaster);
+    }
+
+    @Override
+    public Collection<SubscriptionMaster> getUsersSubscriptions(String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        Collection<SubscriptionMaster> userSubscriptions = user.getSubscriptionMasterCollection();
+        return userSubscriptions;
     }
 
 }
