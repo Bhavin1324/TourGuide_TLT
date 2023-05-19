@@ -176,10 +176,10 @@ public class AdminHomeBean implements Serializable {
         cScales.addYAxesData(linearAxes);
         options.setScales(cScales);
 
-        Title title = new Title();
-        title.setDisplay(true);
-        title.setText("Bar Chart");
-        options.setTitle(title);
+//        Title title = new Title();
+//        title.setDisplay(true);
+//        title.setText("Bar Chart");
+//        options.setTitle(title);
 
         Legend legend = new Legend();
         legend.setDisplay(true);
