@@ -6,6 +6,7 @@ package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
+import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.utils.Utils;
 import javax.inject.Named;
@@ -39,10 +40,7 @@ public class SubscriptionModelBean implements Serializable {
     SubscriptionModel selectedSubModel;
     SubscriptionModel modelForPayment;
     String subModelid;
-    
     Integer currentCost;
-    private UIComponent costLabel;
-
     List<SubscriptionModel> selectedSubModels;
 
     public SubscriptionModelBean() {
@@ -64,7 +62,6 @@ public class SubscriptionModelBean implements Serializable {
 
     public void onModalAction(SubscriptionModel subModel) {
         this.currentCost = subModel.getCost();
-        System.out.println(this.currentCost);
         PrimeFaces.current().executeScript("PF('paymentModal').show()");
         PrimeFaces.current().ajax().update(":dialog:payment-modal");
     }
@@ -181,12 +178,24 @@ public class SubscriptionModelBean implements Serializable {
 
     public void Subscribe() {
 
-        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String uname = req.getSession().getAttribute("username").toString();
-        System.out.println(uname);
-        System.out.println(this.modelForPayment.getName());
-        tb.subscribeToPlan(this.modelForPayment, uname);
-        PrimeFaces.current().executeScript("PF('success_dlg').show()");
-        PrimeFaces.current().executeScript("PF('paymentModal').hide()");
+        if (!isUserSubscribed()) {
+            HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String uname = req.getSession().getAttribute("username").toString();
+            System.out.println(uname);
+            System.out.println(this.modelForPayment.getName());
+            tb.subscribeToPlan(this.modelForPayment, uname);
+            PrimeFaces.current().executeScript("PF('success_dlg').show()");
+            PrimeFaces.current().executeScript("PF('paymentModal').hide()");
+        }else{
+            PrimeFaces.current().executeScript("PF('paymentModal').hide()");
+            PrimeFaces.current().executeScript("PF('isSubscribedDlg').show()");
+        }
+    }
+
+    public boolean isUserSubscribed() {
+         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String uname = req.getSession().getAttribute("username").toString();
+        boolean status = tb.isUserSubscribed(modelForPayment,uname);
+        return status;
     }
 }

@@ -161,6 +161,17 @@
                 </f:facet>
             </p:dialog>
         </h:form>
+        <h:form>
+            <p:dialog id="is-subscribed-dialog" header="Warning" widgetVar="isSubscribedDlg" height="50" width="350" showEffect="fade">
+                <div class="text-center">
+                    <i class="pi pi-exclamation-circle text-5xl" />
+                </div>
+                <div class="text-center text-xl mt-3">You already Subscribed to this plan!</div>
+                <f:facet name="footer">
+                    <p:commandButton value="Close" class="ui-button-danger" icon="pi pi-times" type="button" onclick="PF('isSubscribedDlg').hide()"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </h:body>
 </html>
 

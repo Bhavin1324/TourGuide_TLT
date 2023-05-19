@@ -26,4 +26,6 @@ public interface TouristLocal {
     void subscribeToPlan(SubscriptionModel model,String  username);
     
     Collection<SubscriptionMaster> getUsersSubscriptions(String username);
+    
+    boolean isUserSubscribed(SubscriptionModel model ,String username);
 }

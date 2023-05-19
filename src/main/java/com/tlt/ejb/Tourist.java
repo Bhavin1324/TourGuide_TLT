@@ -119,4 +119,16 @@ public class Tourist implements TouristLocal {
         return userSubscriptions;
     }
 
+    @Override
+    public boolean isUserSubscribed(SubscriptionModel model, String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        Collection<SubscriptionMaster> modelSubscriptions = model.getSubscriptionMasterCollection();
+        for (SubscriptionMaster s : modelSubscriptions) {
+            if(s.getUserMasterCollection().contains(user)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
