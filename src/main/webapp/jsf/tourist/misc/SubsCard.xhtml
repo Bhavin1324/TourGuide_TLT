@@ -15,45 +15,51 @@
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
 
     </h:head>
-    <h:body class="bg-gray-200" style="font-family: sans-serif">
+    <h:body class="bg-gray-200" style="font-family: sans-serif;">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        
+
         <!--Subscription Cards-->
-        
+
         <h:form id="form">
-            <div class="container p-5">
-                <div class="container-fluid ">
-                    <div class="grid justify-content-center my-4 text-5xl font-semibold">Pricing Plans</div>
-                    <div class="grid justify-content-center">
+            <section class=" flex flex-column relative" style="height: 350px;background-color: #8c239e">
+                <div class="py-4 md\:-py-6">
+                    <div class="text-center my-4 text-5xl text-white">Choose a Plan</div>
+                    <div class="text-center text-100 text-xl mt-3 mb-4">Pick a plan. Get amazing features. Explore more in a better way.</div>
+                </div>
+                <div class="absolute top-50 left-50 w-full" style="transform: translate(-50%,0%)">
+                    <div class="grid justify-content-center w-full">
                         <ui:repeat var="item" value="${subsModelBean.subscriptionModel}">
-                            <div class="col-12 lg:col-4">
+                            <div class="col-12 md:col-6 lg:col-4">
                                 <div class="p-3 h-full">
-                                    <div class="shadow-2 p-3 h-full flex flex-column surface-card border-round-3xl"
+                                    <div class="card-select py-4 px-6 mx-auto h-full flex flex-column surface-card border-round-3xl"
                                          style="border-radius: 6px">
-                                        <div class="font-medium text-2xl mb-2">#{item.name}</div>
+                                        <div class="font-medium text-4xl text-center mb-2">#{item.name}</div>
                                         <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
-                                        <div class="flex align-items-center">
-                                            <span class="font-bold text-3xl text-900">${item.cost}
-                                                <span class="material-symbols-outlined">
+                                        <div class="flex align-items-center flex-column">
+                                            <div>
+
+                                                <span class="text-7xl -mr-3 text-purple-700">${item.cost}
+                                                </span>
+                                                <span class="material-symbols-outlined text-purple-700 font-semibold">
                                                     currency_rupee
                                                 </span>
-                                            </span>
-                                            <span class="ml-2 font-medium text-600">
+                                            </div>
+                                            <span class="text-2xl text-600 blocks">
                                                 for #{item.durationInMonth} month
                                             </span>
                                         </div>
-                                        <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                        <hr class="my-5 mx-0 border-top-1 border-bottom-none surface-border"/>
                                         <ul class="list-none p-0 m-0 flex-grow-1">
                                             <ui:repeat var="desc" value="#{item.details.split('\\.')}" >    
-                                                <li class="flex align-items-center mb-3">
+                                                <li class="flex align-items-center mb-3 text-lg">
                                                     <i class="pi pi-check-circle text-green-500 mr-2"/>
                                                     <span>${desc}</span>
                                                 </li>
                                             </ui:repeat>
                                         </ul>
-                                        <hr class="mb-3 mx-0 border-top-1 border-bottom-none surface-border mt-auto"/>
+                                        <hr class="my-5 mx-0 border-top-1 border-bottom-none surface-border mt-auto"/>
                                         <p:commandButton action="#{subsModelBean.onModalAction(item)}" value="Buy Now"
-                                                         styleClass="px-3 py-2 w-full mt-auto ui-button-raised ui-button-help rounded-button">
+                                                         styleClass="px-3 py-2 w-full text-xl mt-auto ui-button-raised ui-button-help rounded-button">
                                             <f:setPropertyActionListener target="#{subsModelBean.modelForPayment}" value="${item}"/>
                                             <f:setPropertyActionListener target="#{subsModelBean.currentCost}" 
                                                                          value="#{item.cost}" />
@@ -64,10 +70,11 @@
                         </ui:repeat>
                     </div>
                 </div>
-            </div>
+            </section>
 
-       <!--Payment Modal-->
-       
+
+            <!--Payment Modal-->
+
         </h:form>
         <h:form id="dialog">
             <p:dialog widgetVar="paymentModal" id="payment-modal" showEffect="fade" 
@@ -144,9 +151,9 @@
                 </p:outputPanel>
             </p:dialog>
         </h:form>
-        
+
         <!--Success Dialog-->
-        
+
         <h:form>
             <p:dialog id="success-dialog" header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade">
                 <p class="m-0">Subscribed successfully!</p>

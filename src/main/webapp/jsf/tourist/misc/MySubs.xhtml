@@ -11,11 +11,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
-        
+
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div>Subscription</div>
+        <div class="container p-5">
+            <div class="container-fluid p-7">
+                <div class=" text-4xl text-900 ">Active Plans</div>
+                <div>
+                    
+                </div>
+            </div>
+
+        </div>
     </h:body>
 </html>
 
