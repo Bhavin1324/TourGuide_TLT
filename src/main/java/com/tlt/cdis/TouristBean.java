@@ -22,7 +22,6 @@ public class TouristBean implements Serializable {
 
     @EJB
     TouristLocal userLogic;
-
     UserMaster userMaster;
 
     public TouristBean() {

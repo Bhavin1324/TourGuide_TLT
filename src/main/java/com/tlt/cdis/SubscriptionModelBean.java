@@ -39,7 +39,7 @@ public class SubscriptionModelBean implements Serializable {
     Collection<SubscriptionModel> allSubscriptionModel;
     SubscriptionModel selectedSubModel;
     SubscriptionModel modelForPayment;
-    String subModelid;
+    String subModelid,cardNumber;
     Integer currentCost;
     List<SubscriptionModel> selectedSubModels;
 
@@ -50,6 +50,14 @@ public class SubscriptionModelBean implements Serializable {
         allSubscriptionModel = new ArrayList<>();
         subModelid = "";
 
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public SubscriptionModel getModelForPayment() {
@@ -182,8 +190,9 @@ public class SubscriptionModelBean implements Serializable {
             HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String uname = req.getSession().getAttribute("username").toString();
             System.out.println(uname);
+            System.out.println(this.cardNumber);
             System.out.println(this.modelForPayment.getName());
-            tb.subscribeToPlan(this.modelForPayment, uname);
+            tb.subscribeToPlan(this.modelForPayment, uname,this.cardNumber);
             PrimeFaces.current().executeScript("PF('success_dlg').show()");
             PrimeFaces.current().executeScript("PF('paymentModal').hide()");
         }else{
