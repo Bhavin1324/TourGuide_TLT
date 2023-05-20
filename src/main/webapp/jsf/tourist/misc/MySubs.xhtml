@@ -20,8 +20,9 @@
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
         <section class=" flex flex-column relative" style="height: 350px;background-color: #8c239e">
             <div class="py-4 md\:-py-6">
-                <div class="text-center mt-7 text-5xl text-white">Active Plans</div>
+                <div class="text-center mt-4 text-5xl text-white">Active Plans</div>
             </div>
+             <div class="text-center text-100 text-xl mt-1">Pick a plan. Get amazing features. Explore more in a better way.</div>
             <div class="absolute top-50 left-50 w-full" style="transform: translate(-50%,0%)">
                 <div class="grid justify-content-center mx-8" >
                     <ui:repeat var="sm" value="#{subMasterBean.usersSubscriptions}" >

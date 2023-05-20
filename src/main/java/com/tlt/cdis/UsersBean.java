@@ -150,12 +150,9 @@ public class UsersBean implements Serializable {
     }
 
     public void roleChangeListener(ValueChangeEvent e) {
-        System.out.println(e.getNewValue());
         this.role = String.valueOf(e.getNewValue());
         if (!this.role.equals("notSelected")) {
-            System.out.println("User roles length: " + ad.getAllRoles().isEmpty());
             for (UserRole r : ad.getAllRoles()) {
-                System.out.println("Role : " + r);
                 if (r.getUserRolePK().getRole().equals(this.role)) {
                     this.users = null;
                     this.users = ad.getUsersByRoles(r);

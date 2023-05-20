@@ -43,9 +43,10 @@ public class AdminHomeBean implements Serializable {
     public AdminHomeBean() {
         barGraphData = new ArrayList<>();
         pieGraphData = new ArrayList<>();
+//        init();
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         barGraphData = ad.getMonthlySubscriptionData();
         pieGraphData = ad.getMonthlyRevenueData();
@@ -112,21 +113,6 @@ public class AdminHomeBean implements Serializable {
         BarChartDataSet barDataSet = new BarChartDataSet();
         barDataSet.setLabel("Subscriptions");
 
-        List<Number> values = new ArrayList<>();
-        
-//        values.add(65);
-//        values.add(59);
-//        values.add(80);
-//        values.add(81);
-//        values.add(56);
-//        values.add(55);
-//        values.add(40);
-//        values.add(40);
-//        values.add(40);
-//        values.add(40);
-//        values.add(40);
-//        values.add(40);
-
         List<String> bgColor = new ArrayList<>();
         bgColor.add("rgb(255, 99, 132)");
         bgColor.add("rgb(255, 159, 64)");
@@ -143,24 +129,14 @@ public class AdminHomeBean implements Serializable {
         barDataSet.setBackgroundColor(bgColor);
 
         data.addChartDataSet(barDataSet);
-
+        
+        List<Number> values = new ArrayList<>();
         List<String> labels = new ArrayList<>();
         for(GraphUtils g : barGraphData){
             values.add(g.getCount());
             labels.add(g.getMonth());
         }
-//        labels.add("January");
-//        labels.add("February");
-//        labels.add("March");
-//        labels.add("April");
-//        labels.add("May");
-//        labels.add("June");
-//        labels.add("July");
-//        labels.add("August");
-//        labels.add("September");
-//        labels.add("October");
-//        labels.add("November");
-//        labels.add("December");
+        
         barDataSet.setData(values);
         data.setLabels(labels);
         barModel.setData(data);
@@ -176,11 +152,6 @@ public class AdminHomeBean implements Serializable {
         cScales.addYAxesData(linearAxes);
         options.setScales(cScales);
 
-//        Title title = new Title();
-//        title.setDisplay(true);
-//        title.setText("Bar Chart");
-//        options.setTitle(title);
-
         Legend legend = new Legend();
         legend.setDisplay(true);
         legend.setPosition("top");
@@ -193,7 +164,7 @@ public class AdminHomeBean implements Serializable {
 
         // disable animation
         Animation animation = new Animation();
-        animation.setDuration(0);
+        animation.setDuration(2);
         options.setAnimation(animation);
 
         barModel.setOptions(options);
@@ -204,19 +175,6 @@ public class AdminHomeBean implements Serializable {
         ChartData data = new ChartData();
 
         PieChartDataSet dataSet = new PieChartDataSet();
-        List<Number> values = new ArrayList<>();
-//        values.add(300);
-//        values.add(50);
-//        values.add(13);
-//        values.add(45);
-//        values.add(98);
-//        values.add(11);
-//        values.add(14);
-//        values.add(1);
-//        values.add(40);
-//        values.add(30);
-//        values.add(30);
-//        values.add(10);
 
         List<String> bgColors = new ArrayList<>();
         bgColors.add("rgb(255, 99, 132)");
@@ -232,25 +190,14 @@ public class AdminHomeBean implements Serializable {
         bgColors.add("rgb(203, 204, 37)");
         bgColors.add("rgb(255, 217, 82)");
         dataSet.setBackgroundColor(bgColors);
-
         data.addChartDataSet(dataSet);
+        
+        List<Number> values = new ArrayList<>();
         List<String> labels = new ArrayList<>();
          for(GraphUtils g : pieGraphData){
             values.add(g.getCount());
             labels.add(g.getMonth());
         }
-//        labels.add("January");
-//        labels.add("February");
-//        labels.add("March");
-//        labels.add("April");
-//        labels.add("May");
-//        labels.add("June");
-//        labels.add("July");
-//        labels.add("August");
-//        labels.add("September");
-//        labels.add("October");
-//        labels.add("November");
-//        labels.add("December");
 
         dataSet.setData(values);
         data.setLabels(labels);

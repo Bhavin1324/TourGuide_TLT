@@ -8,6 +8,7 @@ import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.record.KeepRecord;
 import com.tlt.utils.Utils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -39,7 +40,7 @@ public class SubscriptionModelBean implements Serializable {
     Collection<SubscriptionModel> allSubscriptionModel;
     SubscriptionModel selectedSubModel;
     SubscriptionModel modelForPayment;
-    String subModelid,cardNumber;
+    String subModelid, cardNumber;
     Integer currentCost;
     List<SubscriptionModel> selectedSubModels;
 
@@ -187,24 +188,20 @@ public class SubscriptionModelBean implements Serializable {
     public void Subscribe() {
 
         if (!isUserSubscribed()) {
-            HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            String uname = req.getSession().getAttribute("username").toString();
-            System.out.println(uname);
-            System.out.println(this.cardNumber);
-            System.out.println(this.modelForPayment.getName());
-            tb.subscribeToPlan(this.modelForPayment, uname,this.cardNumber);
+            String uname = KeepRecord.getUsername();
+            tb.subscribeToPlan(this.modelForPayment, uname, this.cardNumber);
+            this.cardNumber="";
             PrimeFaces.current().executeScript("PF('success_dlg').show()");
             PrimeFaces.current().executeScript("PF('paymentModal').hide()");
-        }else{
+        } else {
             PrimeFaces.current().executeScript("PF('paymentModal').hide()");
             PrimeFaces.current().executeScript("PF('isSubscribedDlg').show()");
         }
     }
 
     public boolean isUserSubscribed() {
-         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            String uname = req.getSession().getAttribute("username").toString();
-        boolean status = tb.isUserSubscribed(modelForPayment,uname);
+        String uname = KeepRecord.getUsername();
+        boolean status = tb.isUserSubscribed(modelForPayment, uname);
         return status;
     }
 }

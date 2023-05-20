@@ -9,6 +9,7 @@ import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.record.KeepRecord;
 import com.tlt.utils.UserSubscriptionMapping;
 import java.io.IOException;
 import javax.inject.Named;
@@ -43,9 +44,7 @@ public class SubscriptionMasterBean implements Serializable {
     }
 
     public Collection<SubscriptionMaster> getUsersSubscriptions() {
-
-        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String username = req.getSession().getAttribute("username").toString();
+        String username = KeepRecord.getUsername();
         usersSubscriptions = tb.getUsersSubscriptions(username);
         if (!usersSubscriptions.isEmpty()) {
             return usersSubscriptions;

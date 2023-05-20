@@ -53,7 +53,7 @@
                                             <ui:repeat var="desc" value="#{item.details.split('\\.')}" >    
                                                 <li class="flex align-items-center mb-3 text-lg">
                                                     <i class="pi pi-check-circle text-green-500 mr-2"/>
-                                                    <span>${desc}</span>
+                                                    <span>${desc}.</span>
                                                 </li>
                                             </ui:repeat>
                                         </ul>
@@ -156,7 +156,7 @@
 
         <h:form>
             <p:dialog id="success-dialog" header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade">
-                <p class="m-0">Subscribed successfully!</p>
+                <p class="m-0 text-xl">Subscribed successfully!</p>
                 <f:facet name="footer">
                     <p:commandButton value="Close" class="ui-button-success" icon="pi pi-times" type="button" onclick="PF('success_dlg').hide()"/>
                 </f:facet>
