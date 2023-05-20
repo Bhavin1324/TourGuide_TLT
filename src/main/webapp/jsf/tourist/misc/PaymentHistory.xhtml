@@ -18,7 +18,7 @@
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
         <div class="py-6  px-8" >
             <!--<h2>sdfsf</h2>-->
-            <p:dataTable var="p" value="#{paymentMasterBean.usersPayments}" reflow="true" rows="5" paginator="true">
+            <p:dataTable class="text-xl" var="p" value="#{paymentMasterBean.usersPayments}" reflow="true" rows="5" paginator="true">
                 <f:facet name="header">
                     <div class="ml-4 text-3xl font-semibold">Transaction History</div>
                 </f:facet>
@@ -26,7 +26,10 @@
                     <h:outputText value="#{p.subscriptionId.subscriptionModelId.name}"/>
                 </p:column>
                 <p:column class="text-center" headerText="Amount">
-                    <h:outputText value="#{p.subscriptionId.subscriptionModelId.cost}"/>
+                    <h:outputText class="-mr-1" value="#{p.subscriptionId.subscriptionModelId.cost}"/>
+                     <span class="material-symbols-outlined text-xl">
+                        currency_rupee
+                    </span>
                 </p:column>
 
                 <p:column class="text-center" headerText="Payment Status">

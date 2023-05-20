@@ -4,6 +4,7 @@
  */
 package com.tlt.cdis;
 
+import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.PaymentMaster;
 import javax.inject.Named;
@@ -25,11 +26,14 @@ public class PaymentMasterBean implements Serializable {
 
     @EJB
     TouristLocal tb;
+    
+    @EJB AdminLocal ad;
 
     Collection<PaymentMaster> usersPayments;
-
+    Collection<PaymentMaster> adminAllPaymentDetails;
     public PaymentMasterBean() {
         usersPayments = new ArrayList<>();
+        adminAllPaymentDetails= new ArrayList<>();
     }
 
     public Collection<PaymentMaster> getUsersPayments() {
@@ -41,5 +45,14 @@ public class PaymentMasterBean implements Serializable {
     public void setUsersPayments(Collection<PaymentMaster> usersPayments) {
         this.usersPayments = usersPayments;
     }
+
+    public Collection<PaymentMaster> getAdminAllPaymentDetails() {
+        return ad.getAllPaymentDetails();
+    }
+
+    public void setAdminAllPaymentDetails(Collection<PaymentMaster> adminAllPaymentDetails) {
+        this.adminAllPaymentDetails = adminAllPaymentDetails;
+    }
+    
 
 }

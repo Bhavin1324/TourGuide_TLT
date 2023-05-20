@@ -5,9 +5,11 @@
 package com.tlt.cdis;
 
 import static com.tlt.constants.UrlConstants.TO_SUBS_CARDS;
+import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.utils.UserSubscriptionMapping;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -31,10 +33,13 @@ public class SubscriptionMasterBean implements Serializable {
 
     @EJB
     TouristLocal tb;
+    @EJB AdminLocal ad;
     private Collection<SubscriptionMaster> usersSubscriptions;
+    Collection<UserSubscriptionMapping> adminAllSubscriptions;
 
     public SubscriptionMasterBean() {
         usersSubscriptions = new ArrayList<>();
+        adminAllSubscriptions = new ArrayList<>();
     }
 
     public Collection<SubscriptionMaster> getUsersSubscriptions() {
@@ -48,6 +53,14 @@ public class SubscriptionMasterBean implements Serializable {
             PrimeFaces.current().executeScript("PF('noSubsDlg').show()");
             return usersSubscriptions;
         }
+    }
+
+    public Collection<UserSubscriptionMapping> getAdminAllSubscriptions() {
+        return ad.getAllSubscriptions();
+    }
+
+    public void setAdminAllSubscriptions(Collection<UserSubscriptionMapping> adminAllSubscriptions) {
+        this.adminAllSubscriptions = adminAllSubscriptions;
     }
 
     public void redirectToSubscriptionPlans() {
