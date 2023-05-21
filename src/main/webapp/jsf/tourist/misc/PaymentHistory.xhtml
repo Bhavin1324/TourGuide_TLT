@@ -16,37 +16,51 @@
     </h:head>
     <h:body class="bg-gray-200" style="font-family: sans-serif;">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div class="py-6  px-8" >
-            <!--<h2>sdfsf</h2>-->
-            <p:dataTable class="text-xl" var="p" value="#{paymentMasterBean.usersPayments}" reflow="true" rows="5" paginator="true">
-                <f:facet name="header">
-                    <div class="ml-4 text-3xl font-semibold">Transaction History</div>
-                </f:facet>
-                <p:column class="text-center" headerText="Subscription Model">
-                    <h:outputText value="#{p.subscriptionId.subscriptionModelId.name}"/>
-                </p:column>
-                <p:column class="text-center" headerText="Amount">
-                    <h:outputText class="-mr-1" value="#{p.subscriptionId.subscriptionModelId.cost}"/>
-                     <span class="material-symbols-outlined text-xl">
-                        currency_rupee
-                    </span>
-                </p:column>
+        <div class="my-5 px-2" >
+            <div class="surface-card border-round-2xl p-4">
+                <h:form>
+                    <p:dataTable id="dt-payment-history" class="text-xl" var="p" widgetVar="dtPaymentHistory"
+                                 value="#{paymentMasterBean.usersPayments}" reflow="true" rows="10" 
+                                 paginator="true" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="ml-2 text-3xl font-semibold">Transaction History</div>
+                        </f:facet>
 
-                <p:column class="text-center" headerText="Payment Status">
-                    <h:outputText value="#{p.paymentStatus}"/>
-                </p:column>
+                        <f:facet name="header">
+                            <div class="product-table-header ml-2 mt-5">
+                                <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtPaymentHistory').filter()" 
+                                                 placeholder="Search" />
+                                </div>
+                            </div>
+                        </f:facet>
+                        <p:column  sortBy="#{p.subscriptionId.subscriptionModelId.name}" filterBy="#{p.subscriptionId.subscriptionModelId.name}" class="text-lg" headerText="Subscription Model">
+                            <h:outputText value="#{p.subscriptionId.subscriptionModelId.name}"/>
+                        </p:column>
+                        <p:column sortBy="#{p.subscriptionId.subscriptionModelId.cost}" filterBy="#{p.subscriptionId.subscriptionModelId.cost}" class="text-lg px-4" headerText="Amount">
+                            <h:outputText class="-mr-1" value="#{p.subscriptionId.subscriptionModelId.cost}"/>
+                            <span class="material-symbols-outlined text-xl">
+                                currency_rupee
+                            </span>
+                        </p:column>
 
-                <p:column headerText="Date" class="text-center">
-                    <h:outputText value="#{p.createdAt}"/>
-                </p:column>
+                        <p:column sortBy="#{p.paymentStatus}" filterBy="#{p.paymentStatus}" class="text-lg px-4" headerText="Payment Status">
+                            <h:outputText value="#{p.paymentStatus}"/>
+                        </p:column>
 
-                <p:column headerText="Card Number" class="text-center">
-                    <h:outputText value="#{p.cardDetails}"/>
-                </p:column>
-                <p:column headerText="Guide" class="text-center">
-                    <h:outputText value="#{(p.guideId==null)? '----': p.guideId.name}" />
-                </p:column>
-            </p:dataTable>
+                        <p:column sortBy="#{p.createdAt}" filterBy="#{p.createdAt}" class="text-lg px-4" headerText="Date" >
+                            <h:outputText value="#{p.createdAt.date}/#{p.createdAt.month}/#{p.createdAt.year+1900}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{p.cardDetails}" filterBy="#{p.cardDetails}" class="text-lg px-4" headerText="Card Number" >
+                            <h:outputText value="#{p.cardDetails}"/>
+                        </p:column>
+                        <p:column sortBy="#{p.guideId.name}" filterBy="#{p.guideId.name}" class="text-lg px-4" headerText="Guide" >
+                            <h:outputText value="#{(p.guideId==null)? '&nbsp;&nbsp;----': p.guideId.name}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
         </div>
     </h:body>
 </html>
