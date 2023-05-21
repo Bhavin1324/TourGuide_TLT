@@ -309,19 +309,14 @@ public class Admin implements AdminLocal {
     @Override
     public void deleteUser(String id) {
         UserMaster user = em.find(UserMaster.class, id);
-        Collection<UserRole> roles = user.getUserRoleCollection();
-        Collection<AppointmentMaster> appt = user.getAppointmentMasterCollection();
-        Collection<GuideMaster> guides = user.getGuideMasterCollection();
-        Collection<PaymentMaster> payments = user.getPaymentMasterCollection();
-        Collection<SubscriptionMaster> subs = user.getSubscriptionMasterCollection();
-//        for(UserRole r : roles) {
-//           if(r.getUserMaster().equals(user)){
-//               roles.remove(r);
-//               user.setUserRoleCollection(roles);
-//               return;
-//           }
-//        }
-        em.createNamedQuery("UserRole.deleteByUsername").setParameter("username", user.getName());
+//        Collection<UserRole> roles = user.getUserRoleCollection();
+//        Collection<AppointmentMaster> appt = user.getAppointmentMasterCollection();
+//        Collection<GuideMaster> guides = user.getGuideMasterCollection();
+//        Collection<PaymentMaster> payments = user.getPaymentMasterCollection();
+//        Collection<SubscriptionMaster> subs = user.getSubscriptionMasterCollection();
+//        user.setUserRoleCollection(new ArrayList<>());
+//        user.setAppointmentMasterCollection(new ArrayList<>());
+//        em.createNamedQuery("UserRole.deleteByUsername").setParameter("username", user.getName());
 //        em.merge(user);
         em.remove(user);
     }

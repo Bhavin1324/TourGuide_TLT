@@ -75,6 +75,7 @@ public class UsersBean implements Serializable {
     }
 
     public void setUserid(String userid) {
+        System.out.println("UserID: " + userid);
         this.userid = userid;
     }
 
