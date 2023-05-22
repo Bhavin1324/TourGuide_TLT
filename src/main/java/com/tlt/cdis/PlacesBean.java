@@ -15,14 +15,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.file.UploadedFile;
 
 @Named(value = "placesBean")
 @SessionScoped
 public class PlacesBean implements Serializable {
-
+    
     @EJB
     AdminLocal ad;
     List<PlaceMaster> pc;
@@ -34,7 +36,7 @@ public class PlacesBean implements Serializable {
     private String cityTxt;
     UploadedFile file;
     String fileName;
-
+    
     public PlacesBean() {
         pc = new ArrayList<>();
         selectedPlaces = new ArrayList<>();
@@ -44,92 +46,105 @@ public class PlacesBean implements Serializable {
         catid = "";
         cityid = "";
     }
-
+    
+    public String get12hTime(PlaceMaster p, String status) {
+        if (status.equals("opening")) {
+            return Utils.getTime12h(p.getOpeningTime());
+        } else {
+            return Utils.getTime12h(p.getClosingTime());
+        }
+    }
+    
     public String getFileName() {
         return fileName;
     }
-
+    
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-
+    
     public UploadedFile getFile() {
         return file;
     }
-
+    
     public void setFile(UploadedFile file) {
         this.file = file;
     }
-
+    
     public String getCityTxt() {
         return cityTxt;
     }
-
+    
     public void setCityTxt(String cityTxt) {
         this.cityTxt = cityTxt;
     }
-
+    
     public Collection<Cities> getCities() {
         return ad.getCityByStateId(4030);
     }
-
+    
     public void setCities(Collection<Cities> cities) {
         this.cities = cities;
     }
-
+    
     public Collection<PlaceCategory> getPlaceCategories() {
         return ad.getAllPlaceCategories();
     }
-
+    
     public void setPlaceCategories(Collection<PlaceCategory> placeCategories) {
         this.placeCategories = placeCategories;
     }
-
+    
     public String getCatid() {
         return catid;
     }
-
+    
     public void setCatid(String catid) {
         this.catid = catid;
     }
-
+    
     public String getCityid() {
         return cityid;
     }
-
+    
     public void setCityid(String cityid) {
         this.cityid = cityid;
     }
-
+    
     public PlaceMaster getSelectedPlace() {
+        if (!this.selectedPlace.equals(new PlaceMaster())) {
+            this.cityTxt = selectedPlace.getCityId().getName();
+        }
         return selectedPlace;
     }
-
+    
     public void setSelectedPlace(PlaceMaster selectedPlace) {
         System.out.println(selectedPlace);
         this.selectedPlace = selectedPlace;
     }
-
+    
     public List<PlaceMaster> getPc() {
         return (List<PlaceMaster>) ad.getAllPlaces();
     }
-
+    
     public void setPc(List<PlaceMaster> pc) {
         this.pc = pc;
     }
-
+    
     public List<PlaceMaster> getSelectedPlaces() {
         return selectedPlaces;
     }
-
+    
     public void setSelectedPlaces(List<PlaceMaster> selectedPlaces) {
         this.selectedPlaces = selectedPlaces;
     }
-
+    
     public void openNew() {
+        this.cityTxt="";
+        this.catid="";
         this.selectedPlace = new PlaceMaster();
     }
-
+    
     public void savePlace() {
         try {
             PlaceCategory p = ad.getPlaceCategoryById(catid);
@@ -170,7 +185,7 @@ public class PlacesBean implements Serializable {
             PrimeFaces.current().ajax().update("form:messages", "form:dt-places");
         }
     }
-
+    
     public String getDeleteButtonMessage() {
         if (hasSelectedPlaces()) {
             int size = this.selectedPlaces.size();
@@ -178,17 +193,17 @@ public class PlacesBean implements Serializable {
         }
         return "Delete";
     }
-
+    
     public boolean hasSelectedPlaces() {
         return this.selectedPlaces != null && !this.selectedPlaces.isEmpty();
     }
-
+    
     public void deletePlace() {
         ad.deletePlace(catid);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-places");
     }
-
+    
     public void deleteSelectedPlaces() {
         try {
             for (PlaceMaster p : selectedPlaces) {
@@ -203,12 +218,12 @@ public class PlacesBean implements Serializable {
             PrimeFaces.current().executeScript("PF('dtPlaces').clearFilters()");
         }
     }
-
+    
     public void selectPlace(PlaceMaster place) {
         catid = place.getCategoryId().getId();
         cityid = place.getCityId().getId().toString();
     }
-
+    
     public List<String> completeText(String query) {
         String queryLowerCase = query.toLowerCase();
         List<String> cityList = new ArrayList<>();
@@ -216,8 +231,16 @@ public class PlacesBean implements Serializable {
         for (Cities c : city) {
             cityList.add(c.getName());
         }
-
+        
         return cityList.stream().filter(t -> t.toLowerCase().startsWith(queryLowerCase)).collect(Collectors.toList());
     }
-
+    
+     public void SelectCategoryValidator(FacesContext fc, UIComponent uic, Object obj) {
+        String placeCat = (String) obj;
+        if(placeCat.equals("-1")){
+            FacesMessage msg = new FacesMessage("Category is required");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(msg);
+        }
+    }
 }
