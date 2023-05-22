@@ -8,7 +8,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:map="http://xmlns.jcp.org/jsf/composite/components/map"
->
+      >
     <h:head>
         <title>Home</title>
         <meta charset="UTF-8" />
@@ -19,6 +19,7 @@
         <p:importConstants type="com.tlt.constants.UrlConstants" var="uc" />
         <f:loadBundle basename="properties.config" var="conf"/>
         <script src="https://maps.google.com/maps/api/js?key=#{conf.MAPS_API_KEY}"></script>
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
 
     </h:head>
     <h:body class="bg-gray-200" style="font-family: sans-serif">
@@ -40,7 +41,7 @@
                                 <p:autoComplete value="#{landingBean.placeName}"
                                                 completeMethod="#{landingBean.placesNameList}" placeholder="Find places nearby"
                                                 styleClass="w-full" />
-                                <p:commandButton value="Search" icon="pi pi-search" styleClass="ui-button-help" />
+                                <p:commandButton value="Search" icon="pi pi-search" styleClass="ui-button-help" action="#{landingBean.redirectToPlace()}"/>
                             </div>
                         </h:form>
                     </div>
@@ -73,8 +74,9 @@
                                     <f:facet name="footer">
                                         <div
                                             class="flex justify-content-end align-items-end absolute bottom-0 right-0 mb-4 mr-4">
-                                            <p:commandButton value="Chekout place"
-                                                             styleClass="ui-button-help rounded-button" />
+                                            <p:linkButton value="Chekout place" styleClass="ui-button-help rounded-button" outcome="#{uc.TO_CHOSEN_PLACES_FORWARD}">
+                                                <f:param name="place" value="#{item.id}"/>
+                                            </p:linkButton>
                                         </div>
                                     </f:facet>
                                 </p:card>
@@ -90,7 +92,7 @@
                 <div class="mx-5 px-2 mb-4 text-lg text-gray-800 text-center">Bird eye view of the places you can explore</div>
                 <div class="grid mx-5 my-3">
                     <div class="col-12">
-                        <map:place-map mapModel="#{landingBean.advancedModel}" marker="#{landingBean.marker}" markerSign="#{landingBean.currentUser.profileImage}"/>
+                        <map:mutli-place-map mapModel="#{mapBean.advancedModel}" marker="#{mapBean.marker}" markerSign="#{landingBean.currentUser.profileImage}" style="height: 500px; width: 100%" lat="${landingBean.currentLat}" lng="#{landingBean.currentLng}"/>              
                     </div>
                 </div>
             </div>

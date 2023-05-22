@@ -1,3 +1,4 @@
 /target/
 src/main/java/com/tlt/constants/PathConstants.java
 src/main/webapp/uploads
+src/main/resources/properties/config.properties

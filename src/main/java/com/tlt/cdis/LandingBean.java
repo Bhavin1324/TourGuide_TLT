@@ -1,15 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
- */
+
 package com.tlt.cdis;
 
+import static com.tlt.constants.UrlConstants.TO_CHOSEN_PLACES_FORWARD;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.record.KeepRecord;
+import static com.tlt.utils.GeoLocationUtil.getUserLocation;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -19,48 +18,58 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
 
-
-
 @Named(value = "landingBean")
 @SessionScoped
 public class LandingBean implements Serializable {
-
-    @EJB AdminLocal adminLogic;
-    @EJB TouristLocal userLogic;
-    private MapModel<String> advancedModel;
-    private Marker<String> marker;
     
+    @EJB
+    AdminLocal adminLogic;
+    @EJB
+    TouristLocal userLogic;
+
     String placeName;
     Collection<PlaceMaster> recommandedPlaces;
     UserMaster currentUser;
     ArrayList<PlaceCategory> placeCategories;
-    public LandingBean() {
+
+    MapBean mapBean;
+    String currentLat;
+    String currentLng;
+    
+    @Inject
+    public LandingBean(MapBean mapBean) {
         recommandedPlaces = new ArrayList<>();
         currentUser = new UserMaster();
         placeCategories = new ArrayList<>();
-    }
-    
-    @PostConstruct
-    public void init() {
-        Collection<PlaceMaster> places = adminLogic.getAllPlaces();
-        advancedModel = new DefaultMapModel<>();
-        for (PlaceMaster p : places) {
-            LatLng ll = new LatLng(Double.parseDouble(p.getLatitude()), Double.parseDouble(p.getLongitude()));
-            advancedModel.addOverlay(new Marker<>(ll,p.getName(),p.getImages()));
-        }
-        PrimeFaces.current().executeScript("getLocation();");
+        this.mapBean = mapBean;
     }
 
-    public void onMarkerSelect(OverlaySelectEvent<String> event) {
-        marker = (Marker) event.getOverlay();
+    public void loadMarkers() {
+        Collection<PlaceMaster> places = adminLogic.getAllPlaces();
+        MapModel<String> advancedModel = new DefaultMapModel<>();
+        for (PlaceMaster p : places) {
+            LatLng ll = new LatLng(Double.parseDouble(p.getLatitude()), Double.parseDouble(p.getLongitude()));
+            advancedModel.addOverlay(new Marker<>(ll, p.getName(), p.getImages()));
+        }
+        mapBean.setAdvancedModel(advancedModel);
+        PrimeFaces.current().executeScript("getLocation();");
+        this.currentLat = getUserLocation().getLatitude().toString();
+        this.currentLng = getUserLocation().getLongitude().toString();
     }
+
+    @PostConstruct
+    public void init() {
+        loadMarkers();
+    }
+
     public String getPlaceName() {
         return placeName;
     }
@@ -79,22 +88,6 @@ public class LandingBean implements Serializable {
         this.recommandedPlaces = recommandedPlaces;
     }
 
-    public MapModel<String> getAdvancedModel() {
-        return advancedModel;
-    }
-
-    public void setAdvancedModel(MapModel<String> advancedModel) {
-        this.advancedModel = advancedModel;
-    }
-
-    public Marker<String> getMarker() {
-        return marker;
-    }
-
-    public void setMarker(Marker<String> marker) {
-        this.marker = marker;
-    }
-
     public UserMaster getCurrentUser() {
         return userLogic.findUserByUsername(String.valueOf(KeepRecord.getUsername()));
     }
@@ -103,33 +96,64 @@ public class LandingBean implements Serializable {
         this.currentUser = currentUser;
     }
 
+    public String getCurrentLat() {
+        return currentLat;
+    }
+
+    public void setCurrentLat(String currentLat) {
+        this.currentLat = currentLat;
+    }
+
+    public String getCurrentLng() {
+        return currentLng;
+    }
+
+    public void setCurrentLng(String currentLng) {
+        this.currentLng = currentLng;
+    }
+
     public ArrayList<PlaceCategory> getPlaceCategories() {
-        if(placeCategories.size() > 0){
+        if (placeCategories.size() > 0) {
             return this.placeCategories;
         }
-        ArrayList<PlaceCategory> placeCategoryList = new ArrayList( adminLogic.getAllPlaceCategories());
-       
-        for(PlaceCategory pc : placeCategoryList){
+        ArrayList<PlaceCategory> placeCategoryList = new ArrayList(adminLogic.getAllPlaceCategories());
+
+        for (PlaceCategory pc : placeCategoryList) {
             ArrayList<PlaceMaster> pm = new ArrayList<>(pc.getPlaceMasterCollection());
-            if(pm.size() == 0 || pm == null){
+            if (pm.size() == 0 || pm == null) {
                 continue;
             }
             placeCategories.add(pc);
-        }   
+        }
         return this.placeCategories;
     }
 
     public void setPlaceCategories(ArrayList<PlaceCategory> placeCategories) {
         this.placeCategories = placeCategories;
     }
-    
+
     // This method would use in landing page search method as auto complete 
-    public List<String> placesNameList(String query){
+    public List<String> placesNameList(String query) {
         Collection<PlaceMaster> places = adminLogic.getAllPlaces();
         List<String> namesOfPlaces = new ArrayList<>();
-        for(PlaceMaster place : places){
+        for (PlaceMaster place : places) {
             namesOfPlaces.add(place.getName());
         }
         return namesOfPlaces.stream().filter(place -> place.toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList());
+    }
+
+    public void redirectToPlace() {
+        try {
+            Collection<PlaceMaster> places = adminLogic.getPlacesByName(placeName);
+            for (PlaceMaster p : places) {
+                if (p.getName().equals(placeName)) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(TO_CHOSEN_PLACES_FORWARD + "?place=" + p.getId());
+                    return;
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

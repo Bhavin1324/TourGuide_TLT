@@ -1,11 +1,21 @@
 package com.tlt.utils;
 
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.UUID;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import org.glassfish.soteria.identitystores.hash.Pbkdf2PasswordHashImpl;
 import org.primefaces.model.file.UploadedFile;
 
@@ -73,5 +83,39 @@ public class Utils {
             otp[i] = numbers.charAt(rand.nextInt(numbers.length()));
         }
         return new String(otp);
+    }
+
+    public static String CrossFetch_GET(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+                br.close();
+                return response.toString();
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getTime12h(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+        return String.valueOf(sdf.format(date));
+    }
+    
+    public static String getPropertyValue(String basename, String key){
+        ResourceBundle bundle = ResourceBundle.getBundle(basename, FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        return bundle.getString(key);
     }
 }

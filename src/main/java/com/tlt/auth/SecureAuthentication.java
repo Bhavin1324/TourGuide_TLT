@@ -29,7 +29,6 @@ import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Named
 @RequestScoped
@@ -49,10 +48,7 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
             if (request.getRequestURI().contains("Logout")) {
                 request.logout();
                 KeepRecord.reset();
-//                HttpSession session = request.getSession();
-                System.out.println("Inside Logout func : ---->" + request.getSession().getAttribute("username"));
                 request.getSession().removeAttribute(TOKEN);
-                request.getSession().removeAttribute("username");
                 clearTokenFromCookie(request, response);
                 response.sendRedirect(TO_LOGIN);
                 return context.doNothing();
@@ -83,11 +79,6 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                     KeepRecord.setRoles(result.getCallerGroups());
                     KeepRecord.setCredential(credential);
                     KeepRecord.setUsername(username);
-                    HttpSession session = request.getSession();
-//                    if (!session.getAttribute("username").) {
-                    session.setAttribute("username", username);
-                    System.out.println(session.getAttribute("username"));
-//                    }
 
                     if (result.getCallerGroups().contains(ROLE_ADMIN)) {
                         response.sendRedirect(TO_ADMIN);

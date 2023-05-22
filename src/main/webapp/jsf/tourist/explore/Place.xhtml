@@ -1,21 +1,81 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      >
+      xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:map="http://xmlns.jcp.org/jsf/composite/components/map">
     <h:head>
-        <title>Nearby transport</title>
-        <meta charset="UTF-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <h:outputStylesheet library="css" name="styles.css"/>
-        <h:outputStylesheet library="css" name="primeflex.min.css"/>
-        
+        <title>#{chosenPlaceBean.selectedPlace.name}</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <h:outputStylesheet library="css" name="styles.css" />
+        <h:outputStylesheet library="css" name="primeflex.min.css" />
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc" />
+        <f:loadBundle basename="properties.config" var="conf"/>
+        <script src="https://maps.google.com/maps/api/js?key=#{conf.MAPS_API_KEY}"></script>
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
+        <style>
+            .bg-blend{
+                position: relative;
+                background-color: rgba(0,0,0,0.5);
+                height: 40vh;
+                width: 100%;
+            }
+            .bg-blend::before{
+                content: "";
+                background: url(../../../uploads/places/#{chosenPlaceBean.selectedPlace.images}) no-repeat center center/cover;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 40vh;
+                width: 100%;
+                z-index: -1;
+                background-blend-mode:darken;
+                overflow: hidden
+            }
+        </style>
     </h:head>
     <h:body>
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div>Place</div>
+        <div class="bg-blend">
+            <div class="container">
+                <div class="flex flex-column justify-content-center text-white mx-4" style="height:40vh">
+                    <div class="text-6xl">#{chosenPlaceBean.selectedPlace.name}</div>
+                    <div class="text-xl">#{chosenPlaceBean.selectedPlace.description.substring(0, chosenPlaceBean.selectedPlace.description.indexOf('.'))}</div>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-4 p-2">
+            <div class="grid mx-2">
+                <div class="col-12 md:col-6 map-view overflow-auto align-content-end">
+                    <map:place-map mapModel="#{mapBean.simpleModel}" marker="#{mapBean.marker}" markerSign="${chosenPlaceBean.currentUser.profileImage}" lat="#{chosenPlaceBean.selectedPlace.latitude}" lng="#{chosenPlaceBean.selectedPlace.longitude}" style="height: 350px; width: 400px; margin: 0px auto"/>
+                </div>
+                <div class="card col-12 md:col-6">
+                    <h:form>
+                        <p:tabView activeIndex="#{chosenPlaceBean.activeTabIndex}">
+                            <p:tab title="Description">
+                                <div class="about">
+                                    <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">info</span> #{chosenPlaceBean.selectedPlace.description}</div>
+                                    <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">pin_drop</span> #{chosenPlaceBean.selectedPlace.address}</div>
+                                    <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">schedule</span><b class="mr-2">Opening time:</b> #{chosenPlaceBean.openingTime}</div>
+                                    <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">schedule</span> <b class="mr-2">Closing time:</b> #{chosenPlaceBean.closingTime}</div>
+                                    <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">category</span> <b class="mr-2">Type:</b> #{chosenPlaceBean.selectedPlace.categoryId.name}</div>
+                                    <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">distance</span> <b class="mr-2">Distance:</b> #{chosenPlaceBean.distance}</div>
+                                    <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">directions_car</span> <b class="mr-2">Duration:</b> #{chosenPlaceBean.duration}</div>
+                                </div>
+                            </p:tab>
+                            <p:tab title="Guide">
+
+                            </p:tab>
+                        </p:tabView>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 
