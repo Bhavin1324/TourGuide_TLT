@@ -1,5 +1,7 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.PaymentMaster;
+import com.tlt.entities.PaymentMethod;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
@@ -79,10 +81,10 @@ public class Tourist implements TouristLocal {
     }
 
     @Override
-    public void subscribeToPlan(SubscriptionModel model, String username) {
+    public void subscribeToPlan(SubscriptionModel model, String username,String cardNumber) {
 
         UserMaster usermaster = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
-        
+
         //get all user's subscription list
         Collection<SubscriptionMaster> usersubs = usermaster.getSubscriptionMasterCollection();
 
@@ -101,15 +103,59 @@ public class Tourist implements TouristLocal {
         submaster.setEndDate(endDate);
         submaster.setSubscriptionModelId(model);
         submaster.setUserMasterCollection(new ArrayList<>());
+
+        //create payment record        
+        PaymentMaster userPayment = new PaymentMaster();
+        userPayment.setCardDetails(cardNumber);
+        userPayment.setCreatedAt(new Date());
+        userPayment.setId(Utils.getUUID());
+        PaymentMethod paymentMethod = em.find(PaymentMethod.class,"3hbk2jh3bkj2hb3");
+        userPayment.setPaymentMethodId(paymentMethod);
+        userPayment.setPaymentStatus("Success");
+        userPayment.setSubscriptionId(submaster);
+        userPayment.setUserId(usermaster);
+        em.persist(userPayment);
+        
+        //set user's payment in user's payment collection
+        Collection<PaymentMaster> userPayments = usermaster.getPaymentMasterCollection();
+        userPayments.add(userPayment);
+        usermaster.setPaymentMasterCollection(userPayments);
         
         //add the subcription to user's subscriptionCollection
         usersubs.add(submaster);
-        
+
         //add the user to the subscriptionMaster's user collection
         Collection<UserMaster> userColl = submaster.getUserMasterCollection();
         userColl.add(usermaster);
         em.persist(submaster);
         em.merge(usermaster);
+    }
+
+    @Override
+    public Collection<SubscriptionMaster> getUsersSubscriptions(String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+//        user.setSubscriptionMasterCollection(new ArrayList<>());
+        Collection<SubscriptionMaster> userSubscriptions = user.getSubscriptionMasterCollection();
+        return userSubscriptions;
+    }
+
+    @Override
+    public boolean isUserSubscribed(SubscriptionModel model, String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        Collection<SubscriptionMaster> usersSub = user.getSubscriptionMasterCollection();
+        for(SubscriptionMaster s : usersSub){
+            if(s.getSubscriptionModelId().equals(model)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @Override
+    public Collection<PaymentMaster> usersPaymentHistory(String username){
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        Collection<PaymentMaster> payments = user.getPaymentMasterCollection();
+        return payments;
     }
 
 }

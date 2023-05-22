@@ -37,6 +37,7 @@ public final class UrlConstants {
     public static final String TO_BE_GUIDE = BASE_URL + "tourist/comguide/BeGuide.jsf";
     public static final String TO_MY_SUBS = BASE_URL + "tourist/misc/MySubs.jsf";
     public static final String TO_SUBS_CARDS = BASE_URL + "tourist/misc/SubsCard.jsf";
+    public static final String TO_PAYMENT_HISTORY = BASE_URL + "tourist/misc/PaymentHistory.jsf";
     public static final String TO_ABOUT_US = BASE_URL + "tourist/misc/AboutUs.jsf";
 
 

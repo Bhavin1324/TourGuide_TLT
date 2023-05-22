@@ -75,18 +75,18 @@ public class UserMaster implements Serializable {
     @JoinTable(name = "guide_user_mapping", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "guide_id", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Collection<GuideMaster> guideMasterCollection;
     @JoinTable(name = "user_subscription_mapping", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "subscription_id", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<SubscriptionMaster> subscriptionMasterCollection;
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userMaster", fetch = FetchType.LAZY)
     private Collection<UserRole> userRoleCollection;
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<AppointmentMaster> appointmentMasterCollection;
 
     public UserMaster() {

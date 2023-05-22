@@ -12,6 +12,7 @@ import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
 import com.tlt.utils.GraphUtils;
+import com.tlt.utils.UserSubscriptionMapping;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -155,9 +156,21 @@ public class Admin implements AdminLocal {
     }
 
     @Override
-    public Collection<SubscriptionMaster> getAllSubscriptions() {
-        Collection<SubscriptionMaster> subscriptions = em.createNamedQuery("SubscriptionMaster.findAll").getResultList();
-        return subscriptions;
+    public Collection<UserSubscriptionMapping> getAllSubscriptions() {
+        List<Object[]> jointable = em.createNativeQuery("select * from user_subscription_mapping").getResultList();
+        
+          Collection<UserSubscriptionMapping> mappedData = new ArrayList<>();
+        for(Object[] item : jointable){
+            UserSubscriptionMapping usmap = new UserSubscriptionMapping();
+            
+            usmap.setUser(em.find(UserMaster.class, item[0]));
+            usmap.setSubMaster(em.find(SubscriptionMaster.class,item[1]));
+            mappedData.add(usmap);
+        }
+        
+       return mappedData;
+//        Collection<SubscriptionMaster> subscriptions = em.createNamedQuery("SubscriptionMaster.findAll").getResultList();
+//        return subscriptions;
     }
 
     @Override
@@ -296,19 +309,14 @@ public class Admin implements AdminLocal {
     @Override
     public void deleteUser(String id) {
         UserMaster user = em.find(UserMaster.class, id);
-        Collection<UserRole> roles = user.getUserRoleCollection();
-        Collection<AppointmentMaster> appt = user.getAppointmentMasterCollection();
-        Collection<GuideMaster> guides = user.getGuideMasterCollection();
-        Collection<PaymentMaster> payments = user.getPaymentMasterCollection();
-        Collection<SubscriptionMaster> subs = user.getSubscriptionMasterCollection();
-//        for(UserRole r : roles) {
-//           if(r.getUserMaster().equals(user)){
-//               roles.remove(r);
-//               user.setUserRoleCollection(roles);
-//               return;
-//           }
-//        }
-        em.createNamedQuery("UserRole.deleteByUsername").setParameter("username", user.getName());
+//        Collection<UserRole> roles = user.getUserRoleCollection();
+//        Collection<AppointmentMaster> appt = user.getAppointmentMasterCollection();
+//        Collection<GuideMaster> guides = user.getGuideMasterCollection();
+//        Collection<PaymentMaster> payments = user.getPaymentMasterCollection();
+//        Collection<SubscriptionMaster> subs = user.getSubscriptionMasterCollection();
+//        user.setUserRoleCollection(new ArrayList<>());
+//        user.setAppointmentMasterCollection(new ArrayList<>());
+//        em.createNamedQuery("UserRole.deleteByUsername").setParameter("username", user.getName());
 //        em.merge(user);
         em.remove(user);
     }

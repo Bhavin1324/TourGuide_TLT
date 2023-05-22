@@ -532,3 +532,31 @@ body .ui-tabs .ui-tabs-nav li.ui-tabs-header.ui-state-active a {
 .map-style > div{
     background-color: transparent !important;
 }
+.badge-card {
+    position: relative;
+}
+
+.badge-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white;
+    border-top-left-radius: 1.5rem;
+    border-left: 100px solid #4caf50;
+    border-bottom: 90px solid;
+
+}
+
+.badge-card::before {
+    font-family: 'Material Symbols Outlined';
+    content: "\ef76";
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0 0 12px;
+    font-size: xx-large;
+    color: white;
+    text-align: center;
+    z-index: 1;
+}

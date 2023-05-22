@@ -6,7 +6,9 @@ package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
+import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.record.KeepRecord;
 import com.tlt.utils.Utils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -38,11 +40,8 @@ public class SubscriptionModelBean implements Serializable {
     Collection<SubscriptionModel> allSubscriptionModel;
     SubscriptionModel selectedSubModel;
     SubscriptionModel modelForPayment;
-    String subModelid;
-    
+    String subModelid, cardNumber;
     Integer currentCost;
-    private UIComponent costLabel;
-
     List<SubscriptionModel> selectedSubModels;
 
     public SubscriptionModelBean() {
@@ -52,6 +51,14 @@ public class SubscriptionModelBean implements Serializable {
         allSubscriptionModel = new ArrayList<>();
         subModelid = "";
 
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public SubscriptionModel getModelForPayment() {
@@ -64,7 +71,6 @@ public class SubscriptionModelBean implements Serializable {
 
     public void onModalAction(SubscriptionModel subModel) {
         this.currentCost = subModel.getCost();
-        System.out.println(this.currentCost);
         PrimeFaces.current().executeScript("PF('paymentModal').show()");
         PrimeFaces.current().ajax().update(":dialog:payment-modal");
     }
@@ -181,12 +187,21 @@ public class SubscriptionModelBean implements Serializable {
 
     public void Subscribe() {
 
-        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String uname = req.getSession().getAttribute("username").toString();
-        System.out.println(uname);
-        System.out.println(this.modelForPayment.getName());
-        tb.subscribeToPlan(this.modelForPayment, uname);
-        PrimeFaces.current().executeScript("PF('success_dlg').show()");
-        PrimeFaces.current().executeScript("PF('paymentModal').hide()");
+        if (!isUserSubscribed()) {
+            String uname = KeepRecord.getUsername();
+            tb.subscribeToPlan(this.modelForPayment, uname, this.cardNumber);
+            this.cardNumber="";
+            PrimeFaces.current().executeScript("PF('success_dlg').show()");
+            PrimeFaces.current().executeScript("PF('paymentModal').hide()");
+        } else {
+            PrimeFaces.current().executeScript("PF('paymentModal').hide()");
+            PrimeFaces.current().executeScript("PF('isSubscribedDlg').show()");
+        }
+    }
+
+    public boolean isUserSubscribed() {
+        String uname = KeepRecord.getUsername();
+        boolean status = tb.isUserSubscribed(modelForPayment, uname);
+        return status;
     }
 }

@@ -10,6 +10,7 @@ import com.tlt.entities.SubscriptionModel;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
 import com.tlt.utils.GraphUtils;
+import com.tlt.utils.UserSubscriptionMapping;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
@@ -60,7 +61,7 @@ public interface AdminLocal {
     Collection<SubscriptionModel> getAllSubscriptionModel();
 
     //Subscription 
-    Collection<SubscriptionMaster> getAllSubscriptions();
+    Collection<UserSubscriptionMapping> getAllSubscriptions();
 
     Collection<SubscriptionMaster> getSubscriptionsbyUser(String userId);
 
