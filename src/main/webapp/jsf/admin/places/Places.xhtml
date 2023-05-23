@@ -10,6 +10,7 @@
         <title>Places</title>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
+
     </h:head>
     <h:body class="bg-gray-200">
         <navbar:admin-navbar sideNavigationBean="#{navigationBean}"/>
@@ -73,10 +74,10 @@
                             <h:outputText value="#{p.latitude}" />
                         </p:column>
                         <p:column headerText="Opening Time" sortBy="#{p.openingTime}" >
-                            <h:outputText value="#{p.openingTime.hours} : #{p.openingTime.minutes}" />
+                            <h:outputText value="#{placesBean.get12hTime(p,'opening')}" />
                         </p:column>
                         <p:column headerText="Closing Time" sortBy="#{p.closingTime}">
-                            <h:outputText value="#{p.closingTime.hours} : #{p.closingTime.minutes}" />
+                            <h:outputText value="#{placesBean.get12hTime(p, 'closing')}" />
                         </p:column>
                         <p:column headerText="Category" sortBy="#{p.categoryId.name}">
                             <h:outputText value="#{p.categoryId.name}" />
@@ -103,49 +104,68 @@
                 <h:form enctype="multipart/form-data" id="dialogs">
                     <p:dialog  header="Place Details" styleClass="w-10 md:w-6 h-full overflow-y-auto" showEffect="fade" modal="true" widgetVar="managePlaceDialog" responsive="true">
                         <p:outputPanel id="manage-place-content" class="ui-fluid px-4">
+                            <p:messages id="validationMsg"  closable="true">
+                                <p:autoUpdate/>
+                            </p:messages>
                             <div class="field">
                                 <p:outputLabel for="name">Name</p:outputLabel>
-                                <p:inputText id="name" value="#{placesBean.selectedPlace.name}" required="true" />
+                                <p:inputText id="name" value="#{placesBean.selectedPlace.name}" 
+                                             required="true" requiredMessage="Place Name is required"/>
                             </div>
                             <div class="field">
                                 <p:outputLabel for="address">Address</p:outputLabel>
-                                <p:inputText id="address" value="#{placesBean.selectedPlace.address}" required="true" />
-                            </div>
-                            <div class="field">
-                                <p:outputLabel for="longitude">Longitude</p:outputLabel>
-                                <p:inputText id="longitude" value="#{placesBean.selectedPlace.longitude}" required="true" />
+                                <p:inputText id="address" value="#{placesBean.selectedPlace.address}" 
+                                             required="true" requiredMessage="Address is required"/>
                             </div>
                             <div class="field">
                                 <p:outputLabel for="latitude">Latitude</p:outputLabel>
-                                <p:inputText id="latitude" value="#{placesBean.selectedPlace.latitude}" required="true" />
+                                <p:inputText id="latitude" value="#{placesBean.selectedPlace.latitude}" 
+                                             required="true" requiredMessage="Latitude is required"/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="longitude">Longitude</p:outputLabel>
+                                <p:inputText id="longitude" value="#{placesBean.selectedPlace.longitude}" 
+                                             required="true" requiredMessage="Longitutde is required" />
                             </div>
                             <div class="field">
                                 <p:outputLabel for="openingTime">Opening Time</p:outputLabel>
-                                <p:datePicker showIcon="true" id="openingTime" value="#{placesBean.selectedPlace.openingTime}" timeOnly="true" pattern="HH:mm" />
+                                <p:datePicker showIcon="true" id="openingTime" 
+                                              value="#{placesBean.selectedPlace.openingTime}" timeOnly="true" 
+                                              pattern="HH:mm"  required="true" 
+                                              requiredMessage="Opening Time is Required"/>
                             </div>
                             <div class="field">
                                 <p:outputLabel for="closingTime">Closing Time</p:outputLabel>
-                                <p:datePicker showIcon="true" id="closingTime" value="#{placesBean.selectedPlace.closingTime}" required="true" timeOnly="true" pattern="HH:mm" />
+                                <p:datePicker showIcon="true" id="closingTime" 
+                                              value="#{placesBean.selectedPlace.closingTime}" 
+                                              required="true" timeOnly="true" pattern="HH:mm"
+                                              requiredMessage="Closing Time is required"/>
                             </div>
                             <div class="field">
                                 <p:outputLabel for="description">Description</p:outputLabel>
-                                <p:inputTextarea id="description" value="#{placesBean.selectedPlace.description}" required="true" />
+                                <p:inputTextarea id="description" value="#{placesBean.selectedPlace.description}"
+                                                 required="true" requiredMessage="Descrpition is required" />
                             </div>
                             <div class="field">
                                 <p:outputLabel for="category">Category</p:outputLabel>
-                                <p:selectOneMenu id="category" value="#{placesBean.catid}" >
+                                <p:selectOneMenu id="category" value="#{placesBean.catid}" 
+                                                 validator="#{placesBean.SelectCategoryValidator}">
                                     <f:selectItem itemValue="-1" itemLabel="--Select Category--" />
-                                    <f:selectItems var="c" value="#{placesBean.placeCategories}" itemLabel="#{c.name}" itemValue="#{c.id}"/>
+                                    <f:selectItems var="c" value="#{placesBean.placeCategories}" 
+                                                   itemLabel="#{c.name}" itemValue="#{c.id}"/>
                                 </p:selectOneMenu>
                             </div>
                             <div class="field">
                                 <p:outputLabel for="city">City</p:outputLabel>
                                 <p:autoComplete id="city" value="#{placesBean.cityTxt}"
-                                                completeMethod="#{placesBean.completeText}" scrollHeight="250"/>
+                                                completeMethod="#{placesBean.completeText}" scrollHeight="250"
+                                                required="true" requiredMessage="City is required"
+                                                />
                             </div>
                             <div class="field">
                                 <p:outputLabel for="image">Image</p:outputLabel><br/>
-                                <p:fileUpload id="image" value="#{placesBean.file}" mode="simple" skinSimple="true"/>
+                                <p:fileUpload id="image" value="#{placesBean.file}" mode="simple" skinSimple="true"
+                                              required="true" requiredMessage="Image is required" />
                             </div>
                         </p:outputPanel>
 

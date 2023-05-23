@@ -82,9 +82,11 @@
                     <p:dialog header="Place Category Details" showEffect="fade" modal="true" widgetVar="manageCategoryDialog"
                               responsive="true">
                         <p:outputPanel id="manage-place-category-content" class="ui-fluid">
+                            <p:messages id="valMsg" closable="true" />
                             <div class="field">
                                 <p:outputLabel for="name">Name</p:outputLabel>
-                                <p:inputText id="name" value="#{placeCatBean.selectedCategory.name}" required="true" />
+                                <p:inputText id="name" value="#{placeCatBean.selectedCategory.name}" 
+                                             required="true" requiredMessage="Category Name required"/>
                             </div>
                         </p:outputPanel>
 

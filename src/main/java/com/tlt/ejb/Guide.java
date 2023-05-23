@@ -21,9 +21,19 @@ public class Guide implements GuideLocal {
     }
 
     @Override
-    public Collection<AppointmentMaster> getAllAppointmentsByUserame(String Username) {
-        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", Username);
-        return user.getAppointmentMasterCollection();
+    public Collection<AppointmentMaster> getAllAppointmentsByGuide(String Username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", Username).getSingleResult();
+        GuideMaster guide = em.find(GuideMaster.class,user.getId());
+        return guide.getAppointmentMasterCollection();
+    }
+
+    @Override
+    public Collection<AppointmentMaster> getAppointmentsOfGuide(String gusername,String status) {
+         UserMaster guide = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+//         GuideMaster gm = em.find(GuideMaster.class, guide.getId());
+         
+        Collection<AppointmentMaster> appointments = em.createNamedQuery("AppointmentMaster.getPendingAppointments").setParameter("gid", guide.getId()).setParameter("status", status).getResultList();
+        return appointments;
     }
 
 }
