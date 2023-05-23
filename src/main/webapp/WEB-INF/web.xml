@@ -52,6 +52,9 @@
             <web-resource-name>Tourist's Resource</web-resource-name>
             <description>Tourist Secured Resources</description>
             <url-pattern>/jsf/tourist/*</url-pattern>
+            <url-pattern>/jsf/tourist/explore/*</url-pattern>
+            <url-pattern>/jsf/tourist/comguide/*</url-pattern>
+            <url-pattern>/jsf/tourist/misc/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
             <http-method>PUT</http-method>
@@ -68,6 +71,8 @@
             <web-resource-name>Guide's Resource</web-resource-name>
             <description>Guide Secured Resources</description>
             <url-pattern>/jsf/guide/*</url-pattern>
+            <url-pattern>/jsf/tourist/explore/*</url-pattern>
+            <url-pattern>/jsf/tourist/misc/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
             <http-method>PUT</http-method>

@@ -22,10 +22,8 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class NavigationBean implements Serializable {
 
-    Set<String> roles;
-
+    String activeRole;
     public NavigationBean() {
-        roles = KeepRecord.getRoles();
     }
 
     public void redirectTo(String destination) {
@@ -54,4 +52,13 @@ public class NavigationBean implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+
+    public String getActiveRole() {
+        return KeepRecord.getRoles().iterator().next();
+    }
+
+    public void setActiveRole(String activeRole) {
+        this.activeRole = activeRole;
+    }
+    
 }

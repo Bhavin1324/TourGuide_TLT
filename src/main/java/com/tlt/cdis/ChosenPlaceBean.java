@@ -150,9 +150,7 @@ public class ChosenPlaceBean implements Serializable {
             if (directionsResult.routes.length > 0) {
                 DirectionsRoute route = directionsResult.routes[0];
                 this.distance = route.legs[0].distance.humanReadable;
-                System.out.println("Distance: "+ distance);
                 this.duration = route.legs[0].duration.humanReadable;
-                System.out.println("Duration: "+ duration);
             } else {
                 this.distance = "Unable to calculate distance";
                 this.duration = "Unable to calculte duration";
