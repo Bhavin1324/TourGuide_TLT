@@ -4,7 +4,6 @@
  */
 package com.tlt.cdis;
 
-import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.GuideLocal;
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.record.KeepRecord;
@@ -35,14 +34,19 @@ public class GuideHomeBean implements Serializable {
     private PieChartModel pieModel;
     long apptPendingCount, apptCompleteCount;
     long revenue;
+    GraphUtils gUtils;
 
     public GuideHomeBean() {
         barGraphData = new ArrayList<>();
         pieGraphData = new ArrayList<>();
+        gUtils = new GraphUtils();
     }
 
     public void init() {
-
+        barGraphData = gd.getMonthlyAppointmentsCount(KeepRecord.getUsername());
+        this.barModel = gUtils.createBarModel("Appointments", barGraphData);
+        pieGraphData  = gd.getMonthlyRevenueOfGuide(KeepRecord.getUsername());
+        this.pieModel = gUtils.createPirChart(pieGraphData);
     }
 
     public List<GraphUtils> getBarGraphData() {
@@ -98,7 +102,7 @@ public class GuideHomeBean implements Serializable {
     public long getRevenue() {
         this.revenue = 0;
         Collection<AppointmentMaster> appointments = gd.getAllAppointmentsByGuide(KeepRecord.getUsername());
-        for(AppointmentMaster ap : appointments){
+        for (AppointmentMaster ap : appointments) {
             this.revenue += ap.getGuideId().getAmount();
         }
         return revenue;
