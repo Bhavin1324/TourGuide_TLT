@@ -58,7 +58,7 @@ public class GuideMaster implements Serializable {
     private String email;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "amount")
-    private BigDecimal amount;
+    private Integer amount;
     @Column(name = "phone_number")
     private BigInteger phoneNumber;
     @Column(name = "is_appointed")
@@ -111,11 +111,11 @@ public class GuideMaster implements Serializable {
         this.email = email;
     }
 
-    public BigDecimal getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 

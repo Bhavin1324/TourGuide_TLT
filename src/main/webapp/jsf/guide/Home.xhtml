@@ -1,12 +1,74 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Home</title>
+        <h:outputStylesheet library="css" name="primeflex.min.css"/>
+        <h:outputStylesheet library="css" name="styles.css"/>
     </h:head>
     <h:body>
-        Hello from Facelets
+
+
+        <!--Counts cards-->
+        <div class="container-fluid p-5" >
+            <div class="grid" style="font-family: sans-serif">
+                <div class="col-12 md:col-6 lg:col-4">
+                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                        <div class="flex justify-content-center mb-3">
+                            <div class="flex align-items-center justify-content-center bg-orange-100 border-round-3xl"
+                                 style="width:5rem;height:5rem">
+                                <span class="material-symbols-outlined text-orange-500 " style="font-size: 3rem">
+                                    priority
+                                </span>
+                                <!--<i class="pi pi-user text-orange-500 " style="font-size: 3rem"/>-->
+                            </div>
+                            <div class="ml-7">
+                                <div class="text-orange-500 font-medium text-4xl mb-3"> #{guideHomeBean.apptCompleteCount} </div>
+                                <span class="block text-orange-500">Appointments Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6 lg:col-4">
+                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                        <div class="flex justify-content-center mb-3">
+                            <div class="flex align-items-center justify-content-center bg-blue-100 border-round-3xl"
+                                 style="width:5rem;height:5rem">
+                                <span class="material-symbols-outlined text-blue-500 " style="font-size: 3rem">
+                                    timer
+                                </span>
+                                <!--<i class="pi pi-map-marker text-blue-500 " style="font-size: 3rem"/>-->
+                            </div>
+                            <div class="ml-7">
+                                <div class="text-blue-500 font-medium text-4xl mb-3"> #{guideHomeBean.apptPendingCount} </div>
+                                <span class="block text-blue-500">Appointments Pending</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6 lg:col-4">
+                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                        <div class="flex justify-content-center mb-3">
+                            <div class="flex align-items-center justify-content-center bg-red-100 border-round-3xl"
+                                 style="width:5rem;height:5rem">
+                                <i class="material-symbols-outlined text-red-500 " 
+                                   style="font-size: 3rem">currency_rupee
+                                </i>
+                            </div>
+                            <div class="ml-7">
+                                <div class="text-red-500 font-medium text-4xl mb-3"> #{guideHomeBean.revenue} </div>
+                                <span class="block text-red-500">Total Income</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </h:body>
 </html>
 

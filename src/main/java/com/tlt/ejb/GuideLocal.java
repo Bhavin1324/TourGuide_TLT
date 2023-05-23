@@ -13,6 +13,8 @@ public interface GuideLocal {
     //appointments
     Collection<AppointmentMaster> getAllAppointments();
 
-    Collection<AppointmentMaster> getAllAppointmentsByUserame(String Username);
+    Collection<AppointmentMaster> getAllAppointmentsByGuide(String Username);
+    
+    Collection<AppointmentMaster> getAppointmentsOfGuide(String guide,String status);
     
 }
