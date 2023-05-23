@@ -3,7 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      >
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Dashboard</title>
         <meta charset="UTF-8"/>
@@ -11,11 +13,81 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
-        
+
     </h:head>
     <h:body>
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div>Appointments</div>
+        <div class="my-5 px-2" >
+            <div class="surface-card border-round-2xl p-4">
+                <h:form id="dataTableForm">
+                    <p:growl id="messages" showDetail="true" />
+                    <p:dataTable id="dt-appointments" class="text-xl" var="ap" widgetVar="dtAppointments"
+                                 value="#{guideHomeBean.appointments}" reflow="true" rows="10" 
+                                 paginator="true" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="ml-2 text-3xl font-semibold">Appointments</div>
+                        </f:facet>
+
+                        <f:facet name="header">
+                            <div class="product-table-header ml-2 mt-5">
+                                <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtAppointments').filter()" 
+                                                 placeholder="Search" />
+                                </div>
+                            </div>
+                        </f:facet>
+                        <p:column  sortBy="#{ap.placeId.name}" filterBy="#{ap.placeId.name}" 
+                                   class="text-lg" headerText="Place">
+                            <h:outputText value="#{ap.placeId.name}"/>
+                        </p:column>
+                        <p:column sortBy="#{ap.userId.name}" filterBy="#{ap.userId.name}" class="text-lg px-4" headerText="Tourist">
+                            <h:outputText class="-mr-1" value="#{ap.userId.name}"/>
+                            <span class="material-symbols-outlined text-xl">
+                                currency_rupee
+                            </span>
+                        </p:column>
+
+                        <p:column sortBy="#{ap.userId.contact}" filterBy="#{ap.userId.contact}" class="text-lg px-4" headerText="Tourist's Contact no.">
+                            <h:outputText value="#{ap.userId.contact}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{ap.startDatetime}" filterBy="#{ap.startDatetime}" class="text-lg px-4" headerText="Appointment Start-Time" >
+                            <h:outputText value="#{guideHomeBean.getFormatedDate(ap.startDatetime)} #{guideHomeBean.getFormatedTime(ap.startDatetime)}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{ap.endDatetime}" filterBy="#{ap.endDatetime}" class="text-lg px-4" headerText="Appointment End-Time" >
+                            <h:outputText value="#{guideHomeBean.getFormatedDate(ap.endDatetime)} #{guideHomeBean.getFormatedTime(ap.endDatetime)}"/>
+                        </p:column>
+                        <p:column sortBy="#{ap.appointmentStatus}" filterBy="#{ap.appointmentStatus}" class="text-lg px-4" headerText="Appointment Status" >
+                            <h:outputText value="#{ap.appointmentStatus}" />
+                        </p:column>
+                        <p:column exportable="false">
+                            <p:commandButton icon="pi pi-pencil" rendered="#{ap.appointmentStatus.equals('Pending')}" 
+                                             onclick="PF('manageAppointmentDialog').show()"
+                                             styleClass="mr-3 edit-button rounded-button ui-button-success" process="@this">
+                                <f:setPropertyActionListener target="#{guideHomeBean.selectedAppointment}" value="#{ap}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                <h:form id="dailog">
+                    <p:dialog id="manage-appointment-dialog" width="400" height="150" widgetVar="manageAppointmentDialog" header="Mark as Complete">
+                        <div class="flex flex-column text-center">
+                            <div><i class="pi pi-check-circle text-5xl my-3"/></div>
+                            <div class="text-xl text-center" >Are you sure you want to mark this appointment 'Complete' ?</div>
+                        </div>
+                        <div class="text-end mt-5 flex flex-row justify-content-end">
+                            <p:commandButton value="No" type="button" onclick="PF('manageAppointmentDialog').hide()" class="border-purple-400 mr-3 text-lg ui-button-outlined ui-button-help"/>
+                            <p:commandButton value="Yes" process="@this" 
+                                             update=":dataTableForm:messages :dataTableForm:dt-appointments @this" 
+                                             action="#{guideHomeBean.updateStatus()}" styleClass="text-lg ui-button-help" 
+                                             oncomplete="PF('manageAppointmentDialog').hide()"
+                                             />
+                        </div>
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
     </h:body>
 </html>
 

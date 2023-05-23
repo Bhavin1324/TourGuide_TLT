@@ -109,6 +109,10 @@ public class Utils {
         }
     }
 
+    public static String getDateTimeFormat(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
+        return String.valueOf(sdf.format(date));
+    }
     public static String getTime12h(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
         return String.valueOf(sdf.format(date));

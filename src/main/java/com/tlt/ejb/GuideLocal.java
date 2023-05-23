@@ -23,4 +23,6 @@ public interface GuideLocal {
     
     List<GraphUtils> getMonthlyRevenueOfGuide(String gusername);
     
+    void updateAppointmentStatus(AppointmentMaster appointment);
+    
 }

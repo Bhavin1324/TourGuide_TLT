@@ -13,7 +13,7 @@
         <h:outputStylesheet library="css" name="primeflex.min.css" />
 
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}" />
 
         #{guideHomeBean.init()}
@@ -74,6 +74,8 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Graphs -->
         <div class="container-fluid p-5">
             <div class="flex flex-wrap justify-content-evenly">
                 <div class="card">

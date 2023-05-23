@@ -27,7 +27,8 @@ public class Guide implements GuideLocal {
     public Collection<AppointmentMaster> getAllAppointmentsByGuide(String Username) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", Username).getSingleResult();
         GuideMaster guide = em.find(GuideMaster.class, user.getId());
-        return guide.getAppointmentMasterCollection();
+        Collection<AppointmentMaster> appts = em.createNamedQuery("AppointmentMaster.getAppointmentsOfGuide").setParameter("gid", guide.getId()).getResultList();
+        return appts;
     }
 
     @Override
@@ -69,6 +70,15 @@ public class Guide implements GuideLocal {
             graphData.add(gd);
         }
         return graphData;
+    }
+
+    @Override
+    public void updateAppointmentStatus(AppointmentMaster appointment) {
+        AppointmentMaster appt = em.find(AppointmentMaster.class,appointment.getId());
+        appt.setAppointmentStatus("Complete");
+        em.merge(appt);
+        
+        
     }
 
 }
