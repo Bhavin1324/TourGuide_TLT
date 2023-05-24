@@ -30,7 +30,7 @@ public interface AdminLocal {
 
     PlaceMaster getPlaceById(String id);
 
-    Collection<PlaceMaster> getPlacesByCategory(String categoryId);
+    Collection<PlaceMaster> getPlacesByCategory(PlaceCategory categoryId);
 
     Collection<PlaceMaster> getPlacesByName(String Name);
 

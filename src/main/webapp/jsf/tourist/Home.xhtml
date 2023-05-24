@@ -92,7 +92,7 @@
                 <div class="mx-5 px-2 mb-4 text-lg text-gray-800 text-center">Bird eye view of the places you can explore</div>
                 <div class="grid mx-5 my-3">
                     <div class="col-12">
-                        <map:mutli-place-map mapModel="#{mapBean.advancedModel}" marker="#{mapBean.marker}" markerSign="#{landingBean.currentUser.profileImage}" style="height: 500px; width: 100%" lat="${landingBean.currentLat}" lng="#{landingBean.currentLng}"/>              
+                        <map:mutli-place-map mapModel="#{mapBean.advancedModel}" marker="#{mapBean.marker}" markerSign="#{landingBean.currentUser.profileImage}" style="height: 500px; width: 100%" lat="${landingBean.currentLat}" lng="#{landingBean.currentLng}" widgetWar="all_place"/>              
                     </div>
                 </div>
             </div>
@@ -102,22 +102,57 @@
                 </div>
                 <div class="mx-5 px-2 mb-4 text-lg text-gray-800 text-center">Don't know where to go ? Pick your favorite adventure and we will help you find an amazing experience.
                 </div>
-                <section class="hero-section">
-                    <div class="card-grid">
-                        <ui:repeat value="#{landingBean.placeCategories}" var="item" varStatus="status">
-                            <a class="cat-card" href="#">
-                                <div class="card__background" style="background-image:url(../../uploads/places/#{item.placeMasterList.get(0).images})"></div>
-                                <div class="card__content">
-                                    <p class="card__category">Category</p>
-                                    <h3 class="card__heading">#{item.name}</h3>
-                                </div>
-                            </a>
-                        </ui:repeat>
-                    </div>
-                </section>
+                <h:form>
+                    <section class="hero-section">
+                        <div class="card-grid">
+                            <ui:repeat value="#{landingBean.placeCategories}" var="item" varStatus="status">
+                                <p:commandLink class="cat-card" action="#{landingBean.onCatCardSelect(item)}">
+                                    <div class="card__background" style="background-image:url(../../uploads/places/#{item.placeMasterList.get(0).images})"></div>
+                                    <div class="card__content">
+                                        <p class="card__category">Category</p>
+                                        <h3 class="card__heading">#{item.name}</h3>
+                                    </div>
+                                </p:commandLink>
+                            </ui:repeat>
+                        </div>
+                    </section>
+                </h:form>
             </div>
-
         </div>
+
+        <h:form id="dialog-form">
+            <p:dialog id="category-dialog" header="Categories" widgetVar="c_dialog" height="80vh" width="100%" showEffect="fade" modal="true" >
+                <p:outputPanel id="category-dialog-panel" style="height: 100%">
+                    <div class="grid" style="height: 100%">
+                        <div class="col-12 md:col-6" style="max-height: 100%;">
+                            <ul class="px-2 py-4" style="max-height: 100%; overflow: auto">
+                                <ui:repeat var="item" value="#{landingBean.lstPlacesByCategory}">
+                                    <li class="mx-2 my-4 border-black-alpha-80 list-none">
+                                        <h:link style="text-decoration: none" styleClass="text-black-alpha-90" outcome="#{uc.TO_CHOSEN_PLACES_FORWARD}">
+                                            <div class="flex justify-content-between">
+                                                <div>
+                                                    <div class="font-semibold text-xl">${item.name}</div>
+                                                    <div>#{item.address}</div>
+                                                </div>
+                                                <div class="flex flex-wrap flex-column">
+                                                    <div class="mx-2"><span class="font-semibold mr-2">Open:</span>${landingBean.getTime(item.openingTime)}</div>
+                                                    <div class="mx-2"><span class="font-semibold mr-2">Close:</span>${landingBean.getTime(item.closingTime)}</div>
+                                                </div>
+                                            </div>
+                                            <f:param name="place" value="#{item.id}"/>
+                                        </h:link>
+                                    </li>
+                                    <p:divider/>
+                                </ui:repeat>
+                            </ul>
+                        </div>
+                        <div class="col-12 md:col-6" style="height: 100%">
+                            <map:mutli-place-map mapModel="#{mapBean.categoryModel}" marker="#{mapBean.marker}" markerSign="#{landingBean.currentUser.profileImage}" style="height: 750px; width: 100%" lat="${landingBean.currentLat}" lng="#{landingBean.currentLng}" widgetWar="cat_place"/>            
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
     </h:body>
 
 

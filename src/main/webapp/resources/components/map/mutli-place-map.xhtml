@@ -12,6 +12,7 @@
         <cc:attribute name="style" type="java.lang.String" />
         <cc:attribute name="lat" />
         <cc:attribute name="lng" />
+        <cc:attribute name="widgetWar" />
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -20,7 +21,7 @@
         <div class="card" ondblclick="getLocation()">
             <h:form prependId="false">
                 <p:gmap id="gmap" class="map-style" center="#{cc.attrs.lat},#{cc.attrs.lng}" zoom="13" type="roadmap" model="#{cc.attrs.mapModel}"
-                        style="#{cc.attrs.style}" widgetVar="map">
+                        style="#{cc.attrs.style}" widgetVar="#{cc.attrs.widgetWar}">
 
                     <p:ajax event="overlaySelect" listener="#{mapBean.onMarkerSelect}" />
 
@@ -45,7 +46,7 @@
                         let marker = new google.maps.Marker({
                             center: {lat: latitude, lng: longitude},
                             position: new google.maps.LatLng(latitude, longitude),
-                            map: PF('map').getMap(),
+                            map: PF('#{cc.attrs.widgetWar}').getMap(),
                             title: "Your location",
                             className: 'custom-marker',
                             icon: {
@@ -54,7 +55,7 @@
                                 anchor: new google.maps.Point(16, 32)
                             }
                         });
-                        PF('map').getMap().setCenter(marker.getPosition());
+                        PF('#{cc.attrs.widgetWar}').getMap().setCenter(marker.getPosition());
                     });
                 } else {
                     alert("Geo location is not supported by this browser!");

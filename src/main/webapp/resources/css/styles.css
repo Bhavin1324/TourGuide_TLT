@@ -445,11 +445,14 @@ body{
         transform 200ms linear;
 }
 
-.cat-card:hover .card__background{
+.cat-card:hover .card__background, .cat-card:focus .card__background{
     transform: scale(1.05) translateZ(0);
 }
 
 .card-grid:hover > .cat-card:not(:hover) .card__background{
+    filter: brightness(0.5) saturate(0) contrast(1.2) blur(20px);
+}
+.card-grid:focus > .cat-card:not(:focus) .card__background{
     filter: brightness(0.5) saturate(0) contrast(1.2) blur(20px);
 }
 
@@ -559,4 +562,18 @@ body .ui-tabs .ui-tabs-nav li.ui-tabs-header.ui-state-active a {
     color: white;
     text-align: center;
     z-index: 1;
+}
+
+body .ui-inputfield.ui-state-hover{
+    border-color: #9c27b0 !important;
+}
+
+body .ui-inputfield.ui-state-focus{
+    border-color: #9c27b0 !important;
+    box-shadow: 0 0 0 .2em rgb(227 13 253 / 25%) !important;
+}
+
+.ui-fileupload-simple > .ui-button{
+    background-color: #9c27b0 !important;
+    border-color: #9c27b0 !important;
 }

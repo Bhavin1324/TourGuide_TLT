@@ -46,7 +46,7 @@
                             <f:validateRegex pattern="^[a-zA-Z]+\d+$"/>
                         </p:inputText>
                     </div>
-                    <small class="mb-3 text-blue-400">Username must start with character and ends with any digit</small>
+                    <small class="mb-3 text-purple-500">Username must start with character and ends with any digit</small>
 
                     <div class="ui-input-icon-left w-full mb-3 mt-3">
                         <i class="pi pi-hashtag" />
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="w-full">
-                    <p:commandButton id="reg-btn" value="Register" update="@form" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 mb-4 rounded-button block"/>
+                    <p:commandButton id="reg-btn" value="Register" update="@form" action="#{registerUserBean.register()}" styleClass="w-full ml-auto mr-0 mb-4 rounded-button block ui-button-help"/>
                 </div>
             </div>
         </h:form>
@@ -87,7 +87,7 @@
             <p:dialog header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade">
                 <p class="m-0">User has been registered successfully!</p>
                 <f:facet name="footer">
-                    <p:commandButton value="Go for login" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}"/>
+                    <p:commandButton value="Go for login" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}" styleClass="ui-button-help"/>
                 </f:facet>
             </p:dialog>
         </h:form>

@@ -1,4 +1,3 @@
-
 package com.tlt.cdis;
 
 import static com.tlt.constants.UrlConstants.TO_CHOSEN_PLACES_FORWARD;
@@ -9,11 +8,13 @@ import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.record.KeepRecord;
 import static com.tlt.utils.GeoLocationUtil.getUserLocation;
+import com.tlt.utils.Utils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -29,7 +30,7 @@ import org.primefaces.model.map.Marker;
 @Named(value = "landingBean")
 @SessionScoped
 public class LandingBean implements Serializable {
-    
+
     @EJB
     AdminLocal adminLogic;
     @EJB
@@ -39,16 +40,19 @@ public class LandingBean implements Serializable {
     Collection<PlaceMaster> recommandedPlaces;
     UserMaster currentUser;
     ArrayList<PlaceCategory> placeCategories;
+    PlaceCategory selectedCategory;
+    Collection<PlaceMaster> lstPlacesByCategory;
 
     MapBean mapBean;
     String currentLat;
     String currentLng;
-    
+
     @Inject
     public LandingBean(MapBean mapBean) {
         recommandedPlaces = new ArrayList<>();
         currentUser = new UserMaster();
         placeCategories = new ArrayList<>();
+        lstPlacesByCategory = new ArrayList<>();
         this.mapBean = mapBean;
     }
 
@@ -63,6 +67,16 @@ public class LandingBean implements Serializable {
         PrimeFaces.current().executeScript("getLocation();");
         this.currentLat = getUserLocation().getLatitude().toString();
         this.currentLng = getUserLocation().getLongitude().toString();
+    }
+
+    public void loadMarkerByCategory() {
+        MapModel<String> categoryModel = new DefaultMapModel<>();
+        for (PlaceMaster p : lstPlacesByCategory) {
+            LatLng ll = new LatLng(Double.parseDouble(p.getLatitude()), Double.parseDouble(p.getLongitude()));
+            categoryModel.addOverlay(new Marker<>(ll, p.getName(), p.getImages()));
+        }
+        mapBean.setCategoryModel(categoryModel);
+        PrimeFaces.current().executeScript("getLocation();");
     }
 
     @PostConstruct
@@ -112,6 +126,22 @@ public class LandingBean implements Serializable {
         this.currentLng = currentLng;
     }
 
+    public Collection<PlaceMaster> getLstPlacesByCategory() {
+        return lstPlacesByCategory;
+    }
+
+    public void setLstPlacesByCategory(Collection<PlaceMaster> lstPlacesByCategory) {
+        this.lstPlacesByCategory = lstPlacesByCategory;
+    }
+
+    public PlaceCategory getSelectedCategory() {
+        return selectedCategory;
+    }
+
+    public void setSelectedCategory(PlaceCategory selectedCategory) {
+        this.selectedCategory = selectedCategory;
+    }
+
     public ArrayList<PlaceCategory> getPlaceCategories() {
         if (placeCategories.size() > 0) {
             return this.placeCategories;
@@ -155,5 +185,17 @@ public class LandingBean implements Serializable {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void onCatCardSelect(PlaceCategory category) {
+        lstPlacesByCategory = adminLogic.getPlacesByCategory(category);
+        selectedCategory = category;
+        loadMarkerByCategory();
+        PrimeFaces.current().executeScript("PF('c_dialog').show()");
+        PrimeFaces.current().ajax().update(":dialog-form:category-dialog");
+    }
+    
+    public String getTime(Date date){
+        return Utils.getTime12h(date);
     }
 }

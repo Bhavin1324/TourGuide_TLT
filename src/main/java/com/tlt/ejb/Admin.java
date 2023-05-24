@@ -68,7 +68,7 @@ public class Admin implements AdminLocal {
     }
 
     @Override
-    public Collection<PlaceMaster> getPlacesByCategory(String categoryId) {
+    public Collection<PlaceMaster> getPlacesByCategory(PlaceCategory categoryId) {
         Collection<PlaceMaster> places = em.createNamedQuery("PlaceMaster.findByCategoryId").setParameter("categoryId", categoryId).getResultList();
         return places;
     }
