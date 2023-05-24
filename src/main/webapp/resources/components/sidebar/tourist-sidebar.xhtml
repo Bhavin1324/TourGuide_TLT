@@ -28,7 +28,8 @@
                             <span class="mr-2 font-semibold">#{cc.attrs.user.name}</span>
                         </div>
                         <p:menu toggleable="true" styleClass="border-0 w-full">
-                            <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_TOURIST)}"/>
+                            <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_TOURIST)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
+                            <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_GUIDE)}"/>
                             <p:submenu label="Explore">
                                 <p:menuitem styleClass="px-5" value="Nearby places" action="#{cc.attrs.bean.redirectTo(uc.TO_NEARBY_PLACES)}" update="messages" icon="pi pi-map-marker"/>
                                 <p:menuitem styleClass="px-5" value="Nearby transport" action="#{cc.attrs.bean.redirectTo(uc.TO_NEARBY_TRANSPORT)}" update="messages" icon="pi pi-car"/>

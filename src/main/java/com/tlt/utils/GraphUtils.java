@@ -18,6 +18,7 @@ import org.primefaces.model.charts.bar.BarChartOptions;
 import org.primefaces.model.charts.optionconfig.animation.Animation;
 import org.primefaces.model.charts.optionconfig.legend.Legend;
 import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
+import org.primefaces.model.charts.pie.PieChartDataSet;
 import org.primefaces.model.charts.pie.PieChartModel;
 
 /**
@@ -128,6 +129,41 @@ public class GraphUtils {
 
         barModel.setOptions(options);
         return barModel;
+    }
+
+    public PieChartModel createPirChart(List<GraphUtils> pieGraphData) {
+        pieModel = new PieChartModel();
+        ChartData data = new ChartData();
+
+        PieChartDataSet dataSet = new PieChartDataSet();
+
+        List<String> bgColors = new ArrayList<>();
+        bgColors.add("rgb(255, 99, 132)");
+        bgColors.add("rgb(255, 159, 64)");
+        bgColors.add("rgb(255, 205, 86)");
+        bgColors.add("rgb(75, 192, 192)");
+        bgColors.add("rgb(54, 162, 235)");
+        bgColors.add("rgb(153, 102, 255)");
+        bgColors.add("rgb(71, 99, 255)");
+        bgColors.add("rgb(249, 78, 78)");
+        bgColors.add("rgb(42, 152, 42)");
+        bgColors.add("rgb(237, 119, 204)");
+        bgColors.add("rgb(203, 204, 37)");
+        bgColors.add("rgb(255, 217, 82)");
+        dataSet.setBackgroundColor(bgColors);
+        data.addChartDataSet(dataSet);
+
+        List<Number> values = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+        for (GraphUtils g : pieGraphData) {
+            values.add(g.getCount());
+            labels.add(g.getMonth());
+        }
+
+        dataSet.setData(values);
+        data.setLabels(labels);
+        pieModel.setData(data);
+        return pieModel;
     }
 
 }
