@@ -396,7 +396,7 @@ body{
 
 .card-grid{
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-column-gap: var(--spacing-l);
     grid-row-gap: var(--spacing-l);
     max-width: var(--width-container);
@@ -405,7 +405,19 @@ body{
 
 @media(min-width: 540px){
     .card-grid{
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .cat-card{
+        height: 15rem !important;
+    }
+    .card__category{
+        font-size: 0.9rem;
+    }
+
+    .card__heading{
+        font-size: 1.3rem !important;
+        line-height: 1.4;
+        /*word-spacing: 50vw;*/
     }
 }
 
@@ -413,18 +425,29 @@ body{
     .card-grid{
         grid-template-columns: repeat(4, 1fr);
     }
+    .cat-card{
+        height: 20rem !important;
+    }
+    .card__category{
+        font-size: 0.9rem;
+    }
+
+    .card__heading{
+        font-size: 1.9rem !important;
+        line-height: 1.4;
+    }
 }
 
 .cat-card{
     list-style: none;
     position: relative;
-    height: 30rem;
+    height: 12rem;
 }
 
 .cat-card:before{
     content: '';
     display: block;
-    padding-bottom: 150%;
+    padding-bottom: 100%;
     width: 100%;
 }
 
@@ -450,10 +473,10 @@ body{
 }
 
 .card-grid:hover > .cat-card:not(:hover) .card__background{
-    filter: brightness(0.5) saturate(0) contrast(1.2) blur(20px);
+    filter: brightness(0.5) saturate(0) contrast(1.2) blur(4px);
 }
 .card-grid:focus > .cat-card:not(:focus) .card__background{
-    filter: brightness(0.5) saturate(0) contrast(1.2) blur(20px);
+    filter: brightness(0.5) saturate(0) contrast(1.2) blur(4px);
 }
 
 .card__content{
@@ -472,7 +495,7 @@ body{
 
 .card__heading{
     color: var(--text-lighter);
-    font-size: 1.9rem;
+    font-size: 1.2rem;
     text-shadow: 2px 2px 20px rgba(0,0,0,0.2);
     line-height: 1.4;
     /*word-spacing: 50vw;*/
@@ -576,4 +599,20 @@ body .ui-inputfield.ui-state-focus{
 .ui-fileupload-simple > .ui-button{
     background-color: #9c27b0 !important;
     border-color: #9c27b0 !important;
+}
+.ui-fileupload-simple > .ui-button.ui-state-focus{
+    box-shadow: 0 0 0 .2em rgb(227 13 253 / 25%) !important;
+}
+.ui-datepicker-trigger{
+    background-color: #8c239e !important;
+    border-color: #8c239e !important;
+}
+
+body .ui-selectonemenu.ui-state-hover{
+    border-color: #9c27b0 !important;
+}
+
+body .ui-selectonemenu.ui-state-focus{
+    border-color: #9c27b0 !important;
+    box-shadow: 0 0 0 .2em rgb(227 13 253 / 25%) !important;
 }

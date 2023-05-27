@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
- */
+
 package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
-import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.record.KeepRecord;
 import com.tlt.utils.Utils;
@@ -18,16 +14,10 @@ import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import org.primefaces.PrimeFaces;
-import org.primefaces.component.outputlabel.OutputLabel;
 
-/**
- *
- * @author kunal
- */
+
 @Named(value = "subsModelBean")
 @SessionScoped
 public class SubscriptionModelBean implements Serializable {
@@ -121,12 +111,10 @@ public class SubscriptionModelBean implements Serializable {
     }
 
     public Integer getCurrentCost() {
-        System.out.println("Current cost getter: " + currentCost);
         return currentCost;
     }
 
     public void setCurrentCost(Integer currentCost) {
-        System.out.println("Current cost setter: " + currentCost);
         this.currentCost = currentCost;
     }
 

@@ -13,6 +13,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -197,5 +198,10 @@ public class LandingBean implements Serializable {
     
     public String getTime(Date date){
         return Utils.getTime12h(date);
+    }
+    
+    public String getCurrentYear(){
+        Calendar cal = Calendar.getInstance();
+        return String.valueOf(cal.get(Calendar.YEAR));
     }
 }

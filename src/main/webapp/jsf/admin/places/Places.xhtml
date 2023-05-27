@@ -101,8 +101,8 @@
                     </p:dataTable>
                 </h:form>
 
-                <h:form enctype="multipart/form-data" id="dialogs">
-                    <p:dialog  header="Place Details" styleClass="w-10 md:w-6 h-full overflow-y-auto" showEffect="fade" modal="true" widgetVar="managePlaceDialog" responsive="true">
+                <h:form enctype="multipart/form-data" id="dialogs" class="h-full">
+                    <p:dialog  header="Place Details" styleClass="w-10 h-full md:w-6 overflow-y-scroll" showEffect="fade" modal="true" widgetVar="managePlaceDialog" responsive="true">
                         <p:outputPanel id="manage-place-content" class="ui-fluid px-4">
                             <p:messages id="validationMsg"  closable="true">
                                 <p:autoUpdate/>
@@ -170,7 +170,7 @@
                         </p:outputPanel>
 
                         <f:facet name="footer">
-                            <p:commandButton value="Save" styleClass="mr-2" icon="pi pi-check" actionListener="#{placesBean.savePlace}"
+                            <p:commandButton value="Save" styleClass="mr-2 ui-button-help" icon="pi pi-check" actionListener="#{placesBean.savePlace}"
                                              update="manage-place-content" process="manage-place-content @this" />
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('managePlaceDialog').hide()"
                                              class="mx-3 ui-button-secondary" type="button" />

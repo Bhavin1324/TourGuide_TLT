@@ -16,6 +16,7 @@
     <h:body>
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
         <div>Guide registration form</div>
+        #{subMasterBean.redirectIfNotPrime()}
     </h:body>
 </html>
 
