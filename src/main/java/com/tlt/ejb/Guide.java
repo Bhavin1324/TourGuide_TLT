@@ -26,7 +26,7 @@ public class Guide implements GuideLocal {
     @Override
     public Collection<AppointmentMaster> getAllAppointmentsByGuide(String Username) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", Username).getSingleResult();
-        GuideMaster guide = em.find(GuideMaster.class, user.getId());
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
         Collection<AppointmentMaster> appts = em.createNamedQuery("AppointmentMaster.getAppointmentsOfGuide").setParameter("gid", guide.getId()).getResultList();
         return appts;
     }
@@ -43,7 +43,7 @@ public class Guide implements GuideLocal {
     @Override
     public List<GraphUtils> getMonthlyAppointmentsCount(String gusername) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
-        GuideMaster guide = em.find(GuideMaster.class, user.getId());
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
         List<Object[]> list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(a.start_datetime), COUNT(*) as 'appointmentCounts' FROM `appointment_master` a WHERE a.guide_id = '" + guide.getId() + "' GROUP BY MONTHNAME(a.start_datetime) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(a.start_datetime), ' 01'), '%Y %M %d') ASC;").getResultList();
         List<GraphUtils> graphData = new ArrayList<>();
         for (Object[] obj : list) {
@@ -58,7 +58,7 @@ public class Guide implements GuideLocal {
     @Override
     public List<GraphUtils> getMonthlyRevenueOfGuide(String gusername) {
          UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
-        GuideMaster guide = em.find(GuideMaster.class, user.getId());
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
         List<Object[]> list = new ArrayList<>();
         list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(a.start_datetime), SUM(g.amount) as 'appointmentCounts' FROM `appointment_master` a JOIN guide_master g on a.guide_id = g.id  WHERE guide_id = '" + guide.getId() +"' GROUP BY MONTHNAME(a.start_datetime) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(a.start_datetime), ' 01'), '%Y %M %d') ASC;").getResultList();
 

@@ -1,15 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
- */
+
 package com.tlt.cdis;
 
+import static com.tlt.constants.JwtConstants.ROLE_GUIDE;
+import static com.tlt.constants.JwtConstants.ROLE_TOURIST;
 import com.tlt.constants.UrlConstants;
-import static com.tlt.constants.UrlConstants.TO_ADMIN;
-import static com.tlt.constants.UrlConstants.TO_GUIDE;
-import static com.tlt.constants.UrlConstants.TO_PLACE;
-import static com.tlt.constants.UrlConstants.TO_PLACE_CATEGORY;
-import static com.tlt.constants.UrlConstants.TO_TOURIST;
 import com.tlt.record.KeepRecord;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -23,11 +17,17 @@ import javax.faces.context.FacesContext;
 public class NavigationBean implements Serializable {
 
     String activeRole;
+    boolean roleContainsGuide;
     public NavigationBean() {
     }
 
     public void redirectTo(String destination) {
         try {
+            if(destination.equals(UrlConstants.TO_GUIDE)){
+                activeRole = ROLE_GUIDE;
+            } else if (destination.equals(UrlConstants.TO_TOURIST)){
+                activeRole = ROLE_TOURIST;
+            }
             FacesContext.getCurrentInstance().getExternalContext().redirect(destination);
         } catch (Exception ex) {
             System.out.println("Exception in redirection from context");
@@ -54,11 +54,21 @@ public class NavigationBean implements Serializable {
     }
 
     public String getActiveRole() {
-        return KeepRecord.getRoles().iterator().next();
+        return activeRole;
     }
 
     public void setActiveRole(String activeRole) {
         this.activeRole = activeRole;
+    }
+
+    public boolean isRoleContainsGuide() {
+        Set<String> roles = KeepRecord.getRoles();
+        roleContainsGuide = roles.contains(ROLE_GUIDE) ? true : false;
+        return roleContainsGuide;
+    }
+
+    public void setRoleContainsGuide(boolean roleContainsGuide) {
+        this.roleContainsGuide = roleContainsGuide;
     }
     
 }

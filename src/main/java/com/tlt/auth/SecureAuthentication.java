@@ -104,6 +104,9 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
                 if (KeepRecord.getRoles().contains(ROLE_ADMIN)) {
                     response.sendRedirect(TO_ADMIN);
                 }
+                if(KeepRecord.getRoles().contains(ROLE_GUIDE) && KeepRecord.getRoles().contains(ROLE_TOURIST)){
+                        response.sendRedirect(TO_GUIDE_TOURIST_SELECTION);
+                    }
                 if (KeepRecord.getRoles().contains(ROLE_TOURIST)) {
                     response.sendRedirect(TO_TOURIST);
                 }
