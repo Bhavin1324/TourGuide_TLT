@@ -60,7 +60,7 @@ public class GuideMaster implements Serializable {
     @Column(name = "amount")
     private Integer amount;
     @Column(name = "phone_number")
-    private BigInteger phoneNumber;
+    private long phoneNumber;
     @Column(name = "is_appointed")
     private Boolean isAppointed;
     @ManyToMany(mappedBy = "guideMasterCollection", fetch = FetchType.LAZY)
@@ -119,11 +119,11 @@ public class GuideMaster implements Serializable {
         this.amount = amount;
     }
 
-    public BigInteger getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(BigInteger phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

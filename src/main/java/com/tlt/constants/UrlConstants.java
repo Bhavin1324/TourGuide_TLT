@@ -25,6 +25,8 @@ public final class UrlConstants {
     
     public static final String TO_SIGNUP = BASE_URL + "common/Signup.jsf";
     
+    public static final String TO_GUIDE_TOURIST_SELECTION = BASE_URL + "common/choice.jsf";
+    
     // Tourist urls
     public static final String TO_NEARBY_PLACES = BASE_URL + "tourist/explore/NearbyPlaces.jsf";
     public static final String TO_NEARBY_TRANSPORT = BASE_URL + "tourist/explore/NearbyTransport.jsf";

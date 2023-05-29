@@ -47,6 +47,8 @@ public interface AdminLocal {
 
     Collection<GuideMaster> getGuideByPlace(String PlaceId);
 
+    void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places);
+
     //SubscriptionModel management
     void insertSubscriptionModel(SubscriptionModel data);
 
@@ -110,11 +112,12 @@ public interface AdminLocal {
     long getActiveSubsCount();
 
     long getUserCount();
-    
+
     long getTotalIncome();
-    
+
     //graphs
     List<GraphUtils> getMonthlySubscriptionData();
+
     List<GraphUtils> getMonthlyRevenueData();
 
 }

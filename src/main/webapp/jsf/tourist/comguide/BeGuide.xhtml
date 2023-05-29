@@ -2,8 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      >
+      xmlns:sidebar="http://xmlns.jcp.org/jsf/composite/components/sidebar"
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Become a guide</title>
         <meta charset="UTF-8"/>
@@ -11,12 +13,69 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
-        
+
     </h:head>
-    <h:body>
-        <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div>Guide registration form</div>
+    <h:body style="background-color: #eee">
+        <sidebar:tourist-sidebar bean="#{navigationBean}" user="#{touristBean.userMaster}"/>
         #{subMasterBean.redirectIfNotPrime()}
+        <div class="signup-card h-fit">
+            <h:form>
+                <div class="flex justify-content-between mt-2">
+                    <p:commandButton icon="pi pi-arrow-left" styleClass="rounded-button ui-button-help" onclick="goBack()"/>         
+                    <p:commandButton icon="pi pi-bars" styleClass="rounded-button ui-button-help ui-button-outlined" onclick="PF('tourist_side_panel').show()"/>
+                </div>
+            </h:form>
+            <h:form>
+                <p:messages id="msgs" closable="true" styleClass="mt-4">
+                    <p:autoUpdate/>
+                </p:messages>
+                <div>
+                    <div class="text-2xl font-medium align-self-start mb-4 mt-1">Guide enrollment request</div>
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-user" />
+                        <p:inputText placeholder="Provide name" styleClass="w-full block" value="#{beGuideBean.loggedInUser.name}" readonly="true"/>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-at" />
+                        <p:inputText placeholder="example@email.com" styleClass="w-full" value="#{beGuideBean.loggedInUser.email}" readonly="true"/>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-user-plus" />
+                        <p:inputText placeholder="Username" styleClass="w-full" value="#{beGuideBean.loggedInUser.username}" readonly="true"/>
+                    </div>
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-phone" />
+                        <p:inputMask value="#{beGuideBean.loggedInUser.contact}" mask="999 999 9999" styleClass="w-full" readonly="true" />
+                    </div>
+                    <div class="my-1">Select gender</div>
+                    <p:selectOneRadio id="console" value="#{beGuideBean.guideMaster.gender}" rendered="true" requiredMessage="Gender: gender is required">
+                        <f:selectItem itemLabel="Male" itemValue="Male"/>
+                        <f:selectItem itemLabel="Female" itemValue="Female"/>
+                        <f:selectItem itemLabel="Transgender" itemValue="Transgender"/>
+                    </p:selectOneRadio>
+                    <div class="w-full mt-4 mb-3">
+                        <p:inputNumber id="guide-amount" value="#{beGuideBean.guideMaster.amount}" required="true" requiredMessage="Amount: Guide amount is required" validatorMessage="Rate: Rate should be reasonable" placeholder="Enter fixed price rate">
+                            <f:validateLength maximum="4"/>
+                        </p:inputNumber>
+                    </div>
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <p:autoComplete multiple="true" value="#{beGuideBean.placesNames}"
+                                        completeMethod="#{landingBean.placesNameList}" placeholder="Select places to guide"
+                                        styleClass="w-full" required="true" requiredMessage="Places: Places select a place to guide"/>
+                    </div>
+                    <div class="w-full">
+                        <p:commandButton id="send-req" value="Send request" update="@form" action="#{beGuideBean.registerGuide()}" styleClass="w-full ml-auto mr-0 mb-4 rounded-button block ui-button-help"/>
+                    </div>
+                </div>
+            </h:form>
+        </div>
     </h:body>
+    <script>
+        function goBack() {
+            return history.go(-1);
+        }
+    </script>
 </html>
 

@@ -89,6 +89,23 @@ public class Admin implements AdminLocal {
     }
 
     @Override
+    public void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places) {
+        Collection<PlaceMaster> guidePlaces = guide.getPlaceMasterCollection();
+        for(PlaceMaster pm : places){
+            if(!guidePlaces.contains(pm)){
+                guidePlaces.add(pm);
+                Collection<GuideMaster> guideOfPlace = pm.getGuideMasterCollection();
+                guideOfPlace.add(guide);
+                
+                pm.setGuideMasterCollection(guideOfPlace);
+                guide.setPlaceMasterCollection(guidePlaces);
+                em.merge(pm);
+                em.merge(guide);
+            }
+        }
+    }
+    
+    @Override
     public void deleteGuide(String id) {
         GuideMaster guide = (GuideMaster) em.find(GuideMaster.class, id);
         em.remove(guide);
@@ -158,17 +175,17 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<UserSubscriptionMapping> getAllSubscriptions() {
         List<Object[]> jointable = em.createNativeQuery("select * from user_subscription_mapping").getResultList();
-        
-          Collection<UserSubscriptionMapping> mappedData = new ArrayList<>();
-        for(Object[] item : jointable){
+
+        Collection<UserSubscriptionMapping> mappedData = new ArrayList<>();
+        for (Object[] item : jointable) {
             UserSubscriptionMapping usmap = new UserSubscriptionMapping();
-            
+
             usmap.setUser(em.find(UserMaster.class, item[0]));
-            usmap.setSubMaster(em.find(SubscriptionMaster.class,item[1]));
+            usmap.setSubMaster(em.find(SubscriptionMaster.class, item[1]));
             mappedData.add(usmap);
         }
-        
-       return mappedData;
+
+        return mappedData;
 //        Collection<SubscriptionMaster> subscriptions = em.createNamedQuery("SubscriptionMaster.findAll").getResultList();
 //        return subscriptions;
     }
@@ -273,12 +290,13 @@ public class Admin implements AdminLocal {
     public long getActiveSubsCount() {
         Date today = new Date();
 //        System.out.println("Today is " + today);
-        return (long) em.createNamedQuery("SubscriptionMaster.getActiveSubsCount").setParameter("today",today).getSingleResult();
-    
+        return (long) em.createNamedQuery("SubscriptionMaster.getActiveSubsCount").setParameter("today", today).getSingleResult();
+
     }
+
     @Override
     public long getTotalIncome() {
-         Query obj = em.createNativeQuery("SELECT SUM(s.cost) FROM subscription_model s INNER JOIN subscription_master sm on s.id = sm.subscription_model_id;");
+        Query obj = em.createNativeQuery("SELECT SUM(s.cost) FROM subscription_model s INNER JOIN subscription_master sm on s.id = sm.subscription_model_id;");
         long active = Long.parseLong(obj.getSingleResult().toString());
         return active;
     }
@@ -328,33 +346,34 @@ public class Admin implements AdminLocal {
 
     @Override
     public List<GraphUtils> getMonthlySubscriptionData() {
-       List<Object[]> list = new ArrayList<>();
-       
-      list =  em.createNativeQuery("SELECT DISTINCT MONTHNAME(s.start_date), COUNT(*) AS 'subsCount' FROM `subscription_master` s GROUP BY MONTH(s.start_date) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(s.start_date), ' 01'), '%Y %M %d') ASC;").getResultList();
-      
-      List<GraphUtils> graphData = new ArrayList<>();
-        for(Object[] g : list){
+        List<Object[]> list = new ArrayList<>();
+
+        list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(s.start_date), COUNT(*) AS 'subsCount' FROM `subscription_master` s GROUP BY MONTH(s.start_date) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(s.start_date), ' 01'), '%Y %M %d') ASC;").getResultList();
+
+        List<GraphUtils> graphData = new ArrayList<>();
+        for (Object[] g : list) {
             GraphUtils gd = new GraphUtils();
             gd.setMonth(g[0].toString());
             gd.setCount(Long.parseLong(g[1].toString()));
             graphData.add(gd);
         }
-       return graphData;
+        return graphData;
     }
+
     @Override
     public List<GraphUtils> getMonthlyRevenueData() {
-       List<Object[]> list = new ArrayList<>();
-       
-      list =  em.createNativeQuery("SELECT MONTHNAME(sm.start_date), SUM(s.cost) FROM `subscription_model` s INNER JOIN subscription_master sm ON s.id = sm.subscription_model_id GROUP BY MONTHNAME(sm.start_date) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(sm.start_date), ' 01'), '%Y %M %d') ASC;").getResultList();
-      
-      List<GraphUtils> graphData = new ArrayList<>();
-        for(Object[] g : list){
+        List<Object[]> list = new ArrayList<>();
+
+        list = em.createNativeQuery("SELECT MONTHNAME(sm.start_date), SUM(s.cost) FROM `subscription_model` s INNER JOIN subscription_master sm ON s.id = sm.subscription_model_id GROUP BY MONTHNAME(sm.start_date) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(sm.start_date), ' 01'), '%Y %M %d') ASC;").getResultList();
+
+        List<GraphUtils> graphData = new ArrayList<>();
+        for (Object[] g : list) {
             GraphUtils gd = new GraphUtils();
             gd.setMonth(g[0].toString());
             gd.setCount(Long.parseLong(g[1].toString()));
             graphData.add(gd);
         }
-       return graphData;
+        return graphData;
     }
 
 }

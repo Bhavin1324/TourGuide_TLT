@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Select login</title>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:outputStylesheet library="css" name="styles.css"/>  
+    <h:outputStylesheet library="css" name="primeflex.min.css"/>  
+    <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
+
+    <h:body>
+        <h:form>
+
+            <section class="hero-section">
+                <div class="text-2xl mt-5 mb-4">Select role you want to login as</div>
+                <div class="role-card-grid">
+                    <p:commandLink class="cat-card" action="#{navigationBean.redirectTo(uc.TO_GUIDE)}">
+                        <div class="card__background dull" style="background-image:url(../../images/guide.png)"></div>
+                        <div class="card__content">
+                            <p class="card__category">Login as</p>
+                            <h3 class="card__heading">Guide</h3>
+                        </div>
+                    </p:commandLink>
+                    <p:commandLink class="cat-card" action="#{navigationBean.redirectTo(uc.TO_TOURIST)}">
+                        <div class="card__background dull" style="background-image:url(../../images/tourist.png)"></div>
+                        <div class="card__content">
+                            <p class="card__category">Login as</p>
+                            <h3 class="card__heading">Tourist</h3>
+                        </div>
+                    </p:commandLink>
+
+                </div>
+            </section>
+        </h:form>
+    </h:body>
+</html>
+

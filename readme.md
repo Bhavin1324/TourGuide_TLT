@@ -7,8 +7,8 @@ Create a `config.properties` files inside `properties` named package
 
 - `OEMAIL=`
 - `OPASSWORD=`
+- `OPHONE=`
 - `SECRET_KEY=`
 - `MAIL_HOST=`
 - `MAIL_PORT=`
 - `MAPS_API_KEY=`
-- `IPG_API_KEY=`

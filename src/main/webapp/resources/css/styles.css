@@ -209,7 +209,7 @@
 .signup-card {
     height: 95%;
     width: 30%;
-    padding: 10px 35px;
+    padding: 10px 25px;
     background-color: white;
     border-radius: 20px;
     position: absolute;
@@ -387,10 +387,11 @@ body{
 }
 
 .hero-section{
-    align-items: flex-start;
+    justify-content: flex-start;
     display: flex;
+    flex-direction: column;
     min-height: fit-content;
-    justify-content: center;
+    align-items: center;
     padding: var(--spacing-l) var(--spacing-l);
 }
 
@@ -402,7 +403,14 @@ body{
     max-width: var(--width-container);
     width: 90%;
 }
-
+.role-card-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: var(--spacing-l);
+    grid-row-gap: var(--spacing-l);
+    max-width: var(--width-container);
+    width: 90%;
+}
 @media(min-width: 540px){
     .card-grid{
         grid-template-columns: repeat(3, 1fr);
@@ -447,7 +455,7 @@ body{
 .cat-card:before{
     content: '';
     display: block;
-    padding-bottom: 100%;
+    padding-bottom: inherit;
     width: 100%;
 }
 
@@ -467,7 +475,9 @@ body{
         filter 200ms linear,
         transform 200ms linear;
 }
-
+.card__background.dull{
+    filter: brightness(0.50) saturate(1.2) contrast(0.85);
+}
 .cat-card:hover .card__background, .cat-card:focus .card__background{
     transform: scale(1.05) translateZ(0);
 }
@@ -476,6 +486,12 @@ body{
     filter: brightness(0.5) saturate(0) contrast(1.2) blur(4px);
 }
 .card-grid:focus > .cat-card:not(:focus) .card__background{
+    filter: brightness(0.5) saturate(0) contrast(1.2) blur(4px);
+}
+.role-card-grid:hover > .cat-card:not(:hover) .card__background{
+    filter: brightness(0.5) saturate(0) contrast(1.2) blur(4px);
+}
+.role-card-grid:focus > .cat-card:not(:focus) .card__background{
     filter: brightness(0.5) saturate(0) contrast(1.2) blur(4px);
 }
 
@@ -615,4 +631,26 @@ body .ui-selectonemenu.ui-state-hover{
 body .ui-selectonemenu.ui-state-focus{
     border-color: #9c27b0 !important;
     box-shadow: 0 0 0 .2em rgb(227 13 253 / 25%) !important;
+}
+
+body .ui-radiobutton .ui-radiobutton-box.ui-state-active {
+    border-color: blueviolet !important ;
+    background: #9c27b0 !important;
+    color: #fff !important;
+}
+body .ui-radiobutton .ui-radiobutton-box.ui-state-hover {
+    border-color: #9c27b0 !important ;
+
+}
+body .ui-radiobutton .ui-radiobutton-box.ui-state-focus {
+    box-shadow: 0 0 0 .2em rgb(227 13 253 / 25%) !important;
+}
+body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-item.ui-state-highlight{
+    background: #f4e3fd !important;
+}
+.ui-autocomplete-multiple-container{
+    width: inherit !important;
+}
+.ui-autocomplete-multiple-container .ui-autocomplete-token{
+    background-color: #f5e3fd !important;
 }

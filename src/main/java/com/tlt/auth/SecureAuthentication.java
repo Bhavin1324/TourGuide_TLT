@@ -9,6 +9,7 @@ import static com.tlt.constants.JwtConstants.ROLE_TOURIST;
 import static com.tlt.constants.JwtConstants.TOKEN;
 import static com.tlt.constants.UrlConstants.TO_ADMIN;
 import static com.tlt.constants.UrlConstants.TO_GUIDE;
+import static com.tlt.constants.UrlConstants.TO_GUIDE_TOURIST_SELECTION;
 import static com.tlt.constants.UrlConstants.TO_LOGIN;
 import static com.tlt.constants.UrlConstants.TO_TOURIST;
 import com.tlt.record.KeepRecord;
@@ -82,6 +83,9 @@ public class SecureAuthentication implements HttpAuthenticationMechanism {
 
                     if (result.getCallerGroups().contains(ROLE_ADMIN)) {
                         response.sendRedirect(TO_ADMIN);
+                    }
+                    if(result.getCallerGroups().contains(ROLE_GUIDE) && result.getCallerGroups().contains(ROLE_TOURIST)){
+                        response.sendRedirect(TO_GUIDE_TOURIST_SELECTION);
                     }
                     if (result.getCallerGroups().contains(ROLE_TOURIST)) {
                         response.sendRedirect(TO_TOURIST);
