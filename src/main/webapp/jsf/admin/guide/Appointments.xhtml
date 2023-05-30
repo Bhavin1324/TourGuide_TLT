@@ -3,15 +3,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      >
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Appointments</title>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:admin-navbar sideNavigationBean="#{navigationBean}"/>
-        <h2>This place is to manage guide's appointments</h2>
+        <div class="my-5 px-2" >
+            <h:form>
+                <div class="surface-card border-round-2xl p-4">
+                    <p:dataTable id="dt-appt-details" widgetVar="dtApptDetails" class="text-xl mx-2 px-2" var="ap" value="#{usersBean.allAppointmentsOfGuides}" reflow="true" rows="5" paginator="true" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="ml-2 text-4xl text-800 font-semibold">Appointments of all Guides</div>
+                        </f:facet>
+                        <f:facet name="header">
+                            <div class="product-table-header ml-2 mt-5">
+                                <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtApptDetails').filter()" placeholder="Search" />
+                                </div>
+                            </div>
+                        </f:facet>
+                        <p:column  class="px-4" sortBy="#{ap.guideId.name}" filterBy="#{ap.guideId.name}" headerText="Guide's Name">
+                            <h:outputText value="#{ap.guideId.name}"/>
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.guideId.email}" filterBy="#{ap.guideId.email}" headerText="Guide's Email">
+                            <h:outputText value="#{ap.guideId.email}"/>
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.placeId.name}" filterBy="#{ap.placeId.name}" headerText="Place">
+                            <h:outputText class="-mr-1" value="#{ap.placeId.name}"/>
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.placeId.address}" 
+                                   filterBy="#{ap.placeId.address}" headerText="Place Address">
+                            <h:outputText value="#{ap.placeId.address}"/>
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.startDatetime}" filterBy="#{ap.startDatetime}" headerText="Start Date">
+                            <h:outputText value="#{usersBean.getFormatedDate(ap.startDatetime)} #{usersBean.getFormatedTime(ap.startDatetime)}"/>
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.endDatetime}" filterBy="#{ap.endDatetime}" headerText="End Date">
+                            <h:outputText value="#{usersBean.getFormatedDate(ap.endDatetime)} #{usersBean.getFormatedTime(ap.endDatetime)}"/>
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.userId.email}" 
+                                   filterBy="#{ap.userId.email}" headerText="Tourist's Email">
+                            <h:outputText value="#{ap.userId.email}"/>
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.guideId.amount}" filterBy="#{ap.guideId.amount}" headerText="Amount">
+                            <h:outputText value="#{ap.guideId.amount}"/>
+                            <span class="material-symbols-outlined text-xl">
+                                currency_rupee
+                            </span> 
+                        </p:column>
+                        <p:column  class="px-4" sortBy="#{ap.appointmentStatus}" 
+                                   filterBy="#{ap.appointmentStatus}" headerText="Appointment status">
+                            <h:outputText value="#{ap.appointmentStatus}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </div>
     </h:body>
 </html>
 

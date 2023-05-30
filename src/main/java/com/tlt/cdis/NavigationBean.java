@@ -54,6 +54,9 @@ public class NavigationBean implements Serializable {
     }
 
     public String getActiveRole() {
+       if(this.activeRole == null){
+           return KeepRecord.getRoles().iterator().next();
+       }
         return activeRole;
     }
 
