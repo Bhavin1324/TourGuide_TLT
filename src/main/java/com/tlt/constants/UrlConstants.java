@@ -33,6 +33,7 @@ public final class UrlConstants {
     public static final String TO_RECOMMENDATION = BASE_URL + "tourist/explore/RecommendMe.jsf";
     public static final String TO_CHOSEN_PLACES = BASE_URL + "tourist/explore/Place.jsf";
     public static final String TO_CHOSEN_PLACES_FORWARD = "explore/Place.jsf";
+    public static final String TO_MY_TRIP = BASE_URL + "/tourist/MyTrip.jsf";
     
     public static final String TO_GUIDE_GROUP = BASE_URL + "tourist/comguide/JoinGroup.jsf";
     public static final String TO_PERSONAL_GUIDE = BASE_URL + "tourist/comguide/PersonalGuide.jsf";
@@ -44,6 +45,7 @@ public final class UrlConstants {
     
     // Guides urls
     public static final String TO_APPOINTMENTS = BASE_URL + "guide/appointments/Appointments.jsf";
+    public static final String TO_GUIDE_EVENTS = BASE_URL + "guide/appointments/Event.jsf";
 
 
 }

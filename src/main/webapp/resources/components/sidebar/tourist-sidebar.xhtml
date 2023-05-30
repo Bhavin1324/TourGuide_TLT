@@ -30,6 +30,7 @@
                         <p:menu toggleable="true" styleClass="border-0 w-full">
                             <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_TOURIST)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
                             <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_GUIDE)}"/>
+                            <p:menuitem value="My trip" icon="pi pi-flag" action="#{cc.attrs.bean.redirectTo(uc.TO_MY_TRIP)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
                             <p:submenu label="Transport">
                                 <p:menuitem styleClass="px-5" value="Nearby transport" action="#{cc.attrs.bean.redirectTo(uc.TO_NEARBY_TRANSPORT)}" update="messages" icon="pi pi-car"/>
                             </p:submenu>
@@ -44,8 +45,10 @@
                                 <p:menuitem value="My Transations" styleClass="px-5" action="#{cc.attrs.bean.redirectTo(uc.TO_PAYMENT_HISTORY)}" update="messages" icon="pi pi-wallet"/>
                             </p:submenu>
                             <p:submenu label="Others"  rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_GUIDE)}">
-                                <p:menuitem value="Appointments" styleClass="px-5" action="#{cc.attrs.bean.redirectTo(uc.TO_APPOINTMENTS)}" update="messages" icon="pi pi-file-edit"/> </p:submenu>
-                            <p:menuitem value="Landmark tour prime" action="#{cc.attrs.bean.redirectTo(uc.TO_SUBS_CARDS)}" update="messages" icon="pi pi-verified"/>
+                                <p:menuitem value="Appointments" styleClass="px-5" action="#{cc.attrs.bean.redirectTo(uc.TO_APPOINTMENTS)}" update="messages" icon="pi pi-file-edit"/> 
+                                <p:menuitem value="Raise event" styleClass="px-5" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_EVENTS)}" update="messages" icon="pi pi-megaphone"/> 
+                            </p:submenu>
+                            <p:menuitem value="Landmark tour prime" action="#{cc.attrs.bean.redirectTo(uc.TO_SUBS_CARDS)}" update="messages" icon="pi pi-verified" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
                             <p:menuitem value="About us" action="#{cc.attrs.bean.redirectTo(uc.TO_ABOUT_US)}" update="messages" icon="pi pi-info-circle"/>
                             <p:menuitem value="Logout" icon="pi pi-sign-out" action="#{cc.attrs.bean.logout(uc.TO_LOGOUT)}">
                                 <p:confirm header="Confirmation" message="Are you sure you want to logout?" icon="pi pi-question-circle"/>
