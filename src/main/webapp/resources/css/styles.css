@@ -654,3 +654,29 @@ body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-item.ui-stat
 .ui-autocomplete-multiple-container .ui-autocomplete-token{
     background-color: #f5e3fd !important;
 }
+
+.loader{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    background-color: white;
+    z-index: 10;
+}
+.custom-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background:#9C27B0;
+    clip-path: polygon(0 0,100% 0,100% 100%,0 100%);
+    animation: sh1 2s infinite cubic-bezier(0.3,1,0,1);
+}
+@keyframes sh1 {
+  33% {border-radius: 0;background:#5187ED ;clip-path: polygon(0 0,100% 0,100% 100%,0 100%)}
+  66% {border-radius: 0;background:#525780 ;clip-path: polygon(50% 0,50% 0,100% 100%,0 100%)}
+}

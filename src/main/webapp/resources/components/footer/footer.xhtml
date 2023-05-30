@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <f:loadBundle basename="properties.config" var="conf"/>
+        <div class="footer text-white mt-4" style="background-color: #2d3548;font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+                <div class="container px-4 py-2">
+                    <div class="grid">
+                        <div class="col-12 md:col-6 px-2">
+                            <div class="flex align-items-center mt-4 mb-3">
+                                <div><p:graphicImage value="/images/tlt-logo.png" height="40" style="filter: grayscale(100%) invert(100%); margin-right: .6rem"/></div>
+                                <div class="text-4xl font-semibold">The landmark tour</div>
+                            </div>
+                            <div class="px-2">Motive of this project is to guide visitors and traveller to explore places around and gain knowledge about the historic places. Our guides helps you to provide best knowledge about any places, whould helps you to make your trip amazing.</div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="text-2xl font-semibold my-4">Contact us</div>
+                            <a class="flex align-items-center my-2" href="mailto:#{conf.OEMAIL}" style="text-decoration: none;color:white"><span class="material-symbols-outlined mr-2">email</span>#{conf.OEMAIL}</a>
+                            <a class="flex align-items-center my-2" href="tel:#{conf.OPHONE}" style="text-decoration: none;color:white"><span class="material-symbols-outlined mr-2">phone</span>#{conf.OPHONE}</a>
+                        </div>
+                    </div>
+                    <p:divider/>
+                    <div class="my-2 text-center">Crafted by The landmark tour team &#169; | #{landingBean.currentYear}</div>
+                </div>
+            </div>
+    </cc:implementation>
+</html>

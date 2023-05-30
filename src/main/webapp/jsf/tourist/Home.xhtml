@@ -8,6 +8,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:map="http://xmlns.jcp.org/jsf/composite/components/map"
+      xmlns:footer="http://xmlns.jcp.org/jsf/composite/components/footer"
       >
     <h:head>
         <title>Home</title>
@@ -22,6 +23,10 @@
         <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
 
     </h:head>
+    <div class="loader">
+        <div class="custom-loader"></div>
+    </div>
+
     <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}" />
         <div class="bg-landing">
@@ -118,26 +123,7 @@
                     </section>
                 </h:form>
             </div>
-            <div class="footer text-white mt-4" style="background-color: #2d3548;font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
-                <div class="container px-4 py-2">
-                    <div class="grid">
-                        <div class="col-12 md:col-6 px-2">
-                            <div class="flex align-items-center mt-4 mb-3">
-                                <div><p:graphicImage value="/images/tlt-logo.png" height="40" style="filter: grayscale(100%) invert(100%); margin-right: .6rem"/></div>
-                                <div class="text-4xl font-semibold">The landmark tour</div>
-                            </div>
-                            <div class="px-2">Motive of this project is to guide visitors and traveller to explore places around and gain knowledge about the historic places. Our guides helps you to provide best knowledge about any places, whould helps you to make your trip amazing.</div>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <div class="text-2xl font-semibold my-4">Contact us</div>
-                            <a class="flex align-items-center my-2" href="mailto:#{conf.OEMAIL}" style="text-decoration: none;color:white"><span class="material-symbols-outlined mr-2">email</span>#{conf.OEMAIL}</a>
-                            <a class="flex align-items-center my-2" href="tel:#{conf.OPHONE}" style="text-decoration: none;color:white"><span class="material-symbols-outlined mr-2">phone</span>#{conf.OPHONE}</a>
-                        </div>
-                    </div>
-                    <p:divider/>
-                    <div class="my-2 text-center">Crafted by The landmark tour team &#169; | #{landingBean.currentYear}</div>
-                </div>
-            </div>
+            <footer:footer/>
         </div>
 
         <h:form id="dialog-form">
@@ -174,6 +160,11 @@
             </p:dialog>
         </h:form>
     </h:body>
-
+    <script>
+        let loader = document.querySelector(".loader");
+        window.addEventListener("load",()=>{
+            loader.style.display = "none";
+        });
+    </script>
 
 </html>

@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
+      xmlns:footer="http://xmlns.jcp.org/jsf/composite/components/footer"
       >
     <h:head>
         <title>About us</title>
@@ -11,11 +12,54 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
-        
+        <style>
+            .bg-blend{
+                position: relative;
+                background-color: rgba(0,0,0,0.6);
+                height: 50vh;
+                width: 100%;
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ;
+            }
+            .bg-blend::before{
+                content: "";
+                background: url(../../../images/aboutus.png) no-repeat center center/cover;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 50vh;
+                width: 100%;
+                z-index: -1;
+                background-blend-mode:darken;
+                overflow: hidden
+            }
+        </style>
     </h:head>
     <h:body>
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div>About us</div>
+        <div class="bg-blend">
+            <div class="container h-full">
+                <div class="flex flex-column justify-content-center text-white mx-4 h-full">
+                    <div class="text-7xl text-center mb-2">About us</div>
+                    <div class="text-2xl text-center">For explorers everywhere</div>
+                </div>
+            </div>
+        </div>
+        <div class="container my-4">
+            <div class="content m-2 py-2 px-3 text-lg line-height-2" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ">
+                <p class="my-4"><span class="text-4xl">W</span>elcome to The Landmark Tour, where we bring the world's most iconic landmarks right to your fingertips. Our passion for travel and exploration has led us to create a platform that allows you to experience the wonders of the world from the comfort of your own home.</p> 
+
+                <p class="my-4"><span class="text-4xl">At</span> The Landmark Tour, we believe that travel is not just about physical presence; it is about the magic of discovery, the joy of learning, and the awe-inspiring feeling that comes from witnessing breathtaking landmarks. Our mission is to make these extraordinary experiences accessible to everyone, regardless of their location or circumstances.</p>
+         
+                <p class="my-4"><span class="text-4xl">We</span> understand that travel is not just about famous landmarks; it's about the people, the history, and the local cultures that make each destination unique. That's why our virtual tours go beyond the surface, delving into the stories behind these landmarks. You'll learn about the historical significance, architectural marvels, and fascinating anecdotes that breathe life into these iconic sites. It's a journey that educates, entertains, and enriches your understanding of our shared global heritage.</p>
+
+                <p class="my-4"><span class="text-4xl">But</span> The Landmark Tour is not just a passive viewing experience; it's an interactive adventure. As you explore each virtual tour, you can engage with the content, ask questions, and connect with fellow travelers from around the world. Share your thoughts, exchange travel tips, and immerse yourself in a vibrant community of like-minded individuals who share your passion for discovery.</p>
+
+                <p class="my-4"><span class="text-4xl">We</span> believe that travel should be sustainable and responsible. While virtual tours cannot replace the benefits of responsible tourism, they provide an alternative that minimizes environmental impact. By choosing The Landmark Tour, you can explore the world's wonders without contributing to carbon emissions or overcrowding at popular destinations. It's a guilt-free way to indulge your wanderlust and satisfy your curiosity while being mindful of our planet.</p>
+
+                <p class="my-4"><span class="text-4xl">W</span>hether you're an armchair traveler, a curious student, or simply someone looking for a unique experience, The Landmark Tour is your gateway to the world's most extraordinary places. Join us on this virtual journey of discovery, and let the wonders of the world captivate your imagination. Begin your adventure with us today and unlock a world of endless possibilities.</p>
+            </div>
+        </div>
+        <footer:footer/>
     </h:body>
 </html>
 
