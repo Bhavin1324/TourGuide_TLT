@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.Cities;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
@@ -46,6 +47,8 @@ public interface AdminLocal {
     Collection<GuideMaster> getAllGuides();
 
     Collection<GuideMaster> getGuideByPlace(String PlaceId);
+
+    Collection<AppointmentMaster> getAppointmentsOfAllGuides();
 
     void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places);
 

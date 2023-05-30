@@ -5,6 +5,8 @@
 package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
+import com.tlt.entities.AppointmentMaster;
+import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
@@ -14,6 +16,7 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,6 +42,8 @@ public class UsersBean implements Serializable {
     UserMaster selectedUser;
     List<UserMaster> selectedUsers;
     String role;
+    Collection<GuideMaster> allGuides;
+    Collection<AppointmentMaster> allAppointmentsOfGuides;
 
     public UsersBean() {
         users = new ArrayList<>();
@@ -52,6 +57,29 @@ public class UsersBean implements Serializable {
     @PostConstruct
     public void init() {
         users = ad.getAllUsers();
+    }
+
+    public String getFormatedDate(Date date){
+        return Utils.getDateTimeFormat(date);
+    }
+    public String getFormatedTime(Date date){
+        return Utils.getTime12h(date);
+    }
+    
+    public Collection<AppointmentMaster> getAllAppointmentsOfGuides() {
+        return ad.getAppointmentsOfAllGuides();
+    }
+
+    public void setAllAppointmentsOfGuides(Collection<AppointmentMaster> allAppointmentsOfGuides) {
+        this.allAppointmentsOfGuides = allAppointmentsOfGuides;
+    }
+
+    public Collection<GuideMaster> getAllGuides() {
+        return ad.getAllGuides();
+    }
+
+    public void setAllGuides(Collection<GuideMaster> allGuides) {
+        this.allGuides = allGuides;
     }
 
     public String getRole() {

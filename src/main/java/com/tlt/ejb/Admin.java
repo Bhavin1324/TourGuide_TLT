@@ -136,6 +136,10 @@ public class Admin implements AdminLocal {
         PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, PlaceId);
         return place.getGuideMasterCollection();
     }
+    @Override
+    public Collection<AppointmentMaster> getAppointmentsOfAllGuides() {
+        return em.createNamedQuery("AppointmentMaster.findAll").getResultList();
+    }
 
     // implementation of method related to subscription
     @Override
