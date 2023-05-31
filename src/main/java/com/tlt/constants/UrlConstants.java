@@ -46,6 +46,7 @@ public final class UrlConstants {
     // Guides urls
     public static final String TO_APPOINTMENTS = BASE_URL + "guide/appointments/Appointments.jsf";
     public static final String TO_GUIDE_EVENTS = BASE_URL + "guide/appointments/Event.jsf";
+    public static final String TO_GUIDE_PLACES = BASE_URL + "guide/GuidingPlaces.jsf";
 
 
 }

@@ -74,6 +74,8 @@ public class BeGuideBean implements Serializable {
             this.guideMaster.setName(loggedInUser.getName());
             this.guideMaster.setEmail(loggedInUser.getEmail());
             this.guideMaster.setPhoneNumber(loggedInUser.getContact());
+            this.guideMaster.setUsername(loggedInUser.getUsername());
+            this.guideMaster.setProfileImage(loggedInUser.getProfileImage());
             this.guideMaster.setIsAppointed(false);
 
             this.loggedInUser = getLoggedInUser();

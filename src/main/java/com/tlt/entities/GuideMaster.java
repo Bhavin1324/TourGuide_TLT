@@ -49,6 +49,10 @@ public class GuideMaster implements Serializable {
     @Column(name = "email")
     private String email;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "username")
+    private String username;
+    @Column(name = "profile_image")
+    private String profileImage;
     @Column(name = "amount")
     private Integer amount;
     @Column(name = "phone_number")
@@ -101,6 +105,20 @@ public class GuideMaster implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public Integer getAmount() {
