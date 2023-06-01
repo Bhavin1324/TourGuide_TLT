@@ -4,7 +4,9 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Your events</title>
         <meta charset="UTF-8"/>
@@ -12,11 +14,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
-
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        Guide events
+        <div class="my-5 px-2">
+            <div class="shadow-2 surface-card border-round-2xl p-4">
+                <div class="ml-2 text-4xl text-800 font-semibold my-2">Events raised on places</div>
+              
+            </div>
+        </div>
     </h:body>
 </html>
 

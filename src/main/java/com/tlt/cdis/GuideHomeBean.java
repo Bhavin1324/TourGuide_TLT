@@ -143,9 +143,9 @@ public class GuideHomeBean implements Serializable {
         this.revenue = revenue;
     }
 
-    public void updateStatus() {
+    public void updateStatus(String status) {
         try {
-            gd.updateAppointmentStatus(this.selectedAppointment);
+            gd.updateAppointmentStatus(this.selectedAppointment,status);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Marked as Complete"));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error Occured", "Error Updating Status"));

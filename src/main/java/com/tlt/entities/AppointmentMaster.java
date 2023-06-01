@@ -31,7 +31,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "AppointmentMaster.findAll", query = "SELECT a FROM AppointmentMaster a"),
     @NamedQuery(name = "AppointmentMaster.findById", query = "SELECT a FROM AppointmentMaster a WHERE a.id = :id"),
-    @NamedQuery(name = "AppointmentMaster.getPendingAppointments", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid AND a.appointmentStatus = :status"),
+    @NamedQuery(name = "AppointmentMaster.getAppointmentsByStatus", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid AND a.appointmentStatus = :status"),
     @NamedQuery(name = "AppointmentMaster.getAppointmentsOfGuide", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid ORDER BY a.appointmentStatus DESC"),
     @NamedQuery(name = "AppointmentMaster.findByStartDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.startDatetime = :startDatetime"),
     @NamedQuery(name = "AppointmentMaster.findByEndDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.endDatetime = :endDatetime")})
@@ -54,6 +54,8 @@ public class AppointmentMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "appointment_status")
     private String appointmentStatus;
+    @Column(name = "guide_type")
+    private String guideType;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private UserMaster userId;
@@ -101,6 +103,14 @@ public class AppointmentMaster implements Serializable {
 
     public void setAppointmentStatus(String appointmentStatus) {
         this.appointmentStatus = appointmentStatus;
+    }
+
+    public String getGuideType() {
+        return guideType;
+    }
+
+    public void setGuideType(String guideType) {
+        this.guideType = guideType;
     }
 
     public UserMaster getUserId() {

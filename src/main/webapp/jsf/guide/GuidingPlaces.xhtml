@@ -15,7 +15,7 @@
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
 
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200" style="font-family: sans-serif" >
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
         <div class="my-5 px-2">
             <div class="shadow-2 surface-card border-round-2xl p-4">
@@ -62,7 +62,7 @@
                             <h:outputText value="#{gp.name}" />
                         </p:column>
                         <p:column headerText="Image" sortBy="#{gp.address}" filterBy="#{gp.address}">
-                             <p:graphicImage id="img"  value="/uploads/places/#{gp.images}" style="width: 130px;height:80px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                            <p:graphicImage id="img"  value="/uploads/places/#{gp.images}" style="width: 130px;height:80px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
                         </p:column>
                         <p:column headerText="Place Address" sortBy="#{gp.address}" filterBy="#{gp.address}">
                             <h:outputText value="#{gp.address}" />
@@ -70,11 +70,19 @@
                         <p:column headerText="Place Category" sortBy="#{gp.categoryId.name}" filterBy="#{gp.categoryId.name}">
                             <h:outputText value="#{gp.categoryId.name}" />
                         </p:column>
-                        <p:column headerText="City" sortBy="#{gp.cityId.name}" filterBy="#{gp.cityId.name}">
+                        <p:column headerText="City"  sortBy="#{gp.cityId.name}" filterBy="#{gp.cityId.name}">
                             <h:outputText value="#{gp.cityId.name}" />
                         </p:column>
 
-                        <p:column exportable="false">
+                        <p:column exportable="false" >
+                            <p:commandButton value="Raise an Event" class="text-lg ui-button-help mr-4" 
+                                             action="#{guidingPlaceBean.setSelectedPlace(gp)}" 
+                                             update=":raise-event:manage-event-content"
+                                             icon="pi pi-calendar-plus" process="@this" oncomplete="PF('manageEventDialog').show()">
+                                <c:set var="submodel" value="#{gp}" />
+                                <f:setPropertyActionListener target="#{guidingPlaceBean.selectedPlace}" value="${gp}" />
+                            </p:commandButton>
+
                             <p:commandButton styleClass="ui-button-danger rounded-button"  
                                              icon="pi pi-trash" process="@this" oncomplete="PF('deleteGuidePlaceDialog').show()">
                                 <c:set var="submodel" value="#{gp}" />
@@ -119,6 +127,43 @@
                                          />
                     </p:confirmDialog>
 
+                </h:form>
+                <h:form id="raise-event" >
+                    <p:dialog  header="Raise an Event" width="500" showEffect="fade" modal="true" widgetVar="manageEventDialog" responsive="true">
+                        <p:outputPanel id="manage-event-content" class="ui-fluid px-4">
+                            <p:messages id="modelMsg"/>
+                            <div class="field">
+                                <p:outputLabel for="place">Place Name</p:outputLabel>
+                                <p:inputText disabled="true" id="place" class="font-bold"
+                                             value="#{guidingPlaceBean.selectedPlace.name}" styleClass="w-full" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="address">Place Address</p:outputLabel>
+                                <p:inputText disabled="true" id="address" 
+                                             value="#{guidingPlaceBean.selectedPlace.address}" styleClass="w-full" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="sdate">Event Start Date</p:outputLabel>
+                                <p:datePicker showIcon="true" id="sdate" 
+                                              value="${guidingPlaceBean.eventRaised.startDatetime}" showTime="true" required="true"
+                                              requiredMessage="Event Starting Time is Required"/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="edate">Event Start Date</p:outputLabel>
+                                <p:datePicker showIcon="true" id="edate" 
+                                              value="${guidingPlaceBean.eventRaised.endDatetime}" required="true" 
+                                              showTime="true" requiredMessage="Event Ending Time is Required"/>
+                            </div>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" styleClass="mr-3 bg-purple-500 ui-button-help" 
+                                             icon="pi pi-check" actionListener="#{guidingPlaceBean.raiseEvent}"
+                                             update="manage-event-content" process="manage-event-content @this" />
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageEventDialog').hide()"
+                                             class="mx-3 ui-button-secondary" type="button" />
+                        </f:facet>
+                    </p:dialog>
                 </h:form>
             </div>
         </div>
