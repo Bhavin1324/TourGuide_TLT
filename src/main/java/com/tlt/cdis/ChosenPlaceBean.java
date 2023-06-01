@@ -10,6 +10,7 @@ import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
+import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.record.KeepRecord;
@@ -18,6 +19,8 @@ import com.tlt.utils.Utils;
 import static com.tlt.utils.Utils.getTime12h;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -47,10 +50,13 @@ public class ChosenPlaceBean implements Serializable {
     String distance;
     String duration;
 
+    Collection<GuideMaster> guidsOfPlaces;
+
     @Inject
     public ChosenPlaceBean(MapBean mapBean) {
         selectedPlace = new PlaceMaster();
         this.mapBean = mapBean;
+        guidsOfPlaces = new ArrayList<>();
     }
 
     public void loadMarkers() {
@@ -131,6 +137,15 @@ public class ChosenPlaceBean implements Serializable {
         return duration;
     }
 
+    public Collection<GuideMaster> getGuidsOfPlaces() {
+        this.guidsOfPlaces = adminLogic.getAllGuidesOfPlaces(selectedPlace.getId());
+        return guidsOfPlaces;
+    }
+
+    public void setGuidsOfPlaces(Collection<GuideMaster> guidsOfPlaces) {
+        this.guidsOfPlaces = guidsOfPlaces;
+    }
+
     public void geoCode() {
         PrimeFaces.current().ajax().update("map");
         GeoApiContext context = new GeoApiContext.Builder().apiKey(Utils.getPropertyValue("properties.config", "MAPS_API_KEY")).build();
@@ -146,7 +161,7 @@ public class ChosenPlaceBean implements Serializable {
                     .origin(origin)
                     .destination(destination)
                     .await();
-            
+
             if (directionsResult.routes.length > 0) {
                 DirectionsRoute route = directionsResult.routes[0];
                 this.distance = route.legs[0].distance.humanReadable;

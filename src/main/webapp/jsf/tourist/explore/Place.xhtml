@@ -69,7 +69,42 @@
                                 </div>
                             </p:tab>
                             <p:tab title="Guide">
-
+                                <div>
+                                    <h:outputText styleClass="text-lg text-gray-600 font-semibold" value="No guide is available for this place" rendered="#{chosenPlaceBean.guidsOfPlaces.size() == 0}"/>
+                                    <ui:repeat var="item" value="#{chosenPlaceBean.guidsOfPlaces}">
+                                        <div class="flex mt-2 mb-2 align-items-center flex-wrap">
+                                            <div>
+                                                <p:graphicImage value="/uploads/profiles/#{item.profileImage}" height="70" width="70"/>
+                                            </div>
+                                            <div class="flex flex-column justify-content-center mx-3">
+                                                <div class="text-xl font-semibold mb-4">
+                                                    #{item.name}
+                                                    <h:outputText value="(Available)" class="ml-1 text-green-500 text-base font-normal" rendered="#{!item.isAppointed}"/>
+                                                    <h:outputText value="(Already appointed)" class="ml-1 text-red-300 text-base font-normal" rendered="#{item.isAppointed}"/>
+                                                </div>
+                                                <a href="tel:#{item.phoneNumber}" class="flex align-items-center mb-2 text-black-alpha-90" style="text-decoration: none">
+                                                    <span class="material-symbols-outlined mr-2" style="font-size: 18px">phone</span>
+                                                    <div>#{item.phoneNumber}</div>
+                                                </a>
+                                                <a href="mailto:#{item.email}" class="flex align-items-center text-black-alpha-90 mb-2" style="text-decoration: none">
+                                                    <span class="material-symbols-outlined mr-2" style="font-size: 18px">email</span>
+                                                    <div>#{item.email}</div>
+                                                </a>
+                                                <div class="text-lg text-green-700">
+                                                    <div class="flex align-items-center">
+                                                        
+                                                        <span class="material-symbols-outlined mr-2 text-black-alpha-80" style="font-size: 18px">payments</span>
+                                                        <div class="font-semibold">#{item.amount}</div>
+                                                        <span class="material-symbols-outlined pt-1" style="font-size: 14px">currency_rupee</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        <p:divider/>
+                                    </ui:repeat>
+                                </div>
                             </p:tab>
                         </p:tabView>
                     </h:form>

@@ -49,6 +49,8 @@ public interface AdminLocal {
     Collection<GuideMaster> getGuideByPlace(String PlaceId);
 
     Collection<AppointmentMaster> getAppointmentsOfAllGuides();
+    
+    Collection<GuideMaster> getAllGuidesOfPlaces(String placeId);
 
     void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places);
 

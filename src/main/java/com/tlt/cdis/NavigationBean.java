@@ -1,4 +1,3 @@
-
 package com.tlt.cdis;
 
 import static com.tlt.constants.JwtConstants.ROLE_GUIDE;
@@ -18,14 +17,15 @@ public class NavigationBean implements Serializable {
 
     String activeRole;
     boolean roleContainsGuide;
+
     public NavigationBean() {
     }
 
     public void redirectTo(String destination) {
         try {
-            if(destination.equals(UrlConstants.TO_GUIDE)){
+            if (destination.equals(UrlConstants.TO_GUIDE)) {
                 activeRole = ROLE_GUIDE;
-            } else if (destination.equals(UrlConstants.TO_TOURIST)){
+            } else if (destination.equals(UrlConstants.TO_TOURIST)) {
                 activeRole = ROLE_TOURIST;
             }
             FacesContext.getCurrentInstance().getExternalContext().redirect(destination);
@@ -54,10 +54,11 @@ public class NavigationBean implements Serializable {
     }
 
     public String getActiveRole() {
-        if(this.activeRole == null){
+        if (this.activeRole == null || KeepRecord.getRoles().size() == 1) {
             return KeepRecord.getRoles().iterator().next();
+        } else {
+            return activeRole;
         }
-        return activeRole;
     }
 
     public void setActiveRole(String activeRole) {
@@ -73,5 +74,5 @@ public class NavigationBean implements Serializable {
     public void setRoleContainsGuide(boolean roleContainsGuide) {
         this.roleContainsGuide = roleContainsGuide;
     }
-    
+
 }
