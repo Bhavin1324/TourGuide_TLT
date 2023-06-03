@@ -31,7 +31,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "AppointmentMaster.findAll", query = "SELECT a FROM AppointmentMaster a"),
     @NamedQuery(name = "AppointmentMaster.findById", query = "SELECT a FROM AppointmentMaster a WHERE a.id = :id"),
-    @NamedQuery(name = "AppointmentMaster.getPendingAppointments", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid AND a.appointmentStatus = :status"),
+    @NamedQuery(name = "AppointmentMaster.getAppointmentsByStatus", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid AND a.appointmentStatus = :status"),
     @NamedQuery(name = "AppointmentMaster.getAppointmentsOfGuide", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid ORDER BY a.appointmentStatus DESC"),
     @NamedQuery(name = "AppointmentMaster.findByStartDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.startDatetime = :startDatetime"),
     @NamedQuery(name = "AppointmentMaster.findByEndDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.endDatetime = :endDatetime")})
@@ -107,6 +107,14 @@ public class AppointmentMaster implements Serializable {
         this.appointmentStatus = appointmentStatus;
     }
 
+    public String getGuideType() {
+        return guideType;
+    }
+
+    public void setGuideType(String guideType) {
+        this.guideType = guideType;
+    }
+
     public UserMaster getUserId() {
         return userId;
     }
@@ -129,14 +137,6 @@ public class AppointmentMaster implements Serializable {
 
     public void setPlaceId(PlaceMaster placeId) {
         this.placeId = placeId;
-    }
-
-    public String getGuideType() {
-        return guideType;
-    }
-
-    public void setGuideType(String guideType) {
-        this.guideType = guideType;
     }
 
     public Integer getNumberOfPeople() {

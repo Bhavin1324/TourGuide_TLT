@@ -6,6 +6,7 @@ package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.GuideLocal;
+import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.record.KeepRecord;
@@ -36,12 +37,22 @@ public class GuidingPlaceBean implements Serializable {
     List<PlaceMaster> selectedPlaces;
     PlaceMaster selectedPlace;
     String placeName;
+    AppointmentMaster eventRaised;
 
     public GuidingPlaceBean() {
         placeName = "";
         guidesPlaces = new ArrayList<>();
         selectedPlaces = new ArrayList<>();
         selectedPlace = new PlaceMaster();
+        eventRaised = new AppointmentMaster();
+    }
+
+    public AppointmentMaster getEventRaised() {
+        return eventRaised;
+    }
+
+    public void setEventRaised(AppointmentMaster eventRaised) {
+        this.eventRaised = eventRaised;
     }
 
     public List<PlaceMaster> getGuidesPlaces() {
@@ -71,6 +82,7 @@ public class GuidingPlaceBean implements Serializable {
 
     public void openNew() {
         this.selectedPlace = new PlaceMaster();
+        this.eventRaised = new AppointmentMaster();
     }
 
     public String getDeleteButtonMessage() {
@@ -125,6 +137,7 @@ public class GuidingPlaceBean implements Serializable {
             PlaceMaster pm = placesByName.get(0);
             gd.addGuidesPlace(pm, KeepRecord.getUsername());
             placeName = "";
+            selectedPlace = null;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Added"));
             PrimeFaces.current().ajax().update("form:messages", "form:dt-guide-places");
             PrimeFaces.current().executeScript("PF('manageGuidePlaceDialog').hide()");
@@ -133,6 +146,21 @@ public class GuidingPlaceBean implements Serializable {
             PrimeFaces.current().ajax().update("form:messages", "form:dt-guide-places");
             PrimeFaces.current().executeScript("PF('manageGuidePlaceDialog').hide()");
         }
+    }
+    
+    public void raiseEvent(){
+
+       try{
+           gd.raiseAnEvent(selectedPlace, KeepRecord.getUsername(), eventRaised.getStartDatetime(), eventRaised.getEndDatetime());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Added"));
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-guide-places");
+            PrimeFaces.current().executeScript("PF('manageEventDialog').hide()");
+       }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error Adding Place"));
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-guide-places");
+            PrimeFaces.current().executeScript("PF('manageEventDialog').hide()");
+       }
+        
     }
 
 }

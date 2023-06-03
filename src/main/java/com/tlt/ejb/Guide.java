@@ -5,8 +5,10 @@ import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.utils.GraphUtils;
+import com.tlt.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -34,10 +36,9 @@ public class Guide implements GuideLocal {
 
     @Override
     public Collection<AppointmentMaster> getAppointmentsOfGuide(String gusername, String status) {
-        UserMaster guide = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
-//         GuideMaster gm = em.find(GuideMaster.class, guide.getId());
-
-        Collection<AppointmentMaster> appointments = em.createNamedQuery("AppointmentMaster.getPendingAppointments").setParameter("gid", guide.getId()).setParameter("status", status).getResultList();
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
+        Collection<AppointmentMaster> appointments = em.createNamedQuery("AppointmentMaster.getAppointmentsByStatus").setParameter("gid", guide.getId()).setParameter("status", status).getResultList();
         return appointments;
     }
 
@@ -74,7 +75,7 @@ public class Guide implements GuideLocal {
     }
 
     @Override
-    public void updateAppointmentStatus(AppointmentMaster appointment) {
+    public void updateAppointmentStatus(AppointmentMaster appointment,String status) {
         AppointmentMaster appt = em.find(AppointmentMaster.class,appointment.getId());
         appt.setAppointmentStatus("Complete");
         em.merge(appt);
@@ -131,6 +132,27 @@ public class Guide implements GuideLocal {
         
         em.merge(placeMaster);
         em.merge(guide);
+    }
+
+    @Override
+    public void raiseAnEvent(PlaceMaster placeMaster, String gusername, Date startDate, Date endDate) {
+       PlaceMaster place = em.find(PlaceMaster.class, placeMaster.getId());
+         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username",gusername).getSingleResult();
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
+        AppointmentMaster event = new AppointmentMaster();
+        event.setId(Utils.getUUID());
+        event.setPlaceId(place);
+        event.setGuideId(guide);
+        event.setStartDatetime(startDate);
+        event.setEndDatetime(endDate);
+        event.setAppointmentStatus("Pending");
+        event.setGuideType("Group");
+        em.persist(event);
+        //adding this appointment to guide's appt master coll
+        Collection<AppointmentMaster> guidesAppt = guide.getAppointmentMasterCollection();
+        guidesAppt.add(event);
+        em.merge(guide);
+        
     }
 
 }
