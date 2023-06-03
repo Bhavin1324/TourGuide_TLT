@@ -1,7 +1,11 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.tlt.entities;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,7 +21,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ *
+ * @author Lenovo
+ */
 @Entity
 @Table(name = "guide_master")
 @NamedQueries({
@@ -48,21 +55,30 @@ public class GuideMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "email")
     private String email;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Size(min = 1, max = 65535)
     @Column(name = "username")
     private String username;
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Size(min = 1, max = 65535)
     @Column(name = "profile_image")
     private String profileImage;
     @Column(name = "amount")
     private Integer amount;
     @Column(name = "phone_number")
-    private long phoneNumber;
+    private BigInteger phoneNumber;
     @Column(name = "is_appointed")
     private Boolean isAppointed;
     @ManyToMany(mappedBy = "guideMasterCollection", fetch = FetchType.LAZY)
     private Collection<UserMaster> userMasterCollection;
     @ManyToMany(mappedBy = "guideMasterCollection", fetch = FetchType.LAZY)
     private Collection<PlaceMaster> placeMasterCollection;
+    @OneToMany(mappedBy = "guideId", fetch = FetchType.LAZY)
+    private Collection<EventMaster> eventMasterCollection;
     @OneToMany(mappedBy = "guideId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
     @OneToMany(mappedBy = "guideId", fetch = FetchType.LAZY)
@@ -73,6 +89,12 @@ public class GuideMaster implements Serializable {
 
     public GuideMaster(String id) {
         this.id = id;
+    }
+
+    public GuideMaster(String id, String username, String profileImage) {
+        this.id = id;
+        this.username = username;
+        this.profileImage = profileImage;
     }
 
     public String getId() {
@@ -106,6 +128,7 @@ public class GuideMaster implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getUsername() {
         return username;
     }
@@ -113,6 +136,7 @@ public class GuideMaster implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getProfileImage() {
         return profileImage;
     }
@@ -129,11 +153,11 @@ public class GuideMaster implements Serializable {
         this.amount = amount;
     }
 
-    public long getPhoneNumber() {
+    public BigInteger getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(BigInteger phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -159,6 +183,14 @@ public class GuideMaster implements Serializable {
 
     public void setPlaceMasterCollection(Collection<PlaceMaster> placeMasterCollection) {
         this.placeMasterCollection = placeMasterCollection;
+    }
+
+    public Collection<EventMaster> getEventMasterCollection() {
+        return eventMasterCollection;
+    }
+
+    public void setEventMasterCollection(Collection<EventMaster> eventMasterCollection) {
+        this.eventMasterCollection = eventMasterCollection;
     }
 
     public Collection<PaymentMaster> getPaymentMasterCollection() {

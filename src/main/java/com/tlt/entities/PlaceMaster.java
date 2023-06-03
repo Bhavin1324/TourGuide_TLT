@@ -28,7 +28,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "place_master")
@@ -84,12 +84,14 @@ public class PlaceMaster implements Serializable {
         @JoinColumn(name = "guide_id", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.LAZY)
     private Collection<GuideMaster> guideMasterCollection;
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PlaceCategory categoryId;
+    @OneToMany(mappedBy = "placeId", fetch = FetchType.LAZY)
+    private Collection<EventMaster> eventMasterCollection;
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Cities cityId;
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PlaceCategory categoryId;
     @OneToMany(mappedBy = "placeId", fetch = FetchType.LAZY)
     private Collection<AppointmentMaster> appointmentMasterCollection;
 
@@ -180,12 +182,12 @@ public class PlaceMaster implements Serializable {
         this.guideMasterCollection = guideMasterCollection;
     }
 
-    public PlaceCategory getCategoryId() {
-        return categoryId;
+    public Collection<EventMaster> getEventMasterCollection() {
+        return eventMasterCollection;
     }
 
-    public void setCategoryId(PlaceCategory categoryId) {
-        this.categoryId = categoryId;
+    public void setEventMasterCollection(Collection<EventMaster> eventMasterCollection) {
+        this.eventMasterCollection = eventMasterCollection;
     }
 
     public Cities getCityId() {
@@ -194,6 +196,14 @@ public class PlaceMaster implements Serializable {
 
     public void setCityId(Cities cityId) {
         this.cityId = cityId;
+    }
+
+    public PlaceCategory getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(PlaceCategory categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Collection<AppointmentMaster> getAppointmentMasterCollection() {
@@ -228,5 +238,5 @@ public class PlaceMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.PlaceMaster[ id=" + id + " ]";
     }
-
+    
 }
