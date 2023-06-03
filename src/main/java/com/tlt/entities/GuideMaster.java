@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "GuideMaster.findAll", query = "SELECT g FROM GuideMaster g"),
     @NamedQuery(name = "GuideMaster.findById", query = "SELECT g FROM GuideMaster g WHERE g.id = :id"),
-    @NamedQuery(name = "GuideMaster.findByAmount", query = "SELECT g FROM GuideMaster g WHERE g.amount = :amount"),
+    @NamedQuery(name = "GuideMaster.findByUsername", query = "SELECT g FROM GuideMaster g WHERE g.username = :username"),
     @NamedQuery(name = "GuideMaster.findByPhoneNumber", query = "SELECT g FROM GuideMaster g WHERE g.phoneNumber = :phoneNumber"),
     @NamedQuery(name = "GuideMaster.findByIsAppointed", query = "SELECT g FROM GuideMaster g WHERE g.isAppointed = :isAppointed")})
 public class GuideMaster implements Serializable {

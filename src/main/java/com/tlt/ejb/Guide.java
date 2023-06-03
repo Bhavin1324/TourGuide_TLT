@@ -1,6 +1,7 @@
 package com.tlt.ejb;
 
 import com.tlt.entities.AppointmentMaster;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.UserMaster;
@@ -43,49 +44,130 @@ public class Guide implements GuideLocal {
     }
 
     @Override
-    public List<GraphUtils> getMonthlyAppointmentsCount(String gusername) {
-        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
-        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
+    public List<GraphUtils> getMonthlyPersonalAppointmentsCount(String gusername) {
+
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
         List<Object[]> list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(a.start_datetime), COUNT(*) as 'appointmentCounts' FROM `appointment_master` a WHERE a.guide_id = '" + guide.getId() + "' GROUP BY MONTHNAME(a.start_datetime) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(a.start_datetime), ' 01'), '%Y %M %d') ASC;").getResultList();
         List<GraphUtils> graphData = new ArrayList<>();
         for (Object[] obj : list) {
+//            if (obj[0] != null && obj[1] != null) {
             GraphUtils gd = new GraphUtils();
             gd.setMonth(obj[0].toString());
             gd.setCount(Long.parseLong(obj[1].toString()));
             graphData.add(gd);
+//            }
         }
         return graphData;
     }
 
     @Override
-    public List<GraphUtils> getMonthlyRevenueOfGuide(String gusername) {
-         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
-        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
-        List<Object[]> list = new ArrayList<>();
-        list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(a.start_datetime), SUM(g.amount) as 'appointmentCounts' FROM `appointment_master` a JOIN guide_master g on a.guide_id = g.id  WHERE guide_id = '" + guide.getId() +"' GROUP BY MONTHNAME(a.start_datetime) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(a.start_datetime), ' 01'), '%Y %M %d') ASC;").getResultList();
+    public List<GraphUtils> getMonthlyEventsCount(String gusername) {
 
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        List<Object[]> list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(e.start_time), COUNT(*) as 'appointmentCounts' FROM `event_master` e WHERE e.guide_id = '" + guide.getId() + "' GROUP BY MONTHNAME(e.start_time) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(e.start_time), ' 01'), '%Y %M %d') ASC;").getResultList();
         List<GraphUtils> graphData = new ArrayList<>();
+        for (Object[] obj : list) {
+//            if (obj[0] != null && obj[1] != null) {
+            GraphUtils gd = new GraphUtils();
+            gd.setMonth(obj[0].toString());
+            gd.setCount(Long.parseLong(obj[1].toString()));
+            graphData.add(gd);
+//            }
+        }
+        return graphData;
+    }
+
+    @Override
+    public List<GraphUtils> getMonthlyRevenueOfPersonalAppointments(String gusername) {
+
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        List<Object[]> list = new ArrayList<>();
+        List<GraphUtils> graphData = new ArrayList<>();
+
+        list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(a.start_datetime), g.amount as 'amount',SUM(a.number_of_people) as 'No of people' FROM `appointment_master` a JOIN guide_master g on a.guide_id = g.id  WHERE guide_id = '" + guide.getId() + "' GROUP BY MONTHNAME(a.start_datetime) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(a.start_datetime), ' 01'), '%Y %M %d') ASC;").getResultList();
+
         for (Object[] g : list) {
             GraphUtils gd = new GraphUtils();
-            gd.setMonth(g[0].toString());
-            gd.setCount(Long.parseLong(g[1].toString()));
-            graphData.add(gd);
+            if (g[0] != null && g[1] != null) {
+                gd.setMonth(g[0].toString());
+                gd.setAmount(Long.parseLong(g[1].toString()) * Long.parseLong(g[2].toString()));
+//            gd.setNoofPeople(Long.parseLong(g[2].toString()));
+                graphData.add(gd);
+            }
+
         }
         return graphData;
     }
 
     @Override
-    public void updateAppointmentStatus(AppointmentMaster appointment,String status) {
-        AppointmentMaster appt = em.find(AppointmentMaster.class,appointment.getId());
+    public Long getTotalRevenueOfPersonalAppointments(String gusername) {
+
+        long revenue = 0;
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        List<Object[]> list = new ArrayList<>();
+        if (guide != null) {
+            list = em.createNativeQuery("select  g.amount, SUM(a.number_of_people) from appointment_master a join guide_master g on a.guide_id = g.id where a.guide_id = '" + guide.getId() + "'").getResultList();
+
+            for (Object[] g : list) {
+                GraphUtils gd = new GraphUtils();
+                if (g[0] != null && g[1] != null) {
+                    gd.setAmount(Long.parseLong(g[0].toString()));
+                    gd.setNoofPeople(Long.parseLong(g[1].toString()));
+                    revenue += gd.getAmount() * gd.getNoofPeople();
+                }
+            }
+        }
+        return revenue;
+    }
+
+    @Override
+    public List<GraphUtils> getMonthlyRevenueOfEvents(String gusername) {
+        //        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        List<Object[]> list = new ArrayList<>();
+        List<GraphUtils> graphData = new ArrayList<>();
+        list = em.createNativeQuery("SELECT DISTINCT MONTHNAME(e.start_time),g.amount as 'amount',SUM(e.number_of_people) as 'No of people' FROM `event_master` e JOIN guide_master g on e.guide_id = g.id  WHERE guide_id = '" + guide.getId() + "' GROUP BY MONTHNAME(e.start_time) ORDER BY STR_TO_DATE(CONCAT('0001 ', MONTHNAME(e.start_time), ' 01'), '%Y %M %d') ASC;").getResultList();
+
+        for (Object[] g : list) {
+            GraphUtils gd = new GraphUtils();
+            if (g[0] != null && g[1] != null) {
+                gd.setMonth(g[0].toString());
+                gd.setAmount(Long.parseLong(g[1].toString()) * Long.parseLong(g[2].toString()));
+//            gd.setNoofPeople(Long.parseLong(g[2].toString()));
+                graphData.add(gd);
+            }
+        }
+        return graphData;
+    }
+
+    @Override
+    public Long getTotalRevenueOfEvents(String gusername) {
+        long revenue = 0;
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        List<Object[]> list = new ArrayList<>();
+        list = em.createNativeQuery("select  g.amount, SUM(e.number_of_people) from event_master e join guide_master g on e.guide_id = g.id where e.guide_id = '" + guide.getId() + "'").getResultList();
+
+        for (Object[] g : list) {
+            if (g[0] != null && g[1] != null) {
+                GraphUtils gd = new GraphUtils();
+                gd.setAmount(Long.parseLong(g[0].toString()));
+                gd.setNoofPeople(Long.parseLong(g[1].toString()));
+                revenue += gd.getAmount() * gd.getNoofPeople();
+            }
+        }
+        return revenue;
+    }
+
+    @Override
+    public void updateAppointmentStatus(AppointmentMaster appointment, String status) {
+        AppointmentMaster appt = em.find(AppointmentMaster.class, appointment.getId());
         appt.setAppointmentStatus("Complete");
         em.merge(appt);
-        
-        
     }
 
     @Override
     public Collection<PlaceMaster> getAllPlacesOfGuide(String username) {
-      UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
         Collection<PlaceMaster> guidesPlaces = new ArrayList<>();
         guidesPlaces = guide.getPlaceMasterCollection();
@@ -94,21 +176,21 @@ public class Guide implements GuideLocal {
 
     @Override
     public void removeGuidesPlace(PlaceMaster pm, String username) {
-         PlaceMaster placeMaster = em.find(PlaceMaster.class, pm.getId());
-         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        PlaceMaster placeMaster = em.find(PlaceMaster.class, pm.getId());
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
         Collection<PlaceMaster> guidesPlaces = new ArrayList<>();
-        
+
         //removing placemaster from guide's placeColl
         guidesPlaces = guide.getPlaceMasterCollection();
         guidesPlaces.remove(placeMaster);
         guide.setPlaceMasterCollection(guidesPlaces);
-        
+
         //removing guide from Placemaster's guideColl
         Collection<GuideMaster> guideColl = placeMaster.getGuideMasterCollection();
         guideColl.remove(guide);
         placeMaster.setGuideMasterCollection(guideColl);
-        
+
         em.merge(placeMaster);
         em.merge(guide);
     }
@@ -116,43 +198,44 @@ public class Guide implements GuideLocal {
     @Override
     public void addGuidesPlace(PlaceMaster pm, String username) {
         PlaceMaster placeMaster = em.find(PlaceMaster.class, pm.getId());
-         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
         Collection<PlaceMaster> guidesPlaces = new ArrayList<>();
-        
+
         //adding placemaster to guide's placeColl
         guidesPlaces = guide.getPlaceMasterCollection();
         guidesPlaces.add(placeMaster);
         guide.setPlaceMasterCollection(guidesPlaces);
-        
+
         //adding guide to placemaster's guideColl
         Collection<GuideMaster> guideColl = placeMaster.getGuideMasterCollection();
         guideColl.add(guide);
         placeMaster.setGuideMasterCollection(guideColl);
-        
+
         em.merge(placeMaster);
         em.merge(guide);
     }
 
     @Override
     public void raiseAnEvent(PlaceMaster placeMaster, String gusername, Date startDate, Date endDate) {
-       PlaceMaster place = em.find(PlaceMaster.class, placeMaster.getId());
-         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username",gusername).getSingleResult();
+        PlaceMaster place = em.find(PlaceMaster.class, placeMaster.getId());
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", gusername).getSingleResult();
         GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
-        AppointmentMaster event = new AppointmentMaster();
+        EventMaster event = new EventMaster();
         event.setId(Utils.getUUID());
-        event.setPlaceId(place);
         event.setGuideId(guide);
-        event.setStartDatetime(startDate);
-        event.setEndDatetime(endDate);
-        event.setAppointmentStatus("Pending");
-        event.setGuideType("Group");
+        event.setPlaceId(place);
+        event.setEventStatus("Pending");
+        event.setStartTime(startDate);
+        event.setEndTime(endDate);
+        event.setNumberOfPeople(0);
         em.persist(event);
-        //adding this appointment to guide's appt master coll
-        Collection<AppointmentMaster> guidesAppt = guide.getAppointmentMasterCollection();
-        guidesAppt.add(event);
+
+        //adding this collection to guide's eventColl
+        Collection<EventMaster> eventColl = guide.getEventMasterCollection();
+        eventColl.add(event);
+        guide.setEventMasterCollection(eventColl);
         em.merge(guide);
-        
     }
 
 }

@@ -56,6 +56,8 @@ public class PaymentMaster implements Serializable {
     @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PaymentMethod paymentMethodId;
+    @Column(name = "amount")
+    private Integer amount;
     @JoinColumn(name = "guide_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
@@ -113,6 +115,14 @@ public class PaymentMaster implements Serializable {
         this.paymentMethodId = paymentMethodId;
     }
 
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     public GuideMaster getGuideId() {
         return guideId;
     }
@@ -161,5 +171,5 @@ public class PaymentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.PaymentMaster[ id=" + id + " ]";
     }
-    
+
 }

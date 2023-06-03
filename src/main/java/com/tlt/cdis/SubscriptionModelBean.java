@@ -177,7 +177,7 @@ public class SubscriptionModelBean implements Serializable {
 
         if (!isUserSubscribed()) {
             String uname = KeepRecord.getUsername();
-            tb.subscribeToPlan(this.modelForPayment, uname, this.cardNumber);
+            tb.subscribeToPlan(this.modelForPayment, uname, this.cardNumber,this.currentCost);
             this.cardNumber="";
             PrimeFaces.current().executeScript("PF('success_dlg').show()");
             PrimeFaces.current().executeScript("PF('paymentModal').hide()");

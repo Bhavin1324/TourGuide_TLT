@@ -382,7 +382,7 @@ public class Admin implements AdminLocal {
         for (Object[] g : list) {
             GraphUtils gd = new GraphUtils();
             gd.setMonth(g[0].toString());
-            gd.setCount(Long.parseLong(g[1].toString()));
+            gd.setAmount(Long.parseLong(g[1].toString()));
             graphData.add(gd);
         }
         return graphData;
