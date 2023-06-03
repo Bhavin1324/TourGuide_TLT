@@ -2,6 +2,7 @@ package com.tlt.ejb;
 
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.GuideMaster;
+import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.utils.GraphUtils;
 import java.util.ArrayList;
@@ -79,6 +80,57 @@ public class Guide implements GuideLocal {
         em.merge(appt);
         
         
+    }
+
+    @Override
+    public Collection<PlaceMaster> getAllPlacesOfGuide(String username) {
+      UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
+        Collection<PlaceMaster> guidesPlaces = new ArrayList<>();
+        guidesPlaces = guide.getPlaceMasterCollection();
+        return guidesPlaces;
+    }
+
+    @Override
+    public void removeGuidesPlace(PlaceMaster pm, String username) {
+         PlaceMaster placeMaster = em.find(PlaceMaster.class, pm.getId());
+         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
+        Collection<PlaceMaster> guidesPlaces = new ArrayList<>();
+        
+        //removing placemaster from guide's placeColl
+        guidesPlaces = guide.getPlaceMasterCollection();
+        guidesPlaces.remove(placeMaster);
+        guide.setPlaceMasterCollection(guidesPlaces);
+        
+        //removing guide from Placemaster's guideColl
+        Collection<GuideMaster> guideColl = placeMaster.getGuideMasterCollection();
+        guideColl.remove(guide);
+        placeMaster.setGuideMasterCollection(guideColl);
+        
+        em.merge(placeMaster);
+        em.merge(guide);
+    }
+
+    @Override
+    public void addGuidesPlace(PlaceMaster pm, String username) {
+        PlaceMaster placeMaster = em.find(PlaceMaster.class, pm.getId());
+         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByPhoneNumber").setParameter("phoneNumber", user.getContact()).getSingleResult();
+        Collection<PlaceMaster> guidesPlaces = new ArrayList<>();
+        
+        //adding placemaster to guide's placeColl
+        guidesPlaces = guide.getPlaceMasterCollection();
+        guidesPlaces.add(placeMaster);
+        guide.setPlaceMasterCollection(guidesPlaces);
+        
+        //adding guide to placemaster's guideColl
+        Collection<GuideMaster> guideColl = placeMaster.getGuideMasterCollection();
+        guideColl.add(guide);
+        placeMaster.setGuideMasterCollection(guideColl);
+        
+        em.merge(placeMaster);
+        em.merge(guide);
     }
 
 }

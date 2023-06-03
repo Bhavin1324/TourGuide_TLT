@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Places to guide</title>
         <meta charset="UTF-8"/>
@@ -16,7 +17,111 @@
     </h:head>
     <h:body>
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        Guiding places by the guide
+        <div class="my-5 px-2">
+            <div class="shadow-2 surface-card border-round-2xl p-4">
+                <div class="ml-2 text-4xl text-800 font-semibold my-2">Guiding Places</div>
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true" />
+
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <p:commandButton value="New" icon="pi pi-plus" actionListener="#{guidingPlaceBean.openNew}"
+                                             update=":dialogs:manage-guide-place-content" oncomplete="PF('manageGuidePlaceDialog').show()"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <p:resetInput target=":dialogs:manage-guide-place-content" />
+                            </p:commandButton>
+                            <p:commandButton id="delete-guide-place-button" value="#{guidingPlaceBean.deleteButtonMessage}"
+                                             icon="pi pi-trash" actionListener="#{guidingPlaceBean.deleteSelectedPlaces()}"
+                                             styleClass="ui-button-danger" disabled="#{!guidingPlaceBean.hasSelectedPlaces()}" update="@this">
+                                <p:confirm header="Delete" message="Delete the selected Subscription Model?"
+                                           icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+
+                    <p:dataTable id="dt-guide-places" widgetVar="dtGuidePlaces" var="gp" value="#{guidingPlaceBean.guidesPlaces}"
+                                 reflow="true" styleClass="products-table" selection="#{guidingPlaceBean.selectedPlaces}"
+                                 rowKey="#{gp.id}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="products-table-header">
+                                <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtGuidePlaces').filter()" placeholder="Search" />
+                                </span>
+                            </div>
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" update=":form:delete-guide-place-button" />
+                        <p:ajax event="rowUnselect" update=":form:delete-guide-place-button" />
+                        <p:ajax event="rowSelectCheckbox" update=":form:delete-guide-place-button" />
+                        <p:ajax event="rowUnselectCheckbox" update=":form:delete-guide-place-button" />
+                        <p:ajax event="toggleSelect" update=":form:delete-guide-place-button" />
+
+                        <p:column selectionMode="multiple" styleClass="mr-2" exportable="false"></p:column>
+
+                        <p:column headerText="Place Name" sortBy="#{gp.name}" filterBy="#{gp.name}">
+                            <h:outputText value="#{gp.name}" />
+                        </p:column>
+                        <p:column headerText="Image" sortBy="#{gp.address}" filterBy="#{gp.address}">
+                             <p:graphicImage id="img"  value="/uploads/places/#{gp.images}" style="width: 130px;height:80px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                        </p:column>
+                        <p:column headerText="Place Address" sortBy="#{gp.address}" filterBy="#{gp.address}">
+                            <h:outputText value="#{gp.address}" />
+                        </p:column>
+                        <p:column headerText="Place Category" sortBy="#{gp.categoryId.name}" filterBy="#{gp.categoryId.name}">
+                            <h:outputText value="#{gp.categoryId.name}" />
+                        </p:column>
+                        <p:column headerText="City" sortBy="#{gp.cityId.name}" filterBy="#{gp.cityId.name}">
+                            <h:outputText value="#{gp.cityId.name}" />
+                        </p:column>
+
+                        <p:column exportable="false">
+                            <p:commandButton styleClass="ui-button-danger rounded-button"  
+                                             icon="pi pi-trash" process="@this" oncomplete="PF('deleteGuidePlaceDialog').show()">
+                                <c:set var="submodel" value="#{gp}" />
+                                <f:setPropertyActionListener target="#{guidingPlaceBean.selectedPlace}" value="${gp}" />
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+
+                <h:form id="dialogs">
+                    <p:dialog  header="Add Place" width="500" showEffect="fade" modal="true" widgetVar="manageGuidePlaceDialog" responsive="true">
+                        <p:outputPanel id="manage-guide-place-content" class="ui-fluid px-4">
+                            <p:messages id="modelMsg"/>
+                            <div class="field">
+                                <p:outputLabel for="place">Search Place</p:outputLabel>
+                                <p:autoComplete id="place" value="#{guidingPlaceBean.placeName}"
+                                                completeMethod="#{landingBean.placesNameList}" placeholder="Find places nearby"
+                                                styleClass="w-full" />
+                            </div>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" styleClass="mr-3 bg-purple-500 ui-button-help" icon="pi pi-check" actionListener="#{guidingPlaceBean.saveGuidePlace}"
+                                             update="manage-guide-place-content" process="manage-guide-place-content @this" />
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageGuidePlaceDialog').hide()"
+                                             class="mx-3 ui-button-secondary" type="button" />
+                        </f:facet>
+                    </p:dialog>
+
+                    <p:confirmDialog styleClass="font-semibold text-lg" widgetVar="deleteGuidePlaceDialog" 
+                                     showEffect="fade" width="400"
+                                     message="Are you sure you want to remove this Place?" 
+                                     header="Remove" severity="warn">
+                        <p:commandButton value="No" type="button" 
+                                         styleClass="ui-confirmdialog-no ui-button-flat ui-button-help"
+                                         onclick="PF('deleteGuidePlaceDialog').hide()" />
+                        <p:commandButton value="Yes" actionListener="#{guidingPlaceBean.deletePlace}"
+                                         process="@this" update=":form:delete-guide-place-button"
+                                         oncomplete="PF('deleteGuidePlaceDialog').hide()"
+                                         styleClass="ui-confirmdialog-yes ui-button-help"
+                                         />
+                    </p:confirmDialog>
+
+                </h:form>
+            </div>
+        </div>
     </h:body>
 </html>
 
