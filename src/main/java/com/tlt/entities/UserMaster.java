@@ -5,7 +5,6 @@
 package com.tlt.entities;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -26,7 +25,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "user_master")
@@ -62,31 +61,39 @@ public class UserMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "email")
     private String email;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "contact")
     private long contact;
+    @Basic(optional = false)
+    @NotNull
     @Lob
-    @Size(max = 65535)
+    @Size(min = 1, max = 65535)
     @Column(name = "address")
     private String address;
+    @Basic(optional = false)
+    @NotNull
     @Lob
-    @Size(max = 65535)
+    @Size(min = 1, max = 65535)
     @Column(name = "profile_image")
     private String profileImage;
     @JoinTable(name = "guide_user_mapping", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "guide_id", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<GuideMaster> guideMasterCollection;
     @JoinTable(name = "user_subscription_mapping", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "subscription_id", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<SubscriptionMaster> subscriptionMasterCollection;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    private Collection<TransportMaster> transportMasterCollection;
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<PaymentMaster> paymentMasterCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userMaster", fetch = FetchType.LAZY)
     private Collection<UserRole> userRoleCollection;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<AppointmentMaster> appointmentMasterCollection;
 
     public UserMaster() {
@@ -94,6 +101,13 @@ public class UserMaster implements Serializable {
 
     public UserMaster(String id) {
         this.id = id;
+    }
+
+    public UserMaster(String id, long contact, String address, String profileImage) {
+        this.id = id;
+        this.contact = contact;
+        this.address = address;
+        this.profileImage = profileImage;
     }
 
     public String getId() {
@@ -174,6 +188,14 @@ public class UserMaster implements Serializable {
 
     public void setSubscriptionMasterCollection(Collection<SubscriptionMaster> subscriptionMasterCollection) {
         this.subscriptionMasterCollection = subscriptionMasterCollection;
+    }
+
+    public Collection<TransportMaster> getTransportMasterCollection() {
+        return transportMasterCollection;
+    }
+
+    public void setTransportMasterCollection(Collection<TransportMaster> transportMasterCollection) {
+        this.transportMasterCollection = transportMasterCollection;
     }
 
     public Collection<PaymentMaster> getPaymentMasterCollection() {

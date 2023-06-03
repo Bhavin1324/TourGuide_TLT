@@ -16,8 +16,20 @@ public class GeoLocationUtil {
             File database = new File(GEO_LOCATION_DB);
             DatabaseReader reader = new DatabaseReader.Builder(database).build();
             
+            // for string reponse user url = https://api.ipify.org
             // for json response use url = "https://api.ipify.org?format=json"
-            InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ipify.org"));
+            
+            // Other apis for same purpose
+            // https://api.myip.com/ (This api would return json response)
+            // https://ipinfo.io/json (json only api)
+            // https://ipapi.co/ip/
+            // https://ifconfig.io/ip
+            // https://icanhazip.com/
+            // http://checkip.amazonaws.com/
+            // https://api.my-ip.io/ip
+            // https://api.ip.sb/ip
+            
+            InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://ipapi.co/ip/"));
             CityResponse cityResponse = reader.city(ipAddress);
             
             Location location = cityResponse.getLocation();

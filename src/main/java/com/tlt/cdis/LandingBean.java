@@ -195,12 +195,12 @@ public class LandingBean implements Serializable {
         PrimeFaces.current().executeScript("PF('c_dialog').show()");
         PrimeFaces.current().ajax().update(":dialog-form:category-dialog");
     }
-    
-    public String getTime(Date date){
+
+    public String getTime(Date date) {
         return Utils.getTime12h(date);
     }
-    
-    public String getCurrentYear(){
+
+    public String getCurrentYear() {
         Calendar cal = Calendar.getInstance();
         return String.valueOf(cal.get(Calendar.YEAR));
     }

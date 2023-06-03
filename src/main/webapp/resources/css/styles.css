@@ -523,11 +523,17 @@ body{
         width: 1320px;
         margin: 2px auto;
     }
+    .m-modal{
+        width: 40% !important;
+    }
 }
 @media(min-width:1200px) and (max-width:1399px){
     .container{
         width: 1140px;
         margin: 2px auto;
+    }
+    .m-modal{
+        width: 50% !important;
     }
 }
 @media(min-width:992px) and (max-width:1199px){
@@ -535,11 +541,17 @@ body{
         width: 960px;
         margin: 2px auto;
     }
+    .m-modal{
+        width: 50% !important;
+    }
 }
 @media(min-width:768px) and (max-width:991px){
     .container{
         width: 720px;
         margin: 2px auto;
+    }
+    .m-modal{
+        width: 60% !important;
     }
 }
 @media(min-width:576px) and (max-width:767px){
@@ -547,11 +559,17 @@ body{
         width: 540px;
         margin: 2px auto;
     }
+    .m-modal{
+        width: 70% !important;
+    }
 }
 @media(max-width:575px){
     .container{
         width: 100%;
         margin: 2px auto;
+    }
+    .m-modal{
+        width: 90% !important;
     }
 }
 .ui-linkbutton a{

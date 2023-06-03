@@ -54,6 +54,10 @@ public class AppointmentMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "appointment_status")
     private String appointmentStatus;
+    @Column(name = "guide_type")
+    private String guideType;
+    @Column(name = "number_of_people")
+    private Integer numberOfPeople;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private UserMaster userId;
@@ -127,6 +131,22 @@ public class AppointmentMaster implements Serializable {
         this.placeId = placeId;
     }
 
+    public String getGuideType() {
+        return guideType;
+    }
+
+    public void setGuideType(String guideType) {
+        this.guideType = guideType;
+    }
+
+    public Integer getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
+    public void setNumberOfPeople(Integer numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -151,5 +171,5 @@ public class AppointmentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.AppointmentMaster[ id=" + id + " ]";
     }
-    
+
 }

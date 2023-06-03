@@ -37,6 +37,46 @@
                 background-blend-mode:darken;
                 overflow: hidden
             }
+            body .ui-tabs .ui-tabs-panels .ui-tabs-panel{
+                padding: .7rem 0px 0px 0px;
+            }
+            .custom-button{
+                color: white !important;
+                background-color: transparent !important;
+                border: 2px solid white !important;
+                transition: all .3s ease !important;
+                padding: .2rem 1rem;
+                font-size: 1.2rem !important;
+            }
+            .custom-button:hover, .custom-button:focus{
+                background-color: white !important;
+                color: #9C27B0 !important;
+            }
+            .w-full > input{
+                width: 100% !important;
+            }
+
+            .legend {
+                display: inline-block;
+                border-radius: .25rem;
+                vertical-align: sub;
+                padding: 1rem 1.2rem;
+                width: 100%;
+                border: 2px solid #ddd;
+                border-radius: 1rem;
+            }
+            .legend:hover, .legend:focus{
+                border: 2px solid #9C27B0;
+                border-radius: 1rem;
+            }
+            .field-radiobutton .ui-outputlabel.ui-widget{
+                width: 100%
+            }
+            span[aria-checked="true"] .ui-outputlabel > .legend{
+                border: 2px solid #9C27B0;
+                border-radius: 1rem;
+                background-color: #c85bdb1f;
+            }
         </style>
     </h:head>
     <h:body>
@@ -46,6 +86,7 @@
                 <div class="flex flex-column justify-content-center text-white mx-4" style="height:40vh">
                     <div class="text-6xl">#{chosenPlaceBean.selectedPlace.name}</div>
                     <div class="text-xl">#{chosenPlaceBean.selectedPlace.description.substring(0, chosenPlaceBean.selectedPlace.description.indexOf('.'))}</div>
+                    <div class="mt-4"><h:form><p:commandButton value="Explore now" class="text-lg rounded-button ui-button-raised custom-button" action="#{reservePlace.openReservationModal(param.place)}"/></h:form></div>
                 </div>
             </div>
         </div>
@@ -68,20 +109,18 @@
                                     <div class="text-lg flex justify-content-start my-4"><span class="material-symbols-outlined mr-2">directions_car</span> <b class="mr-2">Duration:</b> #{chosenPlaceBean.duration}</div>
                                 </div>
                             </p:tab>
-                            <p:tab title="Guide">
-                                <div>
+                            <p:tab title="Guides" class="px-0 pt-2">
+                                <div class="grid" style="min-height: fit-content;max-height: 800px; overflow: auto">
                                     <h:outputText styleClass="text-lg text-gray-600 font-semibold" value="No guide is available for this place" rendered="#{chosenPlaceBean.guidsOfPlaces.size() == 0}"/>
                                     <ui:repeat var="item" value="#{chosenPlaceBean.guidsOfPlaces}">
-                                        <div class="flex mt-2 mb-2 align-items-center flex-wrap">
-                                            <div>
-                                                <p:graphicImage value="/uploads/profiles/#{item.profileImage}" height="70" width="70"/>
-                                            </div>
-                                            <div class="flex flex-column justify-content-center mx-3">
-                                                <div class="text-xl font-semibold mb-4">
-                                                    #{item.name}
-                                                    <h:outputText value="(Available)" class="ml-1 text-green-500 text-base font-normal" rendered="#{!item.isAppointed}"/>
-                                                    <h:outputText value="(Already appointed)" class="ml-1 text-red-300 text-base font-normal" rendered="#{item.isAppointed}"/>
+                                        <div class="col-12 md:col-6">
+                                            <p:card class="bg-gray-50 overflow-auto border-round-2xl">
+                                                <div class="text-center">
+                                                    <p:graphicImage value="/uploads/profiles/#{item.profileImage}" height="100" width="100" style="border-radius: 50%; border: 2px solid #8c239e"/>
                                                 </div>
+                                                <div class="text-2xl text-center">#{item.name}</div>
+                                                <h:outputText value="(Available)" class="block mb-4 text-center text-green-500 text-base font-normal" rendered="#{!item.isAppointed}"/>
+                                                <h:outputText value="(Already appointed)" class="block mb-4 text-red-300 text-base font-normal" rendered="#{item.isAppointed}"/>
                                                 <a href="tel:#{item.phoneNumber}" class="flex align-items-center mb-2 text-black-alpha-90" style="text-decoration: none">
                                                     <span class="material-symbols-outlined mr-2" style="font-size: 18px">phone</span>
                                                     <div>#{item.phoneNumber}</div>
@@ -92,17 +131,18 @@
                                                 </a>
                                                 <div class="text-lg text-green-700">
                                                     <div class="flex align-items-center">
-                                                        
+
                                                         <span class="material-symbols-outlined mr-2 text-black-alpha-80" style="font-size: 18px">payments</span>
                                                         <div class="font-semibold">#{item.amount}</div>
                                                         <span class="material-symbols-outlined pt-1" style="font-size: 14px">currency_rupee</span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            
-                                            
+                                                <div class="mt-4">
+                                                    <p:commandButton value="Reserve your guide" class="w-full rounded-button ui-button-raised ui-button-help"/>
+                                                </div>
+
+                                            </p:card>
                                         </div>
-                                        <p:divider/>
                                     </ui:repeat>
                                 </div>
                             </p:tab>
@@ -111,6 +151,89 @@
                 </div>
             </div>
         </div>
+
+        <p:dialog header="Reserve you place" widgetVar="booking_dialog" class="m-modal" showEffect="fade" modal="true" width="">
+            <h:form>
+                <p:messages id="msgs" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+                <div>
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-user" />
+                        <p:inputText placeholder="Provide name" styleClass="w-full block" value="#{beGuideBean.loggedInUser.name}" readonly="true"/>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-at" />
+                        <p:inputText placeholder="example@email.com" styleClass="w-full" value="#{beGuideBean.loggedInUser.email}" readonly="true"/>
+                    </div>
+
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-phone" />
+                        <p:inputMask value="#{beGuideBean.loggedInUser.contact}" mask="999 999 9999" styleClass="w-full" readonly="true" />
+                    </div>
+                    <div class="ui-input-icon-left w-full mb-3">
+                        <i class="pi pi-clock" />
+                        <p:datePicker id="time" value="#{reservePlace.touristAppointment.startDatetime}" showTime="true" placeholder="Select appointment timing" styleClass="w-full" required="true" requiredMessage="Appointment timeing selection in required"/>
+                    </div>
+                    <div class="w-full mb-3">
+                        <h:outputLabel value="Number of people excluding kids" styleClass="block mb-1"/>
+                        <p:spinner value="#{reservePlace.numberOfPeople}" min="0" max="50" placeholder="Number of people excluding kids" downButtonStyleClass="ui-button-help" upButtonStyleClass="ui-button-help" required="true" requiredMessage="Number of people is required" validator="#{validatorBean.validateGoPerson}"/>
+                        <small class="mt-1 block">You can take maximum 50 people</small>
+                    </div>
+                    <div class="w-full mb-3">
+
+                        <p:selectOneRadio id="packSelectionRadio" value="#{reservePlace.pack}">
+                            <f:selectItem itemValue="T"/>
+                            <f:selectItem itemValue="G" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
+                            <f:selectItem itemValue="TG" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
+
+                            <f:facet name="custom">
+                                <p:outputPanel>
+                                    <span class="field-radiobutton" role="radio">
+                                        <p:radioButton id="facet1" for="packSelectionRadio" itemIndex="0"/>
+                                        <p:outputLabel for="facet1">
+                                            <div class="legend">
+                                                <div class="text-xl font-semibold mb-2">Transport</div>
+                                                <div>Our driver would pick you up from the given location</div>
+                                            </div>
+                                        </p:outputLabel>
+                                    </span>
+                                </p:outputPanel>
+                                <p:outputPanel rendered="#{!reservePlace.guidesOfPlace.isEmpty()}">
+                                    <span class="field-radiobutton" role="radio">
+                                        <p:radioButton id="facet2" for="packSelectionRadio" itemIndex="1"/>
+                                        <p:outputLabel for="facet2">
+                                            <div class="legend">
+                                                <div class="text-xl font-semibold mb-2">Guide</div>
+                                                <div>You have to select guide</div>
+                                            </div>
+                                        </p:outputLabel>
+                                    </span>
+                                </p:outputPanel>
+                                <p:outputPanel rendered="#{!reservePlace.guidesOfPlace.isEmpty()}">
+                                    <span class="field-radiobutton" role="radio">
+                                        <p:radioButton id="facet3" for="packSelectionRadio" itemIndex="2"/>
+                                        <p:outputLabel for="facet3">
+                                            <div class="legend">
+                                                <div class="text-xl font-semibold mb-2">Guide + Transport</div>
+                                                <div>Our driver would pick you up from the given location you have to select guide</div>
+                                            </div>
+                                        </p:outputLabel>
+                                    </span>
+                                </p:outputPanel>
+                            </f:facet>
+                        </p:selectOneRadio>
+                    </div>
+
+                    <div class="flex flex-wrap justify-content-end">
+
+                        <p:commandButton icon="pi pi-arrow-right" iconPos="right" value="Next" class="rounded-button ui-button-help"/>
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
     </h:body>
 </html>
 

@@ -28,7 +28,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "cities")
@@ -93,12 +93,14 @@ public class Cities implements Serializable {
     @Size(max = 255)
     @Column(name = "wikiDataId")
     private String wikiDataId;
-    @JoinColumn(name = "state_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private States stateId;
+    @OneToMany(mappedBy = "cityId", fetch = FetchType.LAZY)
+    private Collection<TransporterMaster> transporterMasterCollection;
     @JoinColumn(name = "country_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Countries countryId;
+    @JoinColumn(name = "state_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private States stateId;
     @OneToMany(mappedBy = "cityId", fetch = FetchType.LAZY)
     private Collection<PlaceMaster> placeMasterCollection;
 
@@ -201,12 +203,12 @@ public class Cities implements Serializable {
         this.wikiDataId = wikiDataId;
     }
 
-    public States getStateId() {
-        return stateId;
+    public Collection<TransporterMaster> getTransporterMasterCollection() {
+        return transporterMasterCollection;
     }
 
-    public void setStateId(States stateId) {
-        this.stateId = stateId;
+    public void setTransporterMasterCollection(Collection<TransporterMaster> transporterMasterCollection) {
+        this.transporterMasterCollection = transporterMasterCollection;
     }
 
     public Countries getCountryId() {
@@ -215,6 +217,14 @@ public class Cities implements Serializable {
 
     public void setCountryId(Countries countryId) {
         this.countryId = countryId;
+    }
+
+    public States getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(States stateId) {
+        this.stateId = stateId;
     }
 
     public Collection<PlaceMaster> getPlaceMasterCollection() {

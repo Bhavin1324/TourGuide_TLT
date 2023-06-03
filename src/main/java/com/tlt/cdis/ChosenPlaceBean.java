@@ -1,12 +1,9 @@
 package com.tlt.cdis;
 
 import com.google.maps.DirectionsApi;
-import com.google.maps.DirectionsApiRequest;
-import com.google.maps.DistanceMatrixApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
@@ -27,6 +24,7 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
@@ -41,6 +39,8 @@ public class ChosenPlaceBean implements Serializable {
     AdminLocal adminLogic;
     @EJB
     TouristLocal userLogic;
+    @Inject
+    HttpSession session;
     PlaceMaster selectedPlace;
     MapBean mapBean;
     UserMaster currentUser;
@@ -63,7 +63,9 @@ public class ChosenPlaceBean implements Serializable {
         MapModel<String> model = new DefaultMapModel<>();
         this.currentUser = userLogic.findUserByUsername(KeepRecord.getUsername());
         Map<String, String> query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        this.selectedPlace = adminLogic.getPlaceById(String.valueOf(query.get("place")));
+        String placeId = String.valueOf(query.get("place"));
+        session.setAttribute("pid", placeId);
+        this.selectedPlace = adminLogic.getPlaceById(placeId);
         LatLng ll = new LatLng(Double.parseDouble(selectedPlace.getLatitude()), Double.parseDouble(selectedPlace.getLongitude()));
         model.addOverlay(new Marker<>(ll, selectedPlace.getName(), selectedPlace.getImages()));
         mapBean.setSimpleModel(model);
@@ -161,7 +163,6 @@ public class ChosenPlaceBean implements Serializable {
                     .origin(origin)
                     .destination(destination)
                     .await();
-
             if (directionsResult.routes.length > 0) {
                 DirectionsRoute route = directionsResult.routes[0];
                 this.distance = route.legs[0].distance.humanReadable;
