@@ -41,7 +41,7 @@ public class GuideHomeBean implements Serializable {
     private BarChartModel monthlyEventCountModel;
     private PieChartModel monthlyRevenueOfPersonalAppointmentsModel;
     private PieChartModel monthlyRevenueOfEventsModel;
-    long apptPendingCount, apptCompleteCount;
+    long eventCount, apptCount;
     long personalAptrevenue, eventRevenue;
     private Collection<AppointmentMaster> appointments;
     private AppointmentMaster selectedAppointment;
@@ -184,28 +184,28 @@ public class GuideHomeBean implements Serializable {
         this.monthlyRevenueOfPersonalAppointmentsModel = monthlyRevenueOfPersonalAppointmentsModel;
     }
 
-    public long getApptPendingCount() {
-        apptPendingCount = gd.getAppointmentsOfGuide(KeepRecord.getUsername(), "Pending").size();
-        return apptPendingCount;
+    public long getEventCount() {
+        eventCount = gd.getEventsOfGuide(KeepRecord.getUsername()).size();
+        return eventCount;
     }
 
-    public void setApptPendingCount(long apptPendingCount) {
-        this.apptPendingCount = apptPendingCount;
+    public void setEventCount(long eventCount) {
+        this.eventCount = eventCount;
     }
 
-    public long getApptCompleteCount() {
-        apptCompleteCount = gd.getAppointmentsOfGuide(KeepRecord.getUsername(), "Complete").size();
-        return apptCompleteCount;
+    public long getApptCount() {
+        apptCount = gd.getAllAppointmentsByGuide(KeepRecord.getUsername()).size();
+        return apptCount;
     }
 
-    public void setApptCompleteCount(long apptCompleteCount) {
-        this.apptCompleteCount = apptCompleteCount;
+    public void setApptCount(long apptCount) {
+        this.apptCount = apptCount;
     }
 
     public void updateStatus(String status) {
         try {
             gd.updateAppointmentStatus(this.selectedAppointment, status);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Marked as Complete"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Marked as "+ status));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error Occured", "Error Updating Status"));
         }

@@ -49,7 +49,7 @@
                         </p:column>
 
                         <p:column sortBy="#{p.createdAt}" filterBy="#{p.createdAt}" class="text-lg px-4" headerText="Date" >
-                            <h:outputText value="#{p.createdAt.date}/#{p.createdAt.month}/#{p.createdAt.year+1900}"/>
+                            <h:outputText value="#{guideHomeBean.getFormatedDate(p.createdAt)}&nbsp;&nbsp;&nbsp;#{guideHomeBean.getFormatedTime(p.createdAt)} "/>
                         </p:column>
 
                         <p:column sortBy="#{p.cardDetails}" filterBy="#{p.cardDetails}" class="text-lg px-4" headerText="Card Number" >

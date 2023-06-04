@@ -48,7 +48,7 @@
                             </p:submenu>
                             <p:submenu label="Others"  rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_GUIDE)}">
                                 <p:menuitem value="Appointments" styleClass="px-5" action="#{cc.attrs.bean.redirectTo(uc.TO_APPOINTMENTS)}" update="messages" icon="pi pi-file-edit"/> 
-                                <p:menuitem value="Raise event" styleClass="px-5" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_EVENTS)}" update="messages" icon="pi pi-megaphone"/> 
+                                <p:menuitem value="Raised event" styleClass="px-5" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_EVENTS)}" update="messages" icon="pi pi-megaphone"/> 
                             </p:submenu>
                             <p:menuitem value="Landmark tour prime" action="#{cc.attrs.bean.redirectTo(uc.TO_SUBS_CARDS)}" update="messages" icon="pi pi-verified" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
                             <p:menuitem value="About us" action="#{cc.attrs.bean.redirectTo(uc.TO_ABOUT_US)}" update="messages" icon="pi pi-info-circle"/>

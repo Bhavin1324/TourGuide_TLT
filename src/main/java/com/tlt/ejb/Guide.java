@@ -161,8 +161,14 @@ public class Guide implements GuideLocal {
     @Override
     public void updateAppointmentStatus(AppointmentMaster appointment, String status) {
         AppointmentMaster appt = em.find(AppointmentMaster.class, appointment.getId());
-        appt.setAppointmentStatus("Complete");
+        appt.setAppointmentStatus(status);
         em.merge(appt);
+    }
+    @Override
+    public void updateEventStatus(EventMaster event, String status) {
+        EventMaster e = em.find(EventMaster.class, event.getId());
+        e.setEventStatus(status);
+        em.merge(e);
     }
 
     @Override
@@ -236,6 +242,13 @@ public class Guide implements GuideLocal {
         eventColl.add(event);
         guide.setEventMasterCollection(eventColl);
         em.merge(guide);
+    }
+
+    @Override
+    public Collection<EventMaster> getEventsOfGuide(String gusername) {
+       GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+       Collection<EventMaster> events =  guide.getEventMasterCollection();
+       return events;
     }
 
 }

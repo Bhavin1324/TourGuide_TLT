@@ -2,6 +2,7 @@ package com.tlt.ejb;
 
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.Cities;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceCategory;
@@ -9,6 +10,7 @@ import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.States;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.entities.TransporterMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
 import com.tlt.utils.GraphUtils;
@@ -89,12 +91,12 @@ public class Admin implements AdminLocal {
     @Override
     public void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places) {
         Collection<PlaceMaster> guidePlaces = guide.getPlaceMasterCollection();
-        for(PlaceMaster pm : places){
-            if(!guidePlaces.contains(pm)){
+        for (PlaceMaster pm : places) {
+            if (!guidePlaces.contains(pm)) {
                 guidePlaces.add(pm);
                 Collection<GuideMaster> guideOfPlace = pm.getGuideMasterCollection();
                 guideOfPlace.add(guide);
-                
+
                 pm.setGuideMasterCollection(guideOfPlace);
                 guide.setPlaceMasterCollection(guidePlaces);
                 em.merge(pm);
@@ -102,7 +104,7 @@ public class Admin implements AdminLocal {
             }
         }
     }
-    
+
     @Override
     public void deleteGuide(String id) {
         GuideMaster guide = (GuideMaster) em.find(GuideMaster.class, id);
@@ -134,21 +136,26 @@ public class Admin implements AdminLocal {
         PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, PlaceId);
         return place.getGuideMasterCollection();
     }
+
     @Override
     public Collection<AppointmentMaster> getAppointmentsOfAllGuides() {
         return em.createNamedQuery("AppointmentMaster.findAll").getResultList();
     }
 
     @Override
+    public Collection<EventMaster> getEventsOfAllGuides() {
+        return em.createNamedQuery("EventMaster.findAll").getResultList();
+    }
+
+    @Override
     public Collection<GuideMaster> getAllGuidesOfPlaces(String placeId) {
         PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, placeId);
-        if(place == null){
+        if (place == null) {
             return null;
         }
         return place.getGuideMasterCollection();
     }
 
-    
     // implementation of method related to subscription
     @Override
     public void insertSubscriptionModel(SubscriptionModel data) {
@@ -386,6 +393,34 @@ public class Admin implements AdminLocal {
             graphData.add(gd);
         }
         return graphData;
+    }
+
+    @Override
+    public Collection<TransporterMaster> getAllTransporters() {
+        return em.createNamedQuery("TransporterMaster.findAll").getResultList();
+    }
+
+    @Override
+    public void addTransporter(TransporterMaster transporter) {
+        em.persist(transporter);
+    }
+
+    @Override
+    public void updateTransporter(String id, TransporterMaster transporter) {
+        TransporterMaster tmaster = em.find(TransporterMaster.class, id);
+        tmaster.setName(transporter.getName());
+        tmaster.setAmount(transporter.getAmount());
+        tmaster.setPlateNo(transporter.getPlateNo());
+        tmaster.setContactNo(transporter.getContactNo());
+        tmaster.setCityId(transporter.getCityId());
+        em.merge(tmaster);
+
+    }
+
+    @Override
+    public void removeTransporter(String transporterId) {
+        TransporterMaster tmaster = em.find(TransporterMaster.class, transporterId);
+        em.remove(tmaster);
     }
 
 }

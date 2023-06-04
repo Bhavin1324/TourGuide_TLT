@@ -6,6 +6,7 @@ package com.tlt.cdis;
 
 import com.tlt.ejb.AdminLocal;
 import com.tlt.entities.AppointmentMaster;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.UserMaster;
@@ -43,7 +44,9 @@ public class UsersBean implements Serializable {
     List<UserMaster> selectedUsers;
     String role;
     Collection<GuideMaster> allGuides;
+    int activeTabIndex;
     Collection<AppointmentMaster> allAppointmentsOfGuides;
+    Collection<EventMaster> allEventsOfGuides;
 
     public UsersBean() {
         users = new ArrayList<>();
@@ -59,6 +62,14 @@ public class UsersBean implements Serializable {
         users = ad.getAllUsers();
     }
 
+    public int getActiveTabIndex() {
+        return activeTabIndex;
+    }
+
+    public void setActiveTabIndex(int activeTabIndex) {
+        this.activeTabIndex = activeTabIndex;
+    }
+
     public String getFormatedDate(Date date){
         return Utils.getDateTimeFormat(date);
     }
@@ -72,6 +83,14 @@ public class UsersBean implements Serializable {
 
     public void setAllAppointmentsOfGuides(Collection<AppointmentMaster> allAppointmentsOfGuides) {
         this.allAppointmentsOfGuides = allAppointmentsOfGuides;
+    }
+
+    public Collection<EventMaster> getAllEventsOfGuides() {
+        return ad.getEventsOfAllGuides();
+    }
+
+    public void setAllEventsOfGuides(Collection<EventMaster> allEventsOfGuides) {
+        this.allEventsOfGuides = allEventsOfGuides;
     }
 
     public Collection<GuideMaster> getAllGuides() {

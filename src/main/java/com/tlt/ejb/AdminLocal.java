@@ -2,12 +2,14 @@ package com.tlt.ejb;
 
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.Cities;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.entities.TransporterMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
 import com.tlt.utils.GraphUtils;
@@ -49,7 +51,9 @@ public interface AdminLocal {
     Collection<GuideMaster> getGuideByPlace(String PlaceId);
 
     Collection<AppointmentMaster> getAppointmentsOfAllGuides();
-    
+
+    Collection<EventMaster> getEventsOfAllGuides();
+
     Collection<GuideMaster> getAllGuidesOfPlaces(String placeId);
 
     void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places);
@@ -125,4 +129,12 @@ public interface AdminLocal {
 
     List<GraphUtils> getMonthlyRevenueData();
 
+    //transporters
+    Collection<TransporterMaster> getAllTransporters();
+
+    void addTransporter(TransporterMaster transporter);
+
+    void updateTransporter(String id, TransporterMaster transporter);
+
+    void removeTransporter(String transporterId);
 }

@@ -1,6 +1,7 @@
 package com.tlt.ejb;
 
 import com.tlt.entities.AppointmentMaster;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.utils.GraphUtils;
@@ -33,6 +34,8 @@ public interface GuideLocal {
 
     void updateAppointmentStatus(AppointmentMaster appointment, String status);
 
+    void updateEventStatus(EventMaster event, String status);
+
     Collection<PlaceMaster> getAllPlacesOfGuide(String username);
 
     void removeGuidesPlace(PlaceMaster pm, String username);
@@ -40,4 +43,6 @@ public interface GuideLocal {
     void addGuidesPlace(PlaceMaster pm, String username);
 
     void raiseAnEvent(PlaceMaster placeMaster, String gusername, Date startDate, Date endDate);
+
+    Collection<EventMaster> getEventsOfGuide(String gusername);
 }
