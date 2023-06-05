@@ -246,5 +246,5 @@ public class UserMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.UserMaster[ id=" + id + " ]";
     }
-    
+
 }

@@ -7,6 +7,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:map="http://xmlns.jcp.org/jsf/composite/components/map"
+      xmlns:payment="http://xmlns.jcp.org/jsf/composite/components/payment"
       xmlns:dialog="http://xmlns.jcp.org/jsf/composite/dialog">
     <h:head>
         <title>#{chosenPlaceBean.selectedPlace.name}</title>
@@ -87,7 +88,7 @@
                 <div class="flex flex-column justify-content-center text-white mx-4" style="height:40vh">
                     <div class="text-6xl">#{chosenPlaceBean.selectedPlace.name}</div>
                     <div class="text-xl">#{chosenPlaceBean.selectedPlace.description.substring(0, chosenPlaceBean.selectedPlace.description.indexOf('.'))}</div>
-                    <div class="mt-4"><h:form><p:commandButton value="Explore now" class="text-lg rounded-button ui-button-raised custom-button" onclick="PF('success_dialog').show()"/></h:form></div>
+                    <div class="mt-4"><h:form><p:commandButton value="Explore now" class="text-lg rounded-button ui-button-raised custom-button" onclick="PF('booking_dialog').show()"/></h:form></div>
                 </div>
             </div>
         </div>
@@ -179,8 +180,8 @@
                     </div>
                     <div class="w-full mb-3">
                         <h:outputLabel value="Number of people excluding kids" styleClass="block mb-1"/>
-                        <p:spinner value="#{reservePlace.numberOfPeople}" min="0" max="50" placeholder="Number of people excluding kids" downButtonStyleClass="ui-button-help" upButtonStyleClass="ui-button-help" required="true" requiredMessage="Number of people is required" validator="#{validatorBean.validateGoPerson}"/>
-                        <small class="mt-1 block">You can take maximum 50 people</small>
+                        <p:spinner value="#{reservePlace.numberOfPeople}" min="0" max="10" placeholder="Number of people excluding kids" downButtonStyleClass="ui-button-help" upButtonStyleClass="ui-button-help" required="true" requiredMessage="Number of people is required" validator="#{validatorBean.validateGoPerson}"/>
+                        <small class="mt-1 block">You can take maximum 10 people</small>
                     </div>
                     <div class="w-full mb-3">
 
@@ -189,6 +190,7 @@
                             <f:selectItem itemValue="G" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
                             <f:selectItem itemValue="TG" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
                             <p:ajax event="change" update="form"/>
+                            <p:ajax event="change" update="payment_panel"/>
                             <f:facet name="custom">
                                 <p:outputPanel>
                                     <span class="field-radiobutton" role="radio">
@@ -269,6 +271,7 @@
                                      panelStyle="width:180px" var="g"
                                      filter="true" filterMatchMode="startsWith" converter="conv_select_guide">
                         <p:ajax event="change" update="price-panel"/>
+                        <p:ajax event="change" update="payment_panel"/>
                         <f:selectItems value="#{reservePlace.availableGuideOfPlace}" var="guide"
                                        itemLabel="#{guide.name}" itemValue="#{guide}"/>
 
@@ -308,9 +311,9 @@
                             <div class="flex align-items-center justify-content-end">
                                 <span class="mr-2 font-semibold">TOTAL :</span>
                                 <span class="text-lg flex align-items-center font-semibold">
-                                    <h:outputText rendered="#{reservePlace.pack.equals('TG')}" value="${reservePlace.transporter.amount + reservePlace.selectedGuide.amount}"/>
-                                    <h:outputText rendered="#{reservePlace.pack.equals('T')}" value="${reservePlace.transporter.amount}"/>
-                                    <h:outputText rendered="#{reservePlace.pack.equals('G')}" value="${reservePlace.selectedGuide.amount}"/>
+                                    <h:outputText rendered="#{reservePlace.pack.equals('TG')}" value="#{reservePlace.transporter.amount + reservePlace.selectedGuide.amount}"/>
+                                    <h:outputText rendered="#{reservePlace.pack.equals('T')}" value="#{reservePlace.transporter.amount}"/>
+                                    <h:outputText rendered="#{reservePlace.pack.equals('G')}" value="#{reservePlace.selectedGuide.amount}"/>
                                     <span class="material-symbols-outlined text-base" style="margin-top: 4px">currency_rupee</span>
                                 </span>
                             </div>
@@ -323,14 +326,13 @@
                 </div>
             </h:form>
         </p:dialog>
-        <dialog:alert-success widgetWar="success_dialog" 
-                              header="Success dialog" 
-                              primaryText="Payment done" 
-                              secondaryText="Transaction has been completed successfully"
-                              actionButton="true"
-                              actionButtonValue="Go to login"
-                              action="#{reservePlace.step2Action()}"
-                              />
+        <p:outputPanel id="payment_panel">
+            <payment:s-payment widgetWar="payment_dialog" cardNumber="#{reservePlace.cardNumber}" currentCost="#{reservePlace.transporter.amount + reservePlace.selectedGuide.amount}" paymentAction="#{reservePlace.paymentAction()}" rendered="#{reservePlace.pack.equals('TG')}"/>
+            <payment:s-payment widgetWar="payment_dialog" cardNumber="#{reservePlace.cardNumber}" currentCost="#{reservePlace.transporter.amount}" paymentAction="#{reservePlace.paymentAction()}" rendered="#{reservePlace.pack.equals('T')}"/>
+            <payment:s-payment widgetWar="payment_dialog" cardNumber="#{reservePlace.cardNumber}" currentCost="#{reservePlace.selectedGuide.amount}" paymentAction="#{reservePlace.paymentAction()}" rendered="#{reservePlace.pack.equals('G')}"/>
+        </p:outputPanel>
+        <dialog:alert-success widgetWar="success_dialog" header="Payment success" primaryText="Done" secondaryText="Transacrion has been made successfully" actionButton="true" actionButtonValue="Watch my trip" action="#{reservePlace.goToMyTrip()}"/>
+        <dialog:alert-error widgetWar="error_dialog" header="Payment aborted" primaryText="Failure" secondaryText="Transacrion cannot be completed due to internal issue"/>
     </h:body>
 </html>
 

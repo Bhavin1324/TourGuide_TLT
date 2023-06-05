@@ -33,12 +33,9 @@
                             <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_GUIDE)}"/>
                             <p:menuitem value="My trip" icon="pi pi-flag" action="#{cc.attrs.bean.redirectTo(uc.TO_MY_TRIP)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
                             <p:menuitem value="Guiding places" icon="pi pi-map-marker" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_PLACES)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_GUIDE)}"/>
-                            <p:submenu label="Transport">
-                                <p:menuitem styleClass="px-5" value="Nearby transport" action="#{cc.attrs.bean.redirectTo(uc.TO_NEARBY_TRANSPORT)}" update="messages" icon="pi pi-car"/>
-                            </p:submenu>
-                            <p:submenu label="Guide" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}">
-                                <p:menuitem styleClass="px-5" value="Personal guide" action="#{cc.attrs.bean.redirectTo(uc.TO_PERSONAL_GUIDE)}" update="messages" icon="pi pi-user"/>
-                                <p:menuitem styleClass="px-5" value="Join group" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_GROUP)}" update="messages" icon="pi pi-users"/>
+                            
+                            <p:submenu label="Events &amp; Guide" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}">
+                                <p:menuitem styleClass="px-5" value="Join guide event" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_GROUP)}" update="messages" icon="pi pi-users"/>
                                 <p:menuitem styleClass="px-5" value="Be a guide" action="#{cc.attrs.bean.redirectTo(uc.TO_BE_GUIDE)}" update="messages" icon="pi pi-user-plus" rendered="#{subMasterBean.isPrimeUser}"/>
                             </p:submenu>
 

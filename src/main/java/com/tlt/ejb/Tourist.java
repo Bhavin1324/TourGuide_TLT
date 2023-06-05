@@ -4,6 +4,7 @@ import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PaymentMethod;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.entities.TransportMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.utils.Utils;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class Tourist implements TouristLocal {
     }
 
     @Override
-    public void subscribeToPlan(SubscriptionModel model, String username,String cardNumber,Integer cost) {
+    public void subscribeToPlan(SubscriptionModel model, String username, String cardNumber, Integer cost) {
 
         UserMaster usermaster = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
 
@@ -110,18 +111,18 @@ public class Tourist implements TouristLocal {
         userPayment.setCreatedAt(new Date());
         userPayment.setId(Utils.getUUID());
         userPayment.setAmount(cost);
-        PaymentMethod paymentMethod = em.find(PaymentMethod.class,"3hbk2jh3bkj2hb3");
+        PaymentMethod paymentMethod = em.find(PaymentMethod.class, "3hbk2jh3bkj2hb3");
         userPayment.setPaymentMethodId(paymentMethod);
         userPayment.setPaymentStatus("Success");
         userPayment.setSubscriptionId(submaster);
         userPayment.setUserId(usermaster);
         em.persist(userPayment);
-        
+
         //set user's payment in user's payment collection
         Collection<PaymentMaster> userPayments = usermaster.getPaymentMasterCollection();
         userPayments.add(userPayment);
         usermaster.setPaymentMasterCollection(userPayments);
-        
+
         //add the subcription to user's subscriptionCollection
         usersubs.add(submaster);
 
@@ -144,19 +145,66 @@ public class Tourist implements TouristLocal {
     public boolean isUserSubscribed(SubscriptionModel model, String username) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         Collection<SubscriptionMaster> usersSub = user.getSubscriptionMasterCollection();
-        for(SubscriptionMaster s : usersSub){
-            if(s.getSubscriptionModelId().equals(model)){
+        for (SubscriptionMaster s : usersSub) {
+            if (s.getSubscriptionModelId().equals(model)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     @Override
-    public Collection<PaymentMaster> usersPaymentHistory(String username){
+    public Collection<PaymentMaster> usersPaymentHistory(String username) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         Collection<PaymentMaster> payments = user.getPaymentMasterCollection();
         return payments;
+    }
+
+    @Override
+    public void reserveYourPlace(PaymentMaster payment) {
+        if (payment != null) {
+            em.persist(payment);
+        }
+    }
+
+    @Override
+    public Collection<TransportMaster> getAllTransports() {
+        return em.createNamedQuery("TransportMaster.findAll").getResultList();
+    }
+
+    @Override
+    public TransportMaster findTransportById(String id) {
+        TransportMaster transport = (TransportMaster) em.find(TransportMaster.class, id);
+        if(transport == null){
+            return null;
+        }
+        return transport;
+    }
+
+    @Override
+    public void updateTransportInfo(String id, TransportMaster tranport) {
+        TransportMaster trans = (TransportMaster) em.find(TransportMaster.class, id);
+        if(trans == null){
+            return;
+        }
+        em.merge(tranport);
+    }
+
+    @Override
+    public void insertTransport(TransportMaster transport) {
+        TransportMaster trans = (TransportMaster) em.find(TransportMaster.class, transport.getId());
+        if(trans == null){
+            em.persist(transport);
+        }
+    }
+
+    @Override
+    public void removeTransportInfo(String id) {
+        TransportMaster transport = (TransportMaster) em.find(TransportMaster.class, id);
+        if(transport == null){
+            return;
+        }
+        em.remove(transport);
     }
 
 }

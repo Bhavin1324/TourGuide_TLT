@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="widgetWar" />
+        <cc:attribute name="paymentAction" method-signature="void action()" />
+        <cc:attribute name="currentCost" />
+        <cc:attribute name="cardNumber" />
+        <cc:attribute name="id" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:dialog widgetVar="#{cc.attrs.widgetWar}" id="#{cc.attrs.id}" showEffect="fade" 
+                  header="Make your Payment" modal="true" class="w-full md:w-5 border-round-xl">
+            <h:form id="form">
+                <p:outputPanel id="manage-payment-content">
+                    <div class="p-4 border-round">
+                        <div class="font-medium">
+                            <div class="modal-container">
+                                <p:messages id="msgs"/>
+                                <div class="ui-fluid">
+                                    <div class=" mx-1 grid justify-content-between">
+                                        <div class="ui-input-icon-right"> 
+                                            <i class="pi pi-credit-card text-2xl mt-0"/>
+                                            <p:outputLabel for="cardNumber">Card Number</p:outputLabel>
+                                            <p:inputMask id="cardNumber" placeholder="XXXX XXXX XXXX XXXX"
+                                                         class="my-2" mask="9999 9999 9999 9999" 
+                                                         value="#{cc.attrs.cardNumber}"
+                                                         required="true" requiredMessage="Card number is required" >
+                                            </p:inputMask>
+                                        </div> 
+                                        <div> 
+                                            <p:outputLabel for="cvv">CVV</p:outputLabel>
+                                            <p:password id="cvv" class="my-2" required="true" 
+                                                        requiredMessage="CVV number is required" validatorMessage="Invalid CVV number">
+                                                <f:validateLength minimum="3" maximum="3"/>
+                                            </p:password>
+                                        </div> 
+                                    </div>
+                                    <div class=" mx-1 grid justify-content-between my-2">
+                                        <div class="ui-input-icon-right"> 
+                                            <p:outputLabel for="expiryDate">Expiry Date</p:outputLabel>
+                                            <p:datePicker id="expiryDate" showIcon="true" inline="false" 
+                                                          class="mt-2" view="month" pattern="MM/yyyy" 
+                                                          yearNavigator="true" 
+                                                          yearRange="2023:2090" required="true" 
+                                                          requiredMessage="Expiry Date is required"/>
+                                        </div>
+                                        <div> 
+                                            <p:graphicImage value="/images/PaymentCards.png"  
+                                                            style="width: 200px;height: 50px;margin-top: 20px"/>
+                                        </div>
+                                    </div> 
+                                    <div class="mx-1 mt-1 ">
+                                        <div class="ui-input-icon-right "> 
+                                            <i class="pi pi-user text-2xl" style="margin-top:2px" />
+                                            <p:outputLabel for="nameOnCard">Card Holder's Name</p:outputLabel>
+                                            <p:inputText id="nameOnCard" class="mt-2 w-full" required="true"
+                                                         requiredMessage="Name is required" validatorMessage="Invalid card holders' name">
+                                                <f:validateLength minimum="3"/>
+                                            </p:inputText>
+                                        </div> 
+                                    </div>
+                                    <div class="mx-1 mt-3 mb-1">
+                                        <span class="text-2xl font-semibold" >
+                                            Total Amount: #{cc.attrs.currentCost}
+                                        </span>
+                                    </div>
+                                    <div class=" mt-2 grid justify-content-start col-12 md:col-6">
+                                        <div class="mx-2">
+                                            <p:commandButton id="payBtn" icon="pi pi-check" 
+                                                             action="#{cc.attrs.paymentAction}" 
+                                                             update="manage-payment-content" 
+                                                             process="manage-payment-content @this" value="Pay Now"
+                                                             styleClass="ui-button-success border-round-xl"/>
+                                        </div>
+                                        <div>
+                                            <p:commandButton id="cancelBtn" icon="pi pi-times" type="button"  
+                                                             onclick="PF('#{cc.attrs.widgetWar}').hide()" value="Cancel"
+                                                             styleClass="ui-button-danger border-round-xl"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+    </cc:implementation>
+</html>

@@ -5,6 +5,7 @@ import com.tlt.entities.Cities;
 import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
+import com.tlt.entities.PaymentMethod;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.SubscriptionMaster;
@@ -129,7 +130,7 @@ public interface AdminLocal {
     List<GraphUtils> getMonthlySubscriptionData();
 
     List<GraphUtils> getMonthlyRevenueData();
-    
+
     //Transports
     TransporterMaster getRandomTranporter();
 
@@ -141,4 +142,18 @@ public interface AdminLocal {
     void updateTransporter(String id, TransporterMaster transporter);
 
     void removeTransporter(String transporterId);
+
+    // Appointment
+    Collection<AppointmentMaster> getAllAppointments();
+
+    AppointmentMaster getAppointmentById(String id);
+
+    void insertIntoAppointment(AppointmentMaster appointment);
+
+    void updateAppointment(String id, AppointmentMaster appointment);
+
+    void deleteAppointment(String id);
+    
+    // Payment method
+    public PaymentMethod getCardPayment();
 }

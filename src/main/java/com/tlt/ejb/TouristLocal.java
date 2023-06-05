@@ -3,6 +3,7 @@ package com.tlt.ejb;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.entities.TransportMaster;
 import com.tlt.entities.UserMaster;
 import java.util.Collection;
 import javax.ejb.Local;
@@ -24,11 +25,25 @@ public interface TouristLocal {
 
     UserMaster findUserByEmail(String email);
 
-    void subscribeToPlan(SubscriptionModel model, String username, String cardNumber,Integer cost);
+    void subscribeToPlan(SubscriptionModel model, String username, String cardNumber, Integer cost);
 
     Collection<SubscriptionMaster> getUsersSubscriptions(String username);
 
     boolean isUserSubscribed(SubscriptionModel model, String username);
 
     Collection<PaymentMaster> usersPaymentHistory(String username);
+
+    void reserveYourPlace(PaymentMaster payment);
+
+    // Transport methods
+    Collection<TransportMaster> getAllTransports();
+
+    TransportMaster findTransportById(String id);
+
+    void updateTransportInfo(String id, TransportMaster tranport);
+
+    void insertTransport(TransportMaster transport);
+
+    void removeTransportInfo(String id);
+
 }

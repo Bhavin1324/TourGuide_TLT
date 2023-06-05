@@ -31,7 +31,6 @@ public class GeoLocationUtil {
             
             InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ip.sb/ip"));
             CityResponse cityResponse = reader.city(ipAddress);
-            
             Location location = cityResponse.getLocation();
             return location;
         } catch(Exception ex){

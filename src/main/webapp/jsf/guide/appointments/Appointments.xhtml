@@ -59,9 +59,6 @@
                         <p:column sortBy="#{ap.endDatetime}" filterBy="#{ap.endDatetime}" class="text-lg px-4" headerText="Appointment End-Time" >
                             <h:outputText value="#{guideHomeBean.getFormatedDate(ap.endDatetime)} #{guideHomeBean.getFormatedTime(ap.endDatetime)}"/>
                         </p:column>
-                        <p:column sortBy="#{ap.guideType}" filterBy="#{ap.guideType}" class="text-lg px-4" headerText="Appointment Type" >
-                            <h:outputText value="#{ap.guideType}" />
-                        </p:column>
                         <p:column sortBy="#{ap.appointmentStatus}" filterBy="#{ap.appointmentStatus}" class="text-lg px-4" headerText="Appointment Status" >
                             <h:outputText value="#{ap.appointmentStatus}" />
                         </p:column>

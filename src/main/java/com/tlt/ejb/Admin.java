@@ -5,6 +5,7 @@ import com.tlt.entities.Cities;
 import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
+import com.tlt.entities.PaymentMethod;
 import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.States;
@@ -23,7 +24,6 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 
 @Stateful
 public class Admin implements AdminLocal {
@@ -160,8 +160,8 @@ public class Admin implements AdminLocal {
         String query = "SELECT g.id, g.name, g.gender, g.email,g.username,g.profile_image, g.amount, g.phone_number,g.is_appointed FROM place_guide_mapping p JOIN guide_master g ON guide_id =g.id where place_id = '" + placeId + "' and g.is_appointed = 0;";
         List<Object[]> guides = em.createNativeQuery(query).getResultList();
         Collection<GuideMaster> filteredGuide = new ArrayList<>();
-        for(Object[] guide : guides){
-            if(guide[0] == null){
+        for (Object[] guide : guides) {
+            if (guide[0] == null) {
                 return null;
             }
             GuideMaster g = new GuideMaster();
@@ -417,10 +417,10 @@ public class Admin implements AdminLocal {
         }
         return graphData;
     }
-    
+
     // Transporter methods
     @Override
-    public TransporterMaster getRandomTranporter(){
+    public TransporterMaster getRandomTranporter() {
         List<TransporterMaster> transporters = em.createNamedQuery("TransporterMaster.randomOrder").setMaxResults(1).getResultList();
         return transporters.get(0);
     }
@@ -444,7 +444,6 @@ public class Admin implements AdminLocal {
         tmaster.setContactNo(transporter.getContactNo());
         tmaster.setCityId(transporter.getCityId());
         em.merge(tmaster);
-
     }
 
     @Override
@@ -453,4 +452,48 @@ public class Admin implements AdminLocal {
         em.remove(tmaster);
     }
 
+    @Override
+    public Collection<AppointmentMaster> getAllAppointments() {
+        return em.createNamedQuery("AppointmentMaster.findAll").getResultList();
+    }
+
+    @Override
+    public AppointmentMaster getAppointmentById(String id) {
+        AppointmentMaster appointment = (AppointmentMaster) em.find(AppointmentMaster.class, id);
+        if (appointment == null) {
+            return null;
+        }
+        return appointment;
+    }
+
+    @Override
+    public void insertIntoAppointment(AppointmentMaster appointment) {
+        AppointmentMaster appt = (AppointmentMaster) em.find(AppointmentMaster.class, appointment.getId());
+        if (appt == null) {
+            em.persist(appointment);
+        }
+    }
+
+    @Override
+    public void updateAppointment(String id, AppointmentMaster appointment) {
+        AppointmentMaster appt = (AppointmentMaster) em.find(AppointmentMaster.class, id);
+        if (appt == null) {
+            return;
+        }
+        em.merge(appointment);
+    }
+
+    @Override
+    public void deleteAppointment(String id) {
+        AppointmentMaster appt = (AppointmentMaster) em.find(AppointmentMaster.class, id);
+        if(appt == null){
+            return;
+        }
+        em.remove(appt);
+    }
+
+    @Override
+    public PaymentMethod getCardPayment(){
+        return (PaymentMethod) em.find(PaymentMethod.class, "3hbk2jh3bkj2hb3");
+    }
 }
