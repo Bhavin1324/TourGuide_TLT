@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "user_role")

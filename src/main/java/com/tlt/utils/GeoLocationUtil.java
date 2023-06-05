@@ -29,7 +29,7 @@ public class GeoLocationUtil {
             // https://api.my-ip.io/ip
             // https://api.ip.sb/ip
             
-            InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://ipapi.co/ip/"));
+            InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ip.sb/ip"));
             CityResponse cityResponse = reader.city(ipAddress);
             
             Location location = cityResponse.getLocation();

@@ -31,6 +31,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "TransporterMaster.findAll", query = "SELECT t FROM TransporterMaster t"),
     @NamedQuery(name = "TransporterMaster.findById", query = "SELECT t FROM TransporterMaster t WHERE t.id = :id"),
+    @NamedQuery(name = "TransporterMaster.randomOrder", query = "SELECT t FROM TransporterMaster t ORDER BY FUNCTION('RAND')"),
     @NamedQuery(name = "TransporterMaster.findByContactNo", query = "SELECT t FROM TransporterMaster t WHERE t.contactNo = :contactNo"),
     @NamedQuery(name = "TransporterMaster.findByAmount", query = "SELECT t FROM TransporterMaster t WHERE t.amount = :amount")})
 public class TransporterMaster implements Serializable {

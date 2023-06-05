@@ -6,7 +6,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:map="http://xmlns.jcp.org/jsf/composite/components/map">
+      xmlns:map="http://xmlns.jcp.org/jsf/composite/components/map"
+      xmlns:dialog="http://xmlns.jcp.org/jsf/composite/dialog">
     <h:head>
         <title>#{chosenPlaceBean.selectedPlace.name}</title>
         <meta charset="UTF-8" />
@@ -86,7 +87,7 @@
                 <div class="flex flex-column justify-content-center text-white mx-4" style="height:40vh">
                     <div class="text-6xl">#{chosenPlaceBean.selectedPlace.name}</div>
                     <div class="text-xl">#{chosenPlaceBean.selectedPlace.description.substring(0, chosenPlaceBean.selectedPlace.description.indexOf('.'))}</div>
-                    <div class="mt-4"><h:form><p:commandButton value="Explore now" class="text-lg rounded-button ui-button-raised custom-button" action="#{reservePlace.openReservationModal(param.place)}"/></h:form></div>
+                    <div class="mt-4"><h:form><p:commandButton value="Explore now" class="text-lg rounded-button ui-button-raised custom-button" onclick="PF('booking_dialog').show()"/></h:form></div>
                 </div>
             </div>
         </div>
@@ -120,7 +121,7 @@
                                                 </div>
                                                 <div class="text-2xl text-center">#{item.name}</div>
                                                 <h:outputText value="(Available)" class="block mb-4 text-center text-green-500 text-base font-normal" rendered="#{!item.isAppointed}"/>
-                                                <h:outputText value="(Already appointed)" class="block mb-4 text-red-300 text-base font-normal" rendered="#{item.isAppointed}"/>
+                                                <h:outputText value="(Already appointed)" class="block mb-4 text-center text-red-300 text-base font-normal" rendered="#{item.isAppointed}"/>
                                                 <a href="tel:#{item.phoneNumber}" class="flex align-items-center mb-2 text-black-alpha-90" style="text-decoration: none">
                                                     <span class="material-symbols-outlined mr-2" style="font-size: 18px">phone</span>
                                                     <div>#{item.phoneNumber}</div>
@@ -138,7 +139,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="mt-4">
-                                                    <p:commandButton value="Reserve your guide" class="w-full rounded-button ui-button-raised ui-button-help"/>
+                                                    <p:commandButton value="Reserve your guide" class="w-full rounded-button ui-button-raised ui-button-help" rendered="#{!item.isAppointed}"/>
+                                                    <p:commandButton value="Unavailable / Reserved by other" disabled="true" class="w-full rounded-button ui-button-outlined ui-button-danger" rendered="#{item.isAppointed}"/>
                                                 </div>
 
                                             </p:card>
@@ -152,9 +154,9 @@
             </div>
         </div>
 
-        <p:dialog header="Reserve you place" widgetVar="booking_dialog" class="m-modal" showEffect="fade" modal="true" width="">
+        <p:dialog header="Reserve you place" widgetVar="booking_dialog" class="m-modal" showEffect="fade" modal="true">
             <h:form>
-                <p:messages id="msgs" closable="true">
+                <p:messages id="msg1" closable="true">
                     <p:autoUpdate/>
                 </p:messages>
                 <div>
@@ -172,9 +174,8 @@
                         <i class="pi pi-phone" />
                         <p:inputMask value="#{beGuideBean.loggedInUser.contact}" mask="999 999 9999" styleClass="w-full" readonly="true" />
                     </div>
-                    <div class="ui-input-icon-left w-full mb-3">
-                        <i class="pi pi-clock" />
-                        <p:datePicker id="time" value="#{reservePlace.touristAppointment.startDatetime}" showTime="true" placeholder="Select appointment timing" styleClass="w-full" required="true" requiredMessage="Appointment timeing selection in required"/>
+                    <div class="ui-fluid field w-full mb-3">
+                        <p:datePicker id="time" value="#{reservePlace.touristAppointment.startDatetime}" showTime="true" placeholder="Select appointment timing" required="true" requiredMessage="Appointment timeing selection in required" showIcon="true"/>
                     </div>
                     <div class="w-full mb-3">
                         <h:outputLabel value="Number of people excluding kids" styleClass="block mb-1"/>
@@ -187,7 +188,7 @@
                             <f:selectItem itemValue="T"/>
                             <f:selectItem itemValue="G" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
                             <f:selectItem itemValue="TG" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
-
+                            <p:ajax event="change" update="form"/>
                             <f:facet name="custom">
                                 <p:outputPanel>
                                     <span class="field-radiobutton" role="radio">
@@ -227,13 +228,109 @@
                     </div>
 
                     <div class="flex flex-wrap justify-content-end">
-
-                        <p:commandButton icon="pi pi-arrow-right" iconPos="right" value="Next" class="rounded-button ui-button-help"/>
+                        <p:commandButton icon="pi pi-arrow-right" iconPos="right" value="Next" class="rounded-button ui-button-help" action="#{reservePlace.step1Action()}">
+                        </p:commandButton>
                     </div>
                 </div>
             </h:form>
         </p:dialog>
+        <p:dialog widgetVar="guide_select_dialog" header="Packing up appointment" class="m-modal" showEffect="fade" modal="true">
+            <h:form id="form">
+                <p:messages id="msg2" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+                <p:outputPanel rendered="#{reservePlace.pack.equals('TG') || reservePlace.pack.equals('T')}">
+                    <h3 class="mx-3">Transport info</h3>
+                    <p:divider/>
+                    <fieldset class="mx-2 mb-2 py-3 px-4 border-2 border-round-2xl border-purple-600 flex justify-content-between">
+                        <legend class="px-3">We found driver for you</legend>
+                        <div>
+                            <div class="font-semibold text-xl mb-2">#{reservePlace.transporter.name}</div>
+                            <div><i class="pi pi-phone mr-2"/>#{reservePlace.transporter.contactNo}</div>
+                            <div><i class="pi pi-car mr-2"/>#{reservePlace.transporter.plateNo}</div>
+                        </div>
+                        <div class="flex align-items-center align-self-center mr-2 ml-3"><span class="text-lg font-semibold">#{reservePlace.transporter.amount}</span><span class="material-symbols-outlined text-base mt-1">currency_rupee</span></div>
+                    </fieldset>
+                    <div class="ui-fluid field mb-3 my-3 mx-3">
+                        <p:outputLabel for="@next" value="Select pickup time" styleClass="mb-2"/>
+                        <p:datePicker id="pickup-time" value="#{reservePlace.transport.pickupDateTime}" showTime="true" placeholder="Select pickup timing" required="true" requiredMessage="Pickup timing selection in required" showIcon="true"/>
+                    </div>
+                    <div class="ui-fluid field mb-4 mx-3">
+                        <p:inputTextarea id="pickup-location" cols="33" styleClass="w-full" placeholder="Enter pickup location" required="true" requiredMessage="Pickup location is required" value="#{reservePlace.transport.pickupLocation}"/>
+                    </div>
+                </p:outputPanel>
 
+                <p:outputPanel class="ui-fluid my-4" rendered="#{reservePlace.pack.equals('TG') || reservePlace.pack.equals('G')}">
+                    <h3 class="mx-3 mt-4">Guide info</h3>
+                    <p:divider/>
+                    <p:outputLabel for="@next" value="Choose your guide"/>
+                    <p:selectOneMenu id="guide-selection" value="#{reservePlace.selectedGuide}"
+                                     styleClass="mt-1"
+                                     panelStyle="width:180px" var="g"
+                                     filter="true" filterMatchMode="startsWith" converter="conv_select_guide">
+                        <p:ajax event="change" update="price-panel"/>
+                        <f:selectItems value="#{reservePlace.availableGuideOfPlace}" var="guide"
+                                       itemLabel="#{guide.name}" itemValue="#{guide}"/>
+
+                        <p:column style="width:10%">
+                            <p:graphicImage value="/uploads/profiles/#{g.profileImage}" height="50" width="50" style="border-radius: 50%; border: 2px solid #8c239e"/>
+                        </p:column>
+
+                        <p:column>
+                            <div class="flex align-items-center text-xl mb-2">
+                                <i class="pi pi-user mr-2"/>
+                                <h:outputText value="#{g.name}"/>
+                            </div>
+                            <div class="flex align-items-center">
+                                <i class="pi pi-phone mr-2"/>
+                                <h:outputText value="#{g.phoneNumber}"/>
+                            </div>
+                            <div class="flex align-items-center">
+                                <i class="pi pi-at mr-2"/>
+                                <h:outputText value="#{g.email}"/>
+                            </div>
+                            <div class="flex align-items-center">
+                                <i class="pi pi-money-bill mr-2"/>
+                                <h:outputText value="#{g.amount}"/>
+                                <span class="material-symbols-outlined text-base">currency_rupee</span>
+                            </div>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <h:outputText value="#{reservePlace.availableGuideOfPlace.size()} Guides"
+                                          style="font-weight:bold;" styleClass="py-1 block"/>
+                        </f:facet>
+                    </p:selectOneMenu>
+                </p:outputPanel>
+                <p:outputPanel class="mb-4" id="price-panel">
+                    <div class="text-right">
+                        <div class="border-round-xl border-2 border-purple-300 inline-block py-2 px-4 mx-3 shadow-3">
+                            <div class="flex align-items-center justify-content-end">
+                                <span class="mr-2 font-semibold">TOTAL :</span>
+                                <span class="text-lg flex align-items-center font-semibold">
+                                    <h:outputText rendered="#{reservePlace.pack.equals('TG')}" value="${reservePlace.transporter.amount + reservePlace.selectedGuide.amount}"/>
+                                    <h:outputText rendered="#{reservePlace.pack.equals('T')}" value="${reservePlace.transporter.amount}"/>
+                                    <h:outputText rendered="#{reservePlace.pack.equals('G')}" value="${reservePlace.selectedGuide.amount}"/>
+                                    <span class="material-symbols-outlined text-base" style="margin-top: 4px">currency_rupee</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </p:outputPanel>
+                <div class="flex flex-wrap justify-content-between">
+                    <p:commandButton icon="pi pi-arrow-left" iconPos="left" value="Prev" class="rounded-button ui-button-help ui-button-outlined" onclick="PF('guide_select_dialog').hide;PF('booking_dialog').show()"/>
+                    <p:commandButton icon="pi pi-check-circle" iconPos="left" value="Checkout" class="rounded-button ui-button-help" action="#{reservePlace.step2Action()}"/>
+                </div>
+            </h:form>
+        </p:dialog>
+        <dialog:alert-warning widgetWar="success_dialog" 
+                              header="Success dialog" 
+                              primaryText="Payment done" 
+                              secondaryText="Transaction has been completed successfully"
+                              actionButton="true"
+                              actionButtonValue="Go to login"
+                              action="#{reservePlace.step2Action()}"
+                              />
     </h:body>
 </html>
 

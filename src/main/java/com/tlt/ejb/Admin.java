@@ -9,6 +9,7 @@ import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.States;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.entities.TransporterMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
 import com.tlt.utils.GraphUtils;
@@ -17,13 +18,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import javax.annotation.security.DeclareRoles;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-@DeclareRoles("Admin")
+
 @Stateful
 public class Admin implements AdminLocal {
 
@@ -89,12 +89,12 @@ public class Admin implements AdminLocal {
     @Override
     public void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places) {
         Collection<PlaceMaster> guidePlaces = guide.getPlaceMasterCollection();
-        for(PlaceMaster pm : places){
-            if(!guidePlaces.contains(pm)){
+        for (PlaceMaster pm : places) {
+            if (!guidePlaces.contains(pm)) {
                 guidePlaces.add(pm);
                 Collection<GuideMaster> guideOfPlace = pm.getGuideMasterCollection();
                 guideOfPlace.add(guide);
-                
+
                 pm.setGuideMasterCollection(guideOfPlace);
                 guide.setPlaceMasterCollection(guidePlaces);
                 em.merge(pm);
@@ -102,7 +102,7 @@ public class Admin implements AdminLocal {
             }
         }
     }
-    
+
     @Override
     public void deleteGuide(String id) {
         GuideMaster guide = (GuideMaster) em.find(GuideMaster.class, id);
@@ -134,6 +134,7 @@ public class Admin implements AdminLocal {
         PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, PlaceId);
         return place.getGuideMasterCollection();
     }
+
     @Override
     public Collection<AppointmentMaster> getAppointmentsOfAllGuides() {
         return em.createNamedQuery("AppointmentMaster.findAll").getResultList();
@@ -142,13 +143,36 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<GuideMaster> getAllGuidesOfPlaces(String placeId) {
         PlaceMaster place = (PlaceMaster) em.find(PlaceMaster.class, placeId);
-        if(place == null){
+        if (place == null) {
             return null;
         }
         return place.getGuideMasterCollection();
     }
 
-    
+    @Override
+    public Collection<GuideMaster> getAvailableGuidesOfPlace(String placeId) {
+        String query = "SELECT g.id, g.name, g.gender, g.email,g.username,g.profile_image, g.amount, g.phone_number,g.is_appointed FROM place_guide_mapping p JOIN guide_master g ON guide_id =g.id where place_id = '" + placeId + "' and g.is_appointed = 0;";
+        List<Object[]> guides = em.createNativeQuery(query).getResultList();
+        Collection<GuideMaster> filteredGuide = new ArrayList<>();
+        for(Object[] guide : guides){
+            if(guide[0] == null){
+                return null;
+            }
+            GuideMaster g = new GuideMaster();
+            g.setId(String.valueOf(guide[0]));
+            g.setName(String.valueOf(guide[1]));
+            g.setGender(String.valueOf(guide[2]));
+            g.setEmail(String.valueOf(guide[3]));
+            g.setUsername(String.valueOf(guide[4]));
+            g.setProfileImage(String.valueOf(guide[5]));
+            g.setAmount(Integer.parseInt(String.valueOf(guide[6])));
+            g.setPhoneNumber(Long.parseLong(String.valueOf(guide[7])));
+            g.setIsAppointed(Boolean.parseBoolean(String.valueOf(guide[8])));
+            filteredGuide.add(g);
+        }
+        return filteredGuide;
+    }
+
     // implementation of method related to subscription
     @Override
     public void insertSubscriptionModel(SubscriptionModel data) {
@@ -386,6 +410,13 @@ public class Admin implements AdminLocal {
             graphData.add(gd);
         }
         return graphData;
+    }
+    
+    // Transporter methods
+    @Override
+    public TransporterMaster getRandomTranporter(){
+        List<TransporterMaster> transporters = em.createNamedQuery("TransporterMaster.randomOrder").setMaxResults(1).getResultList();
+        return transporters.get(0);
     }
 
 }

@@ -8,11 +8,11 @@ import com.tlt.entities.PlaceCategory;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
+import com.tlt.entities.TransporterMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
 import com.tlt.utils.GraphUtils;
 import com.tlt.utils.UserSubscriptionMapping;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import javax.ejb.Local;
@@ -49,8 +49,10 @@ public interface AdminLocal {
     Collection<GuideMaster> getGuideByPlace(String PlaceId);
 
     Collection<AppointmentMaster> getAppointmentsOfAllGuides();
-    
+
     Collection<GuideMaster> getAllGuidesOfPlaces(String placeId);
+
+    Collection<GuideMaster> getAvailableGuidesOfPlace(String placeId);
 
     void mapGuideWithPlaces(GuideMaster guide, Collection<PlaceMaster> places);
 
@@ -124,5 +126,8 @@ public interface AdminLocal {
     List<GraphUtils> getMonthlySubscriptionData();
 
     List<GraphUtils> getMonthlyRevenueData();
+    
+    //Transports
+    TransporterMaster getRandomTranporter();
 
 }

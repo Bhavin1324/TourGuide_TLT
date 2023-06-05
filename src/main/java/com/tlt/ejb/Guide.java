@@ -146,7 +146,6 @@ public class Guide implements GuideLocal {
         event.setStartDatetime(startDate);
         event.setEndDatetime(endDate);
         event.setAppointmentStatus("Pending");
-        event.setGuideType("Group");
         em.persist(event);
         //adding this appointment to guide's appt master coll
         Collection<AppointmentMaster> guidesAppt = guide.getAppointmentMasterCollection();

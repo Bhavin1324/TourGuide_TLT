@@ -638,8 +638,8 @@ body .ui-inputfield.ui-state-focus{
     box-shadow: 0 0 0 .2em rgb(227 13 253 / 25%) !important;
 }
 .ui-datepicker-trigger{
-    background-color: #8c239e !important;
-    border-color: #8c239e !important;
+    background-color: #9c27b0 !important;
+    border-color: #9c27b0 !important;
 }
 
 body .ui-selectonemenu.ui-state-hover{
@@ -672,7 +672,9 @@ body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-item.ui-stat
 .ui-autocomplete-multiple-container .ui-autocomplete-token{
     background-color: #f5e3fd !important;
 }
-
+body .ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-state-highlight{
+    background: #f7e3fd !important;
+}
 .loader{
     position: fixed;
     height: 100vh;

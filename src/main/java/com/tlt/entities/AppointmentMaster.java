@@ -24,17 +24,18 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "appointment_master")
 @NamedQueries({
     @NamedQuery(name = "AppointmentMaster.findAll", query = "SELECT a FROM AppointmentMaster a"),
     @NamedQuery(name = "AppointmentMaster.findById", query = "SELECT a FROM AppointmentMaster a WHERE a.id = :id"),
+    @NamedQuery(name = "AppointmentMaster.findByStartDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.startDatetime = :startDatetime"),
     @NamedQuery(name = "AppointmentMaster.getAppointmentsByStatus", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid AND a.appointmentStatus = :status"),
     @NamedQuery(name = "AppointmentMaster.getAppointmentsOfGuide", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid ORDER BY a.appointmentStatus DESC"),
-    @NamedQuery(name = "AppointmentMaster.findByStartDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.startDatetime = :startDatetime"),
-    @NamedQuery(name = "AppointmentMaster.findByEndDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.endDatetime = :endDatetime")})
+    @NamedQuery(name = "AppointmentMaster.findByEndDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.endDatetime = :endDatetime"),
+    @NamedQuery(name = "AppointmentMaster.findByNumberOfPeople", query = "SELECT a FROM AppointmentMaster a WHERE a.numberOfPeople = :numberOfPeople")})
 public class AppointmentMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,19 +55,24 @@ public class AppointmentMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "appointment_status")
     private String appointmentStatus;
-    @Column(name = "guide_type")
-    private String guideType;
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "pack_type")
+    private String packType;
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserMaster userId;
     @JoinColumn(name = "guide_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
     @JoinColumn(name = "place_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PlaceMaster placeId;
+    @JoinColumn(name = "transport_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TransportMaster transportId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserMaster userId;
 
     public AppointmentMaster() {
     }
@@ -107,20 +113,20 @@ public class AppointmentMaster implements Serializable {
         this.appointmentStatus = appointmentStatus;
     }
 
-    public String getGuideType() {
-        return guideType;
+    public String getPackType() {
+        return packType;
     }
 
-    public void setGuideType(String guideType) {
-        this.guideType = guideType;
+    public void setPackType(String packType) {
+        this.packType = packType;
     }
 
-    public UserMaster getUserId() {
-        return userId;
+    public Integer getNumberOfPeople() {
+        return numberOfPeople;
     }
 
-    public void setUserId(UserMaster userId) {
-        this.userId = userId;
+    public void setNumberOfPeople(Integer numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
     }
 
     public GuideMaster getGuideId() {
@@ -139,12 +145,20 @@ public class AppointmentMaster implements Serializable {
         this.placeId = placeId;
     }
 
-    public Integer getNumberOfPeople() {
-        return numberOfPeople;
+    public TransportMaster getTransportId() {
+        return transportId;
     }
 
-    public void setNumberOfPeople(Integer numberOfPeople) {
-        this.numberOfPeople = numberOfPeople;
+    public void setTransportId(TransportMaster transportId) {
+        this.transportId = transportId;
+    }
+
+    public UserMaster getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserMaster userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -171,5 +185,5 @@ public class AppointmentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.AppointmentMaster[ id=" + id + " ]";
     }
-
+    
 }

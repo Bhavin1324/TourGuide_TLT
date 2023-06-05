@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Entity
 @Table(name = "payment_master")
@@ -32,7 +32,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "PaymentMaster.findAll", query = "SELECT p FROM PaymentMaster p"),
     @NamedQuery(name = "PaymentMaster.findById", query = "SELECT p FROM PaymentMaster p WHERE p.id = :id"),
     @NamedQuery(name = "PaymentMaster.findByUsername", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :username"),
-    @NamedQuery(name = "PaymentMaster.findByCreatedAt", query = "SELECT p FROM PaymentMaster p WHERE p.createdAt = :createdAt")})
+    @NamedQuery(name = "PaymentMaster.findByCreatedAt", query = "SELECT p FROM PaymentMaster p WHERE p.createdAt = :createdAt"),
+    @NamedQuery(name = "PaymentMaster.findByAmount", query = "SELECT p FROM PaymentMaster p WHERE p.amount = :amount")})
 public class PaymentMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,18 +54,23 @@ public class PaymentMaster implements Serializable {
     @Size(max = 65535)
     @Column(name = "payment_status")
     private String paymentStatus;
-    @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PaymentMethod paymentMethodId;
+    @Column(name = "amount")
+    private Integer amount;
     @JoinColumn(name = "guide_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private UserMaster userId;
+    private PaymentMethod paymentMethodId;
     @JoinColumn(name = "subscription_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionMaster subscriptionId;
+    @JoinColumn(name = "transport_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TransportMaster transportId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserMaster userId;
 
     public PaymentMaster() {
     }
@@ -105,12 +111,12 @@ public class PaymentMaster implements Serializable {
         this.paymentStatus = paymentStatus;
     }
 
-    public PaymentMethod getPaymentMethodId() {
-        return paymentMethodId;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
     public GuideMaster getGuideId() {
@@ -121,12 +127,12 @@ public class PaymentMaster implements Serializable {
         this.guideId = guideId;
     }
 
-    public UserMaster getUserId() {
-        return userId;
+    public PaymentMethod getPaymentMethodId() {
+        return paymentMethodId;
     }
 
-    public void setUserId(UserMaster userId) {
-        this.userId = userId;
+    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     public SubscriptionMaster getSubscriptionId() {
@@ -135,6 +141,22 @@ public class PaymentMaster implements Serializable {
 
     public void setSubscriptionId(SubscriptionMaster subscriptionId) {
         this.subscriptionId = subscriptionId;
+    }
+
+    public TransportMaster getTransportId() {
+        return transportId;
+    }
+
+    public void setTransportId(TransportMaster transportId) {
+        this.transportId = transportId;
+    }
+
+    public UserMaster getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserMaster userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -161,5 +183,5 @@ public class PaymentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.PaymentMaster[ id=" + id + " ]";
     }
-    
+
 }
