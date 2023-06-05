@@ -87,7 +87,7 @@
                 <div class="flex flex-column justify-content-center text-white mx-4" style="height:40vh">
                     <div class="text-6xl">#{chosenPlaceBean.selectedPlace.name}</div>
                     <div class="text-xl">#{chosenPlaceBean.selectedPlace.description.substring(0, chosenPlaceBean.selectedPlace.description.indexOf('.'))}</div>
-                    <div class="mt-4"><h:form><p:commandButton value="Explore now" class="text-lg rounded-button ui-button-raised custom-button" onclick="PF('booking_dialog').show()"/></h:form></div>
+                    <div class="mt-4"><h:form><p:commandButton value="Explore now" class="text-lg rounded-button ui-button-raised custom-button" onclick="PF('success_dialog').show()"/></h:form></div>
                 </div>
             </div>
         </div>
@@ -323,7 +323,7 @@
                 </div>
             </h:form>
         </p:dialog>
-        <dialog:alert-warning widgetWar="success_dialog" 
+        <dialog:alert-success widgetWar="success_dialog" 
                               header="Success dialog" 
                               primaryText="Payment done" 
                               secondaryText="Transaction has been completed successfully"
