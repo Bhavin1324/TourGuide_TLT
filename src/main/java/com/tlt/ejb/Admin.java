@@ -2,6 +2,7 @@ package com.tlt.ejb;
 
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.Cities;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceCategory;
@@ -138,6 +139,11 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<AppointmentMaster> getAppointmentsOfAllGuides() {
         return em.createNamedQuery("AppointmentMaster.findAll").getResultList();
+    }
+
+    @Override
+    public Collection<EventMaster> getEventsOfAllGuides() {
+        return em.createNamedQuery("EventMaster.findAll").getResultList();
     }
 
     @Override
@@ -406,7 +412,7 @@ public class Admin implements AdminLocal {
         for (Object[] g : list) {
             GraphUtils gd = new GraphUtils();
             gd.setMonth(g[0].toString());
-            gd.setCount(Long.parseLong(g[1].toString()));
+            gd.setAmount(Long.parseLong(g[1].toString()));
             graphData.add(gd);
         }
         return graphData;
@@ -417,6 +423,34 @@ public class Admin implements AdminLocal {
     public TransporterMaster getRandomTranporter(){
         List<TransporterMaster> transporters = em.createNamedQuery("TransporterMaster.randomOrder").setMaxResults(1).getResultList();
         return transporters.get(0);
+    }
+
+    @Override
+    public Collection<TransporterMaster> getAllTransporters() {
+        return em.createNamedQuery("TransporterMaster.findAll").getResultList();
+    }
+
+    @Override
+    public void addTransporter(TransporterMaster transporter) {
+        em.persist(transporter);
+    }
+
+    @Override
+    public void updateTransporter(String id, TransporterMaster transporter) {
+        TransporterMaster tmaster = em.find(TransporterMaster.class, id);
+        tmaster.setName(transporter.getName());
+        tmaster.setAmount(transporter.getAmount());
+        tmaster.setPlateNo(transporter.getPlateNo());
+        tmaster.setContactNo(transporter.getContactNo());
+        tmaster.setCityId(transporter.getCityId());
+        em.merge(tmaster);
+
+    }
+
+    @Override
+    public void removeTransporter(String transporterId) {
+        TransporterMaster tmaster = em.find(TransporterMaster.class, transporterId);
+        em.remove(tmaster);
     }
 
 }

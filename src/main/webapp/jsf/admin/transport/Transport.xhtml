@@ -4,17 +4,155 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:sidebar="http://xmlns.jcp.org/jsf/composite/components/sidebar"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Transporter's Details</title>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
 
 
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200">
         <navbar:admin-navbar sideNavigationBean="#{navigationBean}"/>
-        <div>This page is to manage transport information</div>
+        <div class="my-5 px-2">
+            <div class="shadow-2 surface-card border-round-2xl p-4">
+                <div class="ml-2 text-4xl text-800 font-semibold my-2">Transporters</div>
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true" />
+
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <p:commandButton value="New" icon="pi pi-plus" actionListener="#{transportersBean.openNew}"
+                                             update=":dialogs:manage-transporter-content" oncomplete="PF('manageTransporterDialog').show()"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <p:resetInput target=":dialogs:manage-transporter-content" />
+                            </p:commandButton>
+                            <p:commandButton id="delete-transporter-button" value="#{transportersBean.deleteButtonMessage}"
+                                             icon="pi pi-trash" actionListener="#{transportersBean.deleteSelectedTransporters}"
+                                             styleClass="ui-button-danger" disabled="#{!transportersBean.hasSelectedTransporters()}" update="@this">
+                                <p:confirm header="Confirmation" message="Delete the selected Categories?"
+                                           icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+
+                    <p:dataTable id="dt-transporter" widgetVar="dtTransporter" var="tp" value="#{transportersBean.allTransporters}"
+                                 reflow="true" styleClass="products-table text-lg" selection="#{transportersBean.selectedTransporters}"
+                                 rowKey="#{tp.id}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="products-table-header">
+                                <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtTransporter').filter()" placeholder="Search" />
+                                </span>
+                            </div>
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" update=":form:delete-transporter-button" />
+                        <p:ajax event="rowUnselect" update=":form:delete-transporter-button" />
+                        <p:ajax event="rowSelectCheckbox" update=":form:delete-transporter-button" />
+                        <p:ajax event="rowUnselectCheckbox" update=":form:delete-transporter-button" />
+                        <p:ajax event="toggleSelect" update=":form:delete-transporter-button" />
+
+                        <p:column selectionMode="multiple" styleClass="mr-2" exportable="false"></p:column>
+
+                        <p:column headerText="Name" sortBy="#{tp.name}" filterBy="#{tp.name}">
+                            <h:outputText value="#{tp.name}" />
+                        </p:column>
+                        <p:column headerText="Vehicle Number Plate" sortBy="#{tp.plateNo}" filterBy="#{tp.plateNo}">
+                            <h:outputText value="#{tp.plateNo}" />
+                        </p:column>
+                        <p:column headerText="Contact no." sortBy="#{tp.contactNo}" filterBy="#{tp.contactNo}">
+                            <h:outputText value="#{tp.contactNo}" />
+                        </p:column>
+                        <p:column headerText="Fare Amount" sortBy="#{tp.amount}" filterBy="#{tp.amount}">
+                            <h:outputText value="#{tp.amount}" />
+                        </p:column>
+                        <p:column headerText="City" sortBy="#{tp.cityId}" filterBy="#{tp.cityId}">
+                            <h:outputText value="#{tp.cityId.name}" />
+                        </p:column>
+
+                        <p:column exportable="false">
+                            <p:commandButton action="#{transportersBean.selectTransporter()}" icon="pi pi-pencil" update=":dialogs:manage-transporter-content"
+                                             oncomplete="PF('manageTransporterDialog').show()"
+                                             styleClass="mr-3 edit-button rounded-button ui-button-success" process="@this">
+                                <f:setPropertyActionListener target="#{transportersBean.selectedTransporter}" value="#{tp}"/>
+                                <p:resetInput target=":dialogs:manage-transporter-content" />
+                            </p:commandButton>
+                            <p:commandButton styleClass="ui-button-danger rounded-button" action="#{transportersBean.setTransporterId(tp.id)}" icon="pi pi-trash" process="@this" oncomplete="PF('deleteTransporterDialog').show()">
+                                <c:set var="tpegory" value="#{tp}" />
+                                <f:setPropertyActionListener target="#{transportersBean.selectedTransporter}" value="${tp}" />
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+
+                <h:form id="dialogs">
+                    <p:dialog header="Transporter's Details" showEffect="fade" modal="true" width="450" widgetVar="manageTransporterDialog"
+                              responsive="true">
+                        <p:outputPanel id="manage-transporter-content" class="ui-fluid">
+                            <p:messages id="valMsg" closable="true" />
+                            <div class="field">
+                                <p:outputLabel for="name">Name</p:outputLabel>
+                                <p:inputText id="name" value="#{transportersBean.selectedTransporter.name}" 
+                                             required="true" requiredMessage="Name required"/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="contact">Contact No.</p:outputLabel>
+                                <p:inputText id="contact" value="#{transportersBean.selectedTransporter.contactNo}" 
+                                             required="true" requiredMessage="Contact no. is required"/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="plateno">Vehicle Number Plate</p:outputLabel>
+                                <p:inputText id="plateno" value="#{transportersBean.selectedTransporter.plateNo}" 
+                                             required="true" requiredMessage="Number Plate is required"/>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="amount">Amount</p:outputLabel>
+                                <p:inputText id="amount" value="#{transportersBean.selectedTransporter.amount}" 
+                                             required="true" requiredMessage="Amount is required"/>
+                            </div>
+                          <div class="field">
+                                <p:outputLabel for="city">City</p:outputLabel>
+                                <p:autoComplete id="city" value="#{transportersBean.cityTxt}"
+                                                completeMethod="#{placesBean.completeText}" scrollHeight="250"
+                                                required="true" requiredMessage="City is required"
+                                                />
+                            </div>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" styleClass="mr-3 bg-purple-500 ui-button-help" icon="pi pi-check" 
+                                             actionListener="#{transportersBean.saveTransporter}"
+                                             update="manage-transporter-content" 
+                                             process="manage-transporter-content @this" />
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageTransporterDialog').hide()"
+                                             class="mx-3 ui-button-secondary" type="button" />
+                        </f:facet>
+                    </p:dialog>
+
+                    <p:confirmDialog widgetVar="deleteTransporterDialog" showEffect="fade" width="400"
+                                     message="Are you sure you want to remove this Transporter?" 
+                                     styleClass="text-lg font-semibold"
+                                     header="Remove" severity="warn">
+                        <p:commandButton value="Yes" icon="pi pi-check" 
+                                         styleClass="ui-confirmdialog-yes ui-button-help" 
+                                         actionListener="#{transportersBean.deleteTransporter}" 
+                                         process="@this" update=":form:delete-transporter-button"
+                                         oncomplete="PF('deleteTransporterDialog').hide()" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat ui-button-help" icon="pi pi-times" onclick="PF('deleteTransporterDialog').hide()" />
+                    </p:confirmDialog>
+
+                    <p:confirmDialog global="false" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times" />
+                    </p:confirmDialog>
+                </h:form>
+            </div>
+        </div>
     </h:body>
 
 </html>

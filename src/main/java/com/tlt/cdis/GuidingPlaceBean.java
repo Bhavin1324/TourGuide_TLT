@@ -7,6 +7,7 @@ package com.tlt.cdis;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.GuideLocal;
 import com.tlt.entities.AppointmentMaster;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.SubscriptionModel;
 import com.tlt.record.KeepRecord;
@@ -37,21 +38,42 @@ public class GuidingPlaceBean implements Serializable {
     List<PlaceMaster> selectedPlaces;
     PlaceMaster selectedPlace;
     String placeName;
-    AppointmentMaster eventRaised;
+    EventMaster eventRaised;
+    EventMaster selectedEvent;
+    Collection<EventMaster> eventsOfGuide;
 
     public GuidingPlaceBean() {
         placeName = "";
         guidesPlaces = new ArrayList<>();
         selectedPlaces = new ArrayList<>();
         selectedPlace = new PlaceMaster();
-        eventRaised = new AppointmentMaster();
+        eventRaised = new EventMaster();
+        selectedEvent = new EventMaster();
+        eventsOfGuide =new ArrayList<>();
     }
 
-    public AppointmentMaster getEventRaised() {
+    public EventMaster getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(EventMaster selectedEvent) {
+        this.selectedEvent = selectedEvent;
+    }
+
+    public Collection<EventMaster> getEventsOfGuide() {
+        eventsOfGuide = gd.getEventsOfGuide(KeepRecord.getUsername());
+        return eventsOfGuide;
+    }
+
+    public void setEventsOfGuide(Collection<EventMaster> eventsOfGuide) {
+        this.eventsOfGuide = eventsOfGuide;
+    }
+
+    public EventMaster getEventRaised() {
         return eventRaised;
     }
 
-    public void setEventRaised(AppointmentMaster eventRaised) {
+    public void setEventRaised(EventMaster eventRaised) {
         this.eventRaised = eventRaised;
     }
 
@@ -82,7 +104,7 @@ public class GuidingPlaceBean implements Serializable {
 
     public void openNew() {
         this.selectedPlace = new PlaceMaster();
-        this.eventRaised = new AppointmentMaster();
+        this.eventRaised = new EventMaster();
     }
 
     public String getDeleteButtonMessage() {
@@ -151,16 +173,24 @@ public class GuidingPlaceBean implements Serializable {
     public void raiseEvent(){
 
        try{
-           gd.raiseAnEvent(selectedPlace, KeepRecord.getUsername(), eventRaised.getStartDatetime(), eventRaised.getEndDatetime());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Place Added"));
+           gd.raiseAnEvent(selectedPlace, KeepRecord.getUsername(), eventRaised.getStartTime(), eventRaised.getEndTime());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event Successfully Raised"));
             PrimeFaces.current().ajax().update("form:messages", "form:dt-guide-places");
             PrimeFaces.current().executeScript("PF('manageEventDialog').hide()");
        }catch(Exception e){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error Adding Place"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error Raising Event"));
             PrimeFaces.current().ajax().update("form:messages", "form:dt-guide-places");
             PrimeFaces.current().executeScript("PF('manageEventDialog').hide()");
        }
         
+    }
+     public void updateStatus(String status) {
+        try {
+            gd.updateEventStatus(this.selectedEvent, status);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Marked as  "+ status));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error Occured", "Error Updating Status"));
+        }
     }
 
 }

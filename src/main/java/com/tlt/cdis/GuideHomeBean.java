@@ -33,27 +33,43 @@ public class GuideHomeBean implements Serializable {
 
     @EJB
     GuideLocal gd;
-    private List<GraphUtils> barGraphData;
-    private List<GraphUtils> pieGraphData;
-    private BarChartModel barModel;
-    private PieChartModel pieModel;
-    long apptPendingCount, apptCompleteCount;
-    long revenue;
+    private List<GraphUtils> monthlyAppointmentsCountData;
+    private List<GraphUtils> monthlyRevenueOfPersonalAppointmentsData;
+    private List<GraphUtils> monthlyEventsCountData;
+    private List<GraphUtils> monthlyRevenueOfEventsData;
+    private BarChartModel monthlyApptCountModel;
+    private BarChartModel monthlyEventCountModel;
+    private PieChartModel monthlyRevenueOfPersonalAppointmentsModel;
+    private PieChartModel monthlyRevenueOfEventsModel;
+    long eventCount, apptCount;
+    long personalAptrevenue, eventRevenue;
     private Collection<AppointmentMaster> appointments;
     private AppointmentMaster selectedAppointment;
     GraphUtils gUtils;
 
     public GuideHomeBean() {
-        barGraphData = new ArrayList<>();
-        pieGraphData = new ArrayList<>();
+        monthlyAppointmentsCountData = new ArrayList<>();
+        monthlyEventsCountData = new ArrayList<>();
+        monthlyRevenueOfPersonalAppointmentsData = new ArrayList<>();
+        monthlyRevenueOfEventsData = new ArrayList<>();
+        personalAptrevenue = 0;
+        eventRevenue = 0;
         gUtils = new GraphUtils();
     }
 
     public void init() {
-        barGraphData = gd.getMonthlyAppointmentsCount(KeepRecord.getUsername());
-        this.barModel = gUtils.createBarModel("Appointments", barGraphData);
-        pieGraphData = gd.getMonthlyRevenueOfGuide(KeepRecord.getUsername());
-        this.pieModel = gUtils.createPirChart(pieGraphData);
+
+        monthlyAppointmentsCountData = gd.getMonthlyPersonalAppointmentsCount(KeepRecord.getUsername());
+        this.monthlyApptCountModel = gUtils.createBarModel("Personal Appointments", monthlyAppointmentsCountData);
+
+        monthlyEventsCountData = gd.getMonthlyEventsCount(KeepRecord.getUsername());
+        this.monthlyEventCountModel = gUtils.createBarModel("Events", monthlyEventsCountData);
+
+        monthlyRevenueOfPersonalAppointmentsData = gd.getMonthlyRevenueOfPersonalAppointments(KeepRecord.getUsername());
+        this.monthlyRevenueOfPersonalAppointmentsModel = gUtils.createPirChart(monthlyRevenueOfPersonalAppointmentsData);
+
+        monthlyRevenueOfEventsData = gd.getMonthlyRevenueOfEvents(KeepRecord.getUsername());
+        this.monthlyRevenueOfEventsModel = gUtils.createPirChart(monthlyRevenueOfEventsData);
     }
 
     public String getFormatedDate(Date date) {
@@ -62,6 +78,30 @@ public class GuideHomeBean implements Serializable {
 
     public String getFormatedTime(Date date) {
         return Utils.getTime12h(date);
+    }
+
+    public long getPersonalAptrevenue() {
+        this.personalAptrevenue = gd.getTotalRevenueOfPersonalAppointments(KeepRecord.getUsername());
+        if (personalAptrevenue == 0) {
+            return 0;
+        }
+        return personalAptrevenue;
+    }
+
+    public void setPersonalAptrevenue(long personalAptrevenue) {
+        this.personalAptrevenue = personalAptrevenue;
+    }
+
+    public long getEventRevenue() {
+        eventRevenue =  gd.getTotalRevenueOfEvents(KeepRecord.getUsername());
+        if(eventRevenue == 0){
+            return 0;
+        }
+        return eventRevenue;
+    }
+
+    public void setEventRevenue(long eventRevenue) {
+        this.eventRevenue = eventRevenue;
     }
 
     public Collection<AppointmentMaster> getAppointments() {
@@ -80,73 +120,92 @@ public class GuideHomeBean implements Serializable {
         this.selectedAppointment = selectedAppointment;
     }
 
-    public List<GraphUtils> getBarGraphData() {
-        return barGraphData;
+    public BarChartModel getMonthlyEventCountModel() {
+        return monthlyEventCountModel;
     }
 
-    public void setBarGraphData(List<GraphUtils> barGraphData) {
-        this.barGraphData = barGraphData;
+    public void setMonthlyEventCountModel(BarChartModel monthlyEventCountModel) {
+        this.monthlyEventCountModel = monthlyEventCountModel;
+    }
+
+    public PieChartModel getMonthlyRevenueOfEventsModel() {
+        return monthlyRevenueOfEventsModel;
+    }
+
+    public void setMonthlyRevenueOfEventsModel(PieChartModel monthlyRevenueOfEventsModel) {
+        this.monthlyRevenueOfEventsModel = monthlyRevenueOfEventsModel;
+    }
+
+    public List<GraphUtils> getBarGraphData() {
+        return monthlyAppointmentsCountData;
+    }
+
+    public void setBarGraphData(List<GraphUtils> monthlyAppointmentsCountData) {
+        this.monthlyAppointmentsCountData = monthlyAppointmentsCountData;
     }
 
     public List<GraphUtils> getPieGraphData() {
-        return pieGraphData;
+        return monthlyRevenueOfPersonalAppointmentsData;
     }
 
-    public void setPieGraphData(List<GraphUtils> pieGraphData) {
-        this.pieGraphData = pieGraphData;
+    public void setPieGraphData(List<GraphUtils> monthlyRevenueOfPersonalAppointmentsData) {
+        this.monthlyRevenueOfPersonalAppointmentsData = monthlyRevenueOfPersonalAppointmentsData;
     }
 
-    public BarChartModel getBarModel() {
-        return barModel;
+    public List<GraphUtils> getMonthlyAppointmentsCountData() {
+        return monthlyAppointmentsCountData;
     }
 
-    public void setBarModel(BarChartModel barModel) {
-        this.barModel = barModel;
+    public void setMonthlyAppointmentsCountData(List<GraphUtils> monthlyAppointmentsCountData) {
+        this.monthlyAppointmentsCountData = monthlyAppointmentsCountData;
     }
 
-    public PieChartModel getPieModel() {
-        return pieModel;
+    public List<GraphUtils> getMonthlyRevenueOfPersonalAppointmentsData() {
+        return monthlyRevenueOfPersonalAppointmentsData;
     }
 
-    public void setPieModel(PieChartModel pieModel) {
-        this.pieModel = pieModel;
+    public void setMonthlyRevenueOfPersonalAppointmentsData(List<GraphUtils> monthlyRevenueOfPersonalAppointmentsData) {
+        this.monthlyRevenueOfPersonalAppointmentsData = monthlyRevenueOfPersonalAppointmentsData;
     }
 
-    public long getApptPendingCount() {
-        apptPendingCount = gd.getAppointmentsOfGuide(KeepRecord.getUsername(), "Pending").size();
-        return apptPendingCount;
+    public BarChartModel getMonthlyApptCountModel() {
+        return monthlyApptCountModel;
     }
 
-    public void setApptPendingCount(long apptPendingCount) {
-        this.apptPendingCount = apptPendingCount;
+    public void setMonthlyApptCountModel(BarChartModel monthlyApptCountModel) {
+        this.monthlyApptCountModel = monthlyApptCountModel;
     }
 
-    public long getApptCompleteCount() {
-        apptCompleteCount = gd.getAppointmentsOfGuide(KeepRecord.getUsername(), "Complete").size();
-        return apptCompleteCount;
+    public PieChartModel getMonthlyRevenueOfPersonalAppointmentsModel() {
+        return monthlyRevenueOfPersonalAppointmentsModel;
     }
 
-    public void setApptCompleteCount(long apptCompleteCount) {
-        this.apptCompleteCount = apptCompleteCount;
+    public void setMonthlyRevenueOfPersonalAppointmentsModel(PieChartModel monthlyRevenueOfPersonalAppointmentsModel) {
+        this.monthlyRevenueOfPersonalAppointmentsModel = monthlyRevenueOfPersonalAppointmentsModel;
     }
 
-    public long getRevenue() {
-        this.revenue = 0;
-        Collection<AppointmentMaster> appointments = gd.getAllAppointmentsByGuide(KeepRecord.getUsername());
-        for (AppointmentMaster ap : appointments) {
-            this.revenue += ap.getGuideId().getAmount();
-        }
-        return revenue;
+    public long getEventCount() {
+        eventCount = gd.getEventsOfGuide(KeepRecord.getUsername()).size();
+        return eventCount;
     }
 
-    public void setRevenue(long revenue) {
-        this.revenue = revenue;
+    public void setEventCount(long eventCount) {
+        this.eventCount = eventCount;
+    }
+
+    public long getApptCount() {
+        apptCount = gd.getAllAppointmentsByGuide(KeepRecord.getUsername()).size();
+        return apptCount;
+    }
+
+    public void setApptCount(long apptCount) {
+        this.apptCount = apptCount;
     }
 
     public void updateStatus(String status) {
         try {
-            gd.updateAppointmentStatus(this.selectedAppointment,status);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Marked as Complete"));
+            gd.updateAppointmentStatus(this.selectedAppointment, status);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Marked as "+ status));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error Occured", "Error Updating Status"));
         }

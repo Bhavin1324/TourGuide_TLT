@@ -66,13 +66,17 @@
                         <p:column selectionMode="multiple" styleClass="mr-2" exportable="false"></p:column>
 
                         <p:column headerText="Username" sortBy="#{u.username}" filterBy="#{u.username}">
-                            <h:outputText value="#{u.username}" />
+                            <div class="flex flex-row">
+                                <div>
+                                    <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
+                                        <p:graphicImage value="/uploads/profiles/#{u.profileImage}" />
+                                    </p:avatar>
+                                </div>
+                                <div class="mt-3 ml-2"><h:outputText value="#{u.username}"/></div>
+                            </div>
                         </p:column>
                         <p:column headerText="Name" sortBy="#{u.name}" filterBy="#{u.name}">
                             <h:outputText value="#{u.name}" />
-                        </p:column>
-                        <p:column class="" headerText="Image" exportable="false" >
-                            <p:graphicImage id="img"  value="/uploads/profiles/#{u.profileImage}" style="width: 130px;height:80px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)" />
                         </p:column>
                         <p:column headerText="Email" sortBy="#{u.email}" filterBy="#{u.email}">
                             <h:outputText value="#{u.email}" />

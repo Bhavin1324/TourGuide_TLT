@@ -81,7 +81,7 @@ public class Tourist implements TouristLocal {
     }
 
     @Override
-    public void subscribeToPlan(SubscriptionModel model, String username,String cardNumber) {
+    public void subscribeToPlan(SubscriptionModel model, String username,String cardNumber,Integer cost) {
 
         UserMaster usermaster = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
 
@@ -109,6 +109,7 @@ public class Tourist implements TouristLocal {
         userPayment.setCardDetails(cardNumber);
         userPayment.setCreatedAt(new Date());
         userPayment.setId(Utils.getUUID());
+        userPayment.setAmount(cost);
         PaymentMethod paymentMethod = em.find(PaymentMethod.class,"3hbk2jh3bkj2hb3");
         userPayment.setPaymentMethodId(paymentMethod);
         userPayment.setPaymentStatus("Success");

@@ -2,6 +2,7 @@ package com.tlt.ejb;
 
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.Cities;
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceCategory;
@@ -49,6 +50,8 @@ public interface AdminLocal {
     Collection<GuideMaster> getGuideByPlace(String PlaceId);
 
     Collection<AppointmentMaster> getAppointmentsOfAllGuides();
+
+    Collection<EventMaster> getEventsOfAllGuides();
 
     Collection<GuideMaster> getAllGuidesOfPlaces(String placeId);
 
@@ -130,4 +133,12 @@ public interface AdminLocal {
     //Transports
     TransporterMaster getRandomTranporter();
 
+    //transporters
+    Collection<TransporterMaster> getAllTransporters();
+
+    void addTransporter(TransporterMaster transporter);
+
+    void updateTransporter(String id, TransporterMaster transporter);
+
+    void removeTransporter(String transporterId);
 }

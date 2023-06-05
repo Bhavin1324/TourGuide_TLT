@@ -18,10 +18,92 @@
     </h:head>
     <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div class="my-5 px-2">
-            <div class="shadow-2 surface-card border-round-2xl p-4">
-                <div class="ml-2 text-4xl text-800 font-semibold my-2">Events raised on places</div>
-              
+
+        <div class="my-5 px-2" >
+            <div class="surface-card border-round-2xl p-4">
+                <div class="shadow-2 surface-card border-round-2xl p-4">
+                    <div class="ml-2 text-3xl text-800 font-semibold my-2">Events raised on places</div>
+                    <h:form id="dataTableForm">
+                        <p:growl id="messages" showDetail="true" />
+                        <p:dataTable id="dt-event-guide" class="text-xl" var="e" widgetVar="dtEventsOfGuide"
+                                     value="#{guidingPlaceBean.eventsOfGuide}" reflow="true" rows="10" 
+                                     paginator="true" paginatorPosition="bottom">
+
+                            <f:facet name="header">
+                                <div class="product-table-header ml-2 mt-5">
+                                    <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" onkeyup="PF('dtEventsOfGuide').filter()" 
+                                                     placeholder="Search" />
+                                    </div>
+                                </div>
+                            </f:facet>
+                            <p:column  sortBy="#{e.placeId.name}" filterBy="#{e.placeId.name}" 
+                                       class="text-lg" headerText="Place">
+                                <h:outputText value="#{e.placeId.name}"/>
+                            </p:column>
+                            <p:column  sortBy="#{e.placeId.address}" filterBy="#{e.placeId.address}" 
+                                       class="text-lg" headerText="Place Address">
+                                <h:outputText value="#{e.placeId.address}"/>
+                            </p:column>
+                            <p:column sortBy="#{e.startTime}" filterBy="#{e.startTime}" class="text-lg px-4" headerText="Tourist">
+                                <h:outputText class="-mr-1" value="#{guideHomeBean.getFormatedDate(e.startTime)} #{guideHomeBean.getFormatedTime(e.startTime)}"/>
+                            </p:column>
+
+                           <p:column sortBy="#{e.endTime}" filterBy="#{e.endTime}" class="text-lg px-4" headerText="Tourist">
+                                <h:outputText class="-mr-1" value="#{guideHomeBean.getFormatedDate(e.endTime)} #{guideHomeBean.getFormatedTime(e.endTime)}"/>
+                            </p:column>
+                            <p:column sortBy="#{e.numberOfPeople}" filterBy="#{e.numberOfPeople}" class="text-lg px-4" headerText="No of People joined" >
+                                <h:outputText value="#{e.numberOfPeople}" />
+                            </p:column>
+                            <p:column sortBy="#{e.eventStatus}" filterBy="#{e.eventStatus}" class="text-lg px-4" headerText="Event Status" >
+                                <h:outputText value="#{e.eventStatus}" />
+                            </p:column>
+                            <p:column exportable="false">
+                                <p:commandButton icon="pi pi-pencil" rendered="#{e.eventStatus.equals('Pending')}" 
+                                                 onclick="PF('manageAppointmentDialog').show()"
+                                                 styleClass="mr-3 edit-button rounded-button ui-button-success" process="@this">
+                                    <f:setPropertyActionListener target="#{guidingPlaceBean.selectedEvent}" value="#{e}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="pi pi-times" rendered="#{e.eventStatus.equals('Pending')}" 
+                                                 onclick="PF('manageAppointmentCancelDialog').show()"
+                                                 styleClass="mr-3 edit-button rounded-button ui-button-danger" process="@this">
+                                    <f:setPropertyActionListener target="#{guidingPlaceBean.selectedEvent}" value="#{e}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                    <h:form id="dailog">
+                        <p:dialog id="manage-appointment-dialog" width="400" height="150" widgetVar="manageAppointmentDialog" header="Mark as Complete">
+                            <div class="flex flex-column text-center">
+                                <div><i class="pi pi-check-circle text-5xl my-3"/></div>
+                                <div class="text-xl text-center" >Are you sure you want to mark this event 'Complete' ?</div>
+                            </div>
+                            <div class="text-end mt-5 flex flex-row justify-content-end">
+                                <p:commandButton value="No" type="button" onclick="PF('manageAppointmentDialog').hide()" class="border-purple-400 mr-3 text-lg ui-button-outlined ui-button-help"/>
+                                <p:commandButton value="Yes" process="@this" 
+                                                 update=":dataTableForm:messages :dataTableForm:dt-event-guide @this" 
+                                                 action="#{guidingPlaceBean.updateStatus('Complete')}" styleClass="text-lg ui-button-help" 
+                                                 oncomplete="PF('manageAppointmentDialog').hide()"
+                                                 />
+                            </div>
+                        </p:dialog>
+                        <p:dialog id="manage-appointment-cancel-dialog" width="400" height="150" widgetVar="manageAppointmentCancelDialog" header="Mark as Canceled">
+                            <div class="flex flex-column text-center">
+                                <div><i class="pi pi-check-circle text-5xl my-3"/></div>
+                                <div class="text-xl text-center" >Are you sure you want to mark this event 'Canceled' ?</div>
+                            </div>
+                            <div class="text-end mt-5 flex flex-row justify-content-end">
+                                <p:commandButton value="No" type="button" onclick="PF('manageAppointmentCancelDialog').hide()" class="border-purple-400 mr-3 text-lg ui-button-outlined ui-button-help"/>
+                                <p:commandButton value="Yes" process="@this" 
+                                                 update=":dataTableForm:messages :dataTableForm:dt-event-guide @this" 
+                                                 action="#{guidingPlaceBean.updateStatus('Cancel')}" 
+                                                 styleClass="text-lg ui-button-help" 
+                                                 oncomplete="PF('manageAppointmentCancelDialog').hide()"
+                                                 />
+                            </div>
+                        </p:dialog>
+                    </h:form>
+                </div>
             </div>
         </div>
     </h:body>

@@ -33,6 +33,9 @@ public class GraphUtils {
     private PieChartModel pieModel;
     String month;
     Long count;
+    Long amount;
+    Long noofPeople;
+    Long revenue;
 
     public String getMonth() {
         return month;
@@ -42,12 +45,36 @@ public class GraphUtils {
         this.month = month;
     }
 
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
     public Long getCount() {
         return count;
     }
 
     public void setCount(Long count) {
         this.count = count;
+    }
+
+    public Long getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(Long revenue) {
+        this.revenue = revenue;
+    }
+
+    public Long getNoofPeople() {
+        return noofPeople;
+    }
+
+    public void setNoofPeople(Long noofPeople) {
+        this.noofPeople = noofPeople;
     }
 
     public BarChartModel getBarModel() {
@@ -69,7 +96,7 @@ public class GraphUtils {
     public BarChartModel createBarModel(String setLabel, List<GraphUtils> barGraphData) {
         barModel = new BarChartModel();
         ChartData data = new ChartData();
-
+            
         BarChartDataSet barDataSet = new BarChartDataSet();
         barDataSet.setLabel(setLabel);
 
@@ -156,7 +183,7 @@ public class GraphUtils {
         List<Number> values = new ArrayList<>();
         List<String> labels = new ArrayList<>();
         for (GraphUtils g : pieGraphData) {
-            values.add(g.getCount());
+            values.add(g.getAmount());
             labels.add(g.getMonth());
         }
 
