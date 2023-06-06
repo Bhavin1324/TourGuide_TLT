@@ -145,6 +145,10 @@ public class Admin implements AdminLocal {
     public Collection<EventMaster> getEventsOfAllGuides() {
         return em.createNamedQuery("EventMaster.findAll").getResultList();
     }
+    @Override
+    public Collection<EventMaster> getEventsByCity(String cityName) {
+        return em.createNamedQuery("EventMaster.findByCity").setParameter("cityname",cityName ).getResultList();
+    }
 
     @Override
     public Collection<GuideMaster> getAllGuidesOfPlaces(String placeId) {
@@ -356,8 +360,8 @@ public class Admin implements AdminLocal {
     }
 
     @Override
-    public Collection<UserMaster> getUsersByRoles(UserRole role) {
-        Collection<UserRole> roles = em.createNamedQuery("UserRole.findByRole").setParameter("role", role.getUserRolePK().getRole()).getResultList();
+    public Collection<UserMaster> getUsersByRoles(String role) {
+        Collection<UserRole> roles = em.createNamedQuery("UserRole.findByRole").setParameter("role", role).getResultList();
 
         Collection<UserMaster> usersToReturn = new ArrayList<>();
         for (UserRole r : roles) {
@@ -496,4 +500,24 @@ public class Admin implements AdminLocal {
     public PaymentMethod getCardPayment(){
         return (PaymentMethod) em.find(PaymentMethod.class, "3hbk2jh3bkj2hb3");
     }
+
+    @Override
+    public void joinEvent(Integer noOfPeople, EventMaster event, String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        EventMaster emaster = em.find(EventMaster.class,event.getId());
+        Integer noofpeople = event.getNumberOfPeople() + noOfPeople;
+        emaster.setNumberOfPeople(noofpeople);
+        UserMaster umaster = em.find(UserMaster.class,user.getId());
+        Collection<EventMaster> usersEvent = umaster.getEventMasterCollection();
+        usersEvent.add(emaster);
+        umaster.setEventMasterCollection(usersEvent);
+        
+        Collection<UserMaster> eventsUser = emaster.getUserMasterCollection();
+        eventsUser.add(umaster);
+        emaster.setUserMasterCollection(eventsUser);
+        
+        em.merge(umaster);
+        em.merge(emaster);
+    }
+
 }

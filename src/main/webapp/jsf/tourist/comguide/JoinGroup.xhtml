@@ -3,7 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-      >
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Join guide group</title>
         <meta charset="UTF-8"/>
@@ -11,11 +13,139 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
-        
+
     </h:head>
-    <h:body>
+    <h:body class="bg-gray-200">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <div>Join group of guide</div>
+        <div class="my-5 px-2" >
+            <div class="shadow-2 surface-card border-round-2xl p-4">
+                <div class="ml-4 text-3xl text-800 font-semibold my-2">Events Raised</div>
+                <h:form id="dataTableForm">
+                    <p:growl id="messages" showDetail="true" />
+                    <p:dataTable id="dt-join-event" var="e" widgetVar="dtEventsOfGuide"
+                                 value="#{joinGroupBean.events}" reflow="true" rows="10" 
+                                 paginator="true" paginatorPosition="bottom">
+
+                        <f:facet name="header">
+                            <div class="product-table-header mt-5">
+                                <p:autoComplete id="cities" class="mr-3" style="width: 15vw" placeholder="Search City"
+                                                value="#{joinGroupBean.cityText}"
+                                                completeMethod="#{placesBean.completeText}"
+                                                />
+                                <p:commandButton id="search" icon="pi pi-search" value="Search" actionListener="#{joinGroupBean.cityValuChangeListener}" update=":dataTableForm:dt-join-event" class="ui-button-help" />
+
+                            </div>
+                        </f:facet>
+                        <p:column  class="px-4 text-lg" sortBy="#{e.guideId.name}" filterBy="#{e.guideId.name}" headerText="Guide">
+                            <div class="flex flex-row">
+                                <div>
+                                    <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
+                                        <p:graphicImage value="/uploads/profiles/#{e.guideId.profileImage}" />
+                                    </p:avatar>
+                                </div>
+                                <div class="mt-3 ml-2"><h:outputText class="text-lg" value="#{e.guideId.name}"/></div>
+                            </div>
+                        </p:column>
+                        <p:column  class="px-4 text-lg" sortBy="#{e.guideId.email}" filterBy="#{e.guideId.email}" headerText="Guide's Email">
+                            <h:outputText class="-mr-1" value="#{e.guideId.email}"/>
+                        </p:column>
+                        <p:column  class="px-4 text-lg" sortBy="#{e.guideId.phoneNumber}" filterBy="#{e.guideId.phoneNumber}" headerText="Contact No.">
+                            <h:outputText value="#{e.guideId.phoneNumber}"/>
+                        </p:column>
+                        <p:column  sortBy="#{e.placeId.name}" filterBy="#{e.placeId.name}" 
+                                   class="text-lg" headerText="Place">
+                            <div class="text-center flex flex-column justify-content-center">
+                                <div>
+                                    <p:graphicImage  value="/uploads/places/#{e.placeId.images}"  
+                                                     style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                                </div>
+                                <div class="mt-4">
+                                    <h:outputText  value="#{e.placeId.name}"/>
+                                </div>
+                            </div>
+                        </p:column>
+                        <p:column  sortBy="#{e.placeId.address}" filterBy="#{e.placeId.address}" 
+                                   class="text-lg" headerText="Place Address">
+                            <h:outputText value="#{e.placeId.address}"/>
+                        </p:column>
+                        <p:column sortBy="#{e.startTime}" filterBy="#{e.startTime}" class="text-lg px-4" headerText="Start Date Time">
+                            <h:outputText class="-mr-1" value="#{guideHomeBean.getFormatedDate(e.startTime)} #{guideHomeBean.getFormatedTime(e.startTime)}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{e.endTime}" filterBy="#{e.endTime}" class="text-lg px-4" headerText="End Data Time">
+                            <h:outputText class="-mr-1" value="#{guideHomeBean.getFormatedDate(e.endTime)} #{guideHomeBean.getFormatedTime(e.endTime)}"/>
+                        </p:column>
+                        <p:column width="100" sortBy="#{e.numberOfPeople}" filterBy="#{e.numberOfPeople}" class="text-lg px-4" headerText="No of People joined" >
+                            <h:outputText value="#{e.numberOfPeople}" />
+                        </p:column> 
+                        <p:column exportable="false">
+                            <p:commandButton icon="pi pi-check" value="Join Event"
+                                             update=":dialogs:manage-join-event-content"
+                                             oncomplete="PF('manageJoinDialog').show()"
+                                             styleClass="mr-3 ui-button-success" process="@this">
+                                <f:setPropertyActionListener target="#{joinGroupBean.selectedEvent}" value="#{e}"/>
+                                <p:resetInput target=":dialogs:manage-join-event-content" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                <h:form id="dialogs">
+                    <p:dialog header="Enter Details" width="600" showEffect="fade" modal="true" widgetVar="manageJoinDialog"
+                              responsive="true">
+                        <p:outputPanel id="manage-join-event-content" class="ui-fluid">
+                            <p:messages id="valMsg" closable="true" />
+                            <div class="field">
+                                <p:outputLabel for="place">Place Name</p:outputLabel>
+                                <p:inputText disabled="true" id="place" value="#{joinGroupBean.selectedEvent.placeId.name}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="address">Place Address</p:outputLabel>
+                                <p:inputText disabled="true" id="address" value="#{joinGroupBean.selectedEvent.placeId.address}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="estart">Event Start Time</p:outputLabel>
+                                <p:inputText disabled="true" id="estart" value="#{joinGroupBean.selectedEvent.startTime}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="eend">Event End Time</p:outputLabel>
+                                <p:inputText disabled="true" id="eend" value="#{joinGroupBean.selectedEvent.endTime}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel>Guide</p:outputLabel>
+                                <div class="flex flex-row">
+                                    <div>
+                                        <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
+                                            <p:graphicImage value="/uploads/profiles/#{joinGroupBean.selectedEvent.guideId.profileImage}" />
+                                        </p:avatar>
+                                    </div>
+                                    <div class="mt-4 ml-3">
+                                        <h:outputText class="text-lg" value="#{joinGroupBean.selectedEvent.guideId.name}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="people">Confirm no. of People</p:outputLabel>
+                                <p:spinner id="people" value="#{joinGroupBean.people}" min="0" max="50" placeholder="Number of people excluding kids" downButtonStyleClass="ui-button-help" upButtonStyleClass="ui-button-help" required="true" requiredMessage="Number of people is required" validator="#{validatorBean.validateGoPerson}"/>
+                                <small class="mt-1 block">You can take maximum 50 people</small>
+                            </div>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Join" styleClass="mr-2 bg-purple-500 ui-button-help" icon="pi pi-check" 
+                                             actionListener="#{joinGroupBean.joinEvent}"
+                                             update="manage-join-event-content" 
+                                             process="manage-join-event-content @this" 
+                                             >
+                                
+                                <!--<p:ajax event="click" update="dataTableForm:dt-join-event"/>-->
+                            </p:commandButton>
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageJoinDialog').hide()"
+                                             class="mx-3 ui-button-secondary" type="button" />
+                        </f:facet>
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
     </h:body>
 </html>
 
