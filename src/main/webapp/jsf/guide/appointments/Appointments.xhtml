@@ -19,15 +19,12 @@
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
         <div class="my-5 px-2" >
             <div class="surface-card border-round-2xl p-4">
+                <div class="ml-4 text-3xl my-2 font-semibold">Appointments</div>
                 <h:form id="dataTableForm">
                     <p:growl id="messages" showDetail="true" />
                     <p:dataTable id="dt-appointments" class="text-xl" var="ap" widgetVar="dtAppointments"
                                  value="#{guideHomeBean.appointments}" reflow="true" rows="10" 
                                  paginator="true" paginatorPosition="bottom">
-                        <f:facet name="header">
-                            <div class="ml-2 text-3xl font-semibold">Appointments</div>
-                        </f:facet>
-
                         <f:facet name="header">
                             <div class="product-table-header ml-2 mt-5">
                                 <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
@@ -58,9 +55,6 @@
 
                         <p:column sortBy="#{ap.endDatetime}" filterBy="#{ap.endDatetime}" class="text-lg px-4" headerText="Appointment End-Time" >
                             <h:outputText value="#{guideHomeBean.getFormatedDate(ap.endDatetime)} #{guideHomeBean.getFormatedTime(ap.endDatetime)}"/>
-                        </p:column>
-                        <p:column sortBy="#{ap.guideType}" filterBy="#{ap.guideType}" class="text-lg px-4" headerText="Appointment Type" >
-                            <h:outputText value="#{ap.guideType}" />
                         </p:column>
                         <p:column sortBy="#{ap.appointmentStatus}" filterBy="#{ap.appointmentStatus}" class="text-lg px-4" headerText="Appointment Status" >
                             <h:outputText value="#{ap.appointmentStatus}" />

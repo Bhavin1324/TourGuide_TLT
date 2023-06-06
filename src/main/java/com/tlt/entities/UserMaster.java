@@ -95,6 +95,8 @@ public class UserMaster implements Serializable {
     private Collection<UserRole> userRoleCollection;
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<AppointmentMaster> appointmentMasterCollection;
+   @ManyToMany(mappedBy = "userMasterCollection", fetch = FetchType.LAZY)
+   private Collection<EventMaster> eventMasterCollection;
 
     public UserMaster() {
     }
@@ -220,6 +222,14 @@ public class UserMaster implements Serializable {
 
     public void setAppointmentMasterCollection(Collection<AppointmentMaster> appointmentMasterCollection) {
         this.appointmentMasterCollection = appointmentMasterCollection;
+    }
+
+    public Collection<EventMaster> getEventMasterCollection() {
+        return eventMasterCollection;
+    }
+
+    public void setEventMasterCollection(Collection<EventMaster> eventMasterCollection) {
+        this.eventMasterCollection = eventMasterCollection;
     }
 
     @Override

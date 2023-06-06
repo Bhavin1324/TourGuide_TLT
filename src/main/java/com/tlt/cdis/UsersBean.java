@@ -70,13 +70,14 @@ public class UsersBean implements Serializable {
         this.activeTabIndex = activeTabIndex;
     }
 
-    public String getFormatedDate(Date date){
+    public String getFormatedDate(Date date) {
         return Utils.getDateTimeFormat(date);
     }
-    public String getFormatedTime(Date date){
+
+    public String getFormatedTime(Date date) {
         return Utils.getTime12h(date);
     }
-    
+
     public Collection<AppointmentMaster> getAllAppointmentsOfGuides() {
         return ad.getAppointmentsOfAllGuides();
     }
@@ -200,16 +201,16 @@ public class UsersBean implements Serializable {
     public void roleChangeListener(ValueChangeEvent e) {
         this.role = String.valueOf(e.getNewValue());
         if (!this.role.equals("notSelected")) {
-            for (UserRole r : ad.getAllRoles()) {
-                if (r.getUserRolePK().getRole().equals(this.role)) {
-                    this.users = null;
-                    this.users = ad.getUsersByRoles(r);
-                    return;
-                } else {
-                    this.users = null;
-                }
-            }
-        }else{
+//            for (UserRole r : ad.getAllRoles()) {
+//                if (r.getUserRolePK().getRole().equals(this.role)) {
+            this.users = null;
+            this.users = ad.getUsersByRoles(this.role);
+//            return;
+////                } else {
+////                    this.users = null;
+////                }
+//            }
+        } else {
             this.users = ad.getAllUsers();
         }
     }

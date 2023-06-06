@@ -1,4 +1,3 @@
-
 package com.tlt.utils;
 
 import com.maxmind.geoip2.DatabaseReader;
@@ -7,18 +6,20 @@ import com.maxmind.geoip2.record.Location;
 import static com.tlt.constants.PathConstants.GEO_LOCATION_DB;
 import static com.tlt.utils.Utils.CrossFetch_GET;
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GeoLocationUtil {
-    public static Location getUserLocation(){
-        try{
+
+    public static Location getUserLocation() {
+        try {
             File database = new File(GEO_LOCATION_DB);
             DatabaseReader reader = new DatabaseReader.Builder(database).build();
-            
+
             // for string reponse user url = https://api.ipify.org
             // for json response use url = "https://api.ipify.org?format=json"
-            
             // Other apis for same purpose
             // https://api.myip.com/ (This api would return json response)
             // https://ipinfo.io/json (json only api)
@@ -28,13 +29,25 @@ public class GeoLocationUtil {
             // http://checkip.amazonaws.com/
             // https://api.my-ip.io/ip
             // https://api.ip.sb/ip
-            
             InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ip.sb/ip"));
             CityResponse cityResponse = reader.city(ipAddress);
-            
+
             Location location = cityResponse.getLocation();
             return location;
-        } catch(Exception ex){
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getUserCurrentCity() {
+        File database = new File(GEO_LOCATION_DB);
+        try {
+            DatabaseReader reader = new DatabaseReader.Builder(database).build();
+            InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ip.sb/ip"));
+            CityResponse cityResponse = reader.city(ipAddress);
+            return cityResponse.getCity().getName();
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }

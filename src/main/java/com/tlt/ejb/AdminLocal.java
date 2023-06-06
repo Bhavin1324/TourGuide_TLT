@@ -53,6 +53,8 @@ public interface AdminLocal {
 
     Collection<EventMaster> getEventsOfAllGuides();
 
+    Collection<EventMaster> getEventsByCity(String cityName);
+
     Collection<GuideMaster> getAllGuidesOfPlaces(String placeId);
 
     Collection<GuideMaster> getAvailableGuidesOfPlace(String placeId);
@@ -89,7 +91,7 @@ public interface AdminLocal {
 
     void insertUser(UserMaster user);
 
-    Collection<UserMaster> getUsersByRoles(UserRole role);
+    Collection<UserMaster> getUsersByRoles(String role);
 
     //Roles
     Collection<UserRole> getAllRoles();
@@ -129,7 +131,7 @@ public interface AdminLocal {
     List<GraphUtils> getMonthlySubscriptionData();
 
     List<GraphUtils> getMonthlyRevenueData();
-    
+
     //Transports
     TransporterMaster getRandomTranporter();
 
@@ -141,4 +143,6 @@ public interface AdminLocal {
     void updateTransporter(String id, TransporterMaster transporter);
 
     void removeTransporter(String transporterId);
+    
+    void joinEvent(Integer noOfPeople,EventMaster event,String username);
 }
