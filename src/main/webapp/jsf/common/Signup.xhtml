@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:dialog="http://xmlns.jcp.org/jsf/composite/components/dialog"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
@@ -82,15 +83,9 @@
                 </div>
             </div>
         </h:form>
+        <dialog:alert-success widgetWar="success_dlg" header="Registration success" primaryText="Success" secondaryText="User has been registered successfully"  actionButton="true" action="#{registerUserBean.redirectToLogin()}" actionButtonValue="Login"/>
+        <dialog:alert-error widgetWar="error_dlg" header="Registration failed" primaryText="Failure" secondaryText="Unable to register user"/>
         
-        <h:form>
-            <p:dialog header="Success" widgetVar="success_dlg" minHeight="40" width="350" showEffect="fade">
-                <p class="m-0">User has been registered successfully!</p>
-                <f:facet name="footer">
-                    <p:commandButton value="Go for login" action="#{navigationBean.redirectTo(uc.TO_LOGIN)}" styleClass="ui-button-help"/>
-                </f:facet>
-            </p:dialog>
-        </h:form>
     </h:body>
 </html>
 

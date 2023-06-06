@@ -11,6 +11,8 @@ import com.tlt.entities.UserRole;
 import com.tlt.utils.Utils;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -85,46 +87,58 @@ public class RegisterUserBean implements Serializable {
         this.showDialog = showDialog;
     }
 
-    public void register() throws IOException {
+    public void register() {
+        try {
 
-        boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE, PROFILE_IMG_DEST);
-        if (!uploadStatus) {
-            if (file != null && !file.getContentType().equalsIgnoreCase("image/png") && !file.getContentType().equalsIgnoreCase("image/jpeg") && !file.getContentType().equalsIgnoreCase("image/jpg")) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Image: image should be jpeg | jpg | png only", ""));
+            boolean uploadStatus = Utils.uploadFile_PF(file, Utils.IMAGE, PROFILE_IMG_DEST);
+            if (!uploadStatus) {
+                if (file != null && !file.getContentType().equalsIgnoreCase("image/png") && !file.getContentType().equalsIgnoreCase("image/jpeg") && !file.getContentType().equalsIgnoreCase("image/jpg")) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Image: image should be jpeg | jpg | png only", ""));
+                    return;
+                }
+                this.fileName = DEFAULT_USER_IMG;
+            } else {
+                this.fileName = Utils.FileName;
+            }
+            if (tejb.findUserByEmail(userMaster.getEmail()) != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "This email is alredy registered", ""));
                 return;
             }
-            this.fileName = DEFAULT_USER_IMG;
-        } else {
-            this.fileName = Utils.FileName;
-        }
-        if (tejb.findUserByEmail(userMaster.getEmail()) != null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "This email is alredy registered", ""));
-            return;
-        }
-        if (tejb.findUserByUsername(userMaster.getUsername()) != null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username: This username is already taken. Try to make new.", "Create new username which is unique"));
-            return;
-        }
-        if (!userMaster.getPassword().equals(confirmPass)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password: Confirm password must match with entered password", ""));
-            return;
-        }
+            if (tejb.findUserByUsername(userMaster.getUsername()) != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username: This username is already taken. Try to make new.", "Create new username which is unique"));
+                return;
+            }
+            if (!userMaster.getPassword().equals(confirmPass)) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password: Confirm password must match with entered password", ""));
+                return;
+            }
 
-        userMaster.setId(Utils.getUUID());
-        userMaster.setContact(Long.parseLong(contactNumber.replaceAll(" ", "")));
-        userMaster.setProfileImage(this.fileName);
+            userMaster.setId(Utils.getUUID());
+            userMaster.setContact(Long.parseLong(contactNumber.replaceAll(" ", "")));
+            userMaster.setProfileImage(this.fileName);
 
-        String hashedPassword = Utils.generateHash(userMaster.getPassword().toString());
-        userMaster.setPassword(hashedPassword);
-        tejb.insertUser(userMaster);
-        UserRole role = new UserRole(userMaster.getUsername(), ROLE_TOURIST);
-        role.setUserMaster(userMaster);
-        aejb.addUserRole(role);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User has been registerd successfully"));
-        userMaster = new UserMaster();
-        confirmPass = "";
-        contactNumber = "";
-        Utils.resetFilesCache();
-        PrimeFaces.current().executeScript("PF('success_dlg').show()");
+            String hashedPassword = Utils.generateHash(userMaster.getPassword().toString());
+            userMaster.setPassword(hashedPassword);
+            tejb.insertUser(userMaster);
+            UserRole role = new UserRole(userMaster.getUsername(), ROLE_TOURIST);
+            role.setUserMaster(userMaster);
+            aejb.addUserRole(role);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User has been registerd successfully"));
+            userMaster = new UserMaster();
+            confirmPass = "";
+            contactNumber = "";
+            Utils.resetFilesCache();
+            PrimeFaces.current().executeScript("PF('success_dlg').show()");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            PrimeFaces.current().executeScript("PF('error_dlg').show()");
+        }
+    }
+        public void redirectToLogin(){
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(TO_LOGIN);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

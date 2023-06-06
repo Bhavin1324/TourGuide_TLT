@@ -209,10 +209,10 @@ public class ReservePlace implements Serializable {
                     return;
                 case "G":
                     touristAppointment.setGuideId(selectedGuide);
-                    
+
                     payment.setGuideId(selectedGuide);
                     payment.setAmount(selectedGuide.getAmount());
-                    
+
                     adminLogic.insertIntoAppointment(touristAppointment);
                     touristLogic.reserveYourPlace(payment);
                     reset();
@@ -220,10 +220,10 @@ public class ReservePlace implements Serializable {
                     return;
                 case "T":
                     touristAppointment.setTransportId(transport);
-                    
+
                     payment.setTransportId(transport);
                     payment.setAmount(transporter.getAmount());
-                    
+
                     touristLogic.insertTransport(transport);
                     adminLogic.insertIntoAppointment(touristAppointment);
                     touristLogic.reserveYourPlace(payment);
@@ -248,7 +248,8 @@ public class ReservePlace implements Serializable {
             ex.printStackTrace();
         }
     }
-    public void reset(){
+
+    public void reset() {
         numberOfPeople = 0;
         pack = "T";
         currentPlace = new PlaceMaster();
@@ -258,5 +259,10 @@ public class ReservePlace implements Serializable {
         transport = new TransportMaster();
         cardNumber = null;
         transporter = null;
+    }
+
+    public void guideCardSelectOption(GuideMaster guide) {
+        selectedGuide = guide;
+        PrimeFaces.current().executeScript("PF('booking_dialog').show()");
     }
 }

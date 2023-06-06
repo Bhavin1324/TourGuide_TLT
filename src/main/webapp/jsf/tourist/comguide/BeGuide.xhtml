@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:sidebar="http://xmlns.jcp.org/jsf/composite/components/sidebar"
-
+      xmlns:dialog="http://xmlns.jcp.org/jsf/composite/components/dialog"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
@@ -70,11 +70,32 @@
                                         styleClass="w-full" required="true" requiredMessage="Places: Places select a place to guide"/>
                     </div>
                     <div class="w-full">
-                        <p:commandButton id="send-req" value="Register" update="@form" action="#{beGuideBean.registerGuide()}" styleClass="w-full ml-auto mr-0 mb-4 rounded-button block ui-button-help"/>
+                        <p:commandButton id="send-req" value="Send OTP" update="@form" action="#{beGuideBean.verify()}" styleClass="w-full ml-auto mr-0 mb-4 rounded-button block ui-button-help"/>
                     </div>
                 </div>
             </h:form>
         </div>
+        <h:form id="otp-form">
+            <p:dialog id="otp-dialog" header="Check given email for OTP" widgetVar="otp_dlg" minHeight="40" width="350" showEffect="fade" modal="true">
+                <p:outputPanel id="otp-panel" class="ui-fluid">
+
+                    <p:message id="single-message" for="otp" class="mx-0 mb-2 w-full">
+                        <p:autoUpdate/>
+                    </p:message>
+                    <div class="ui-input-icon-left w-full mb-2">
+                        <i class="pi pi-hashtag" />
+                        <p:inputMask id="otp" value="#{beGuideBean.enteredOtp}" placeholder="Enter OTP" mask="999999" styleClass="w-full" required="true" requiredMessage="Otp is required to enter">
+                            <f:validateLength minimum="6"/>
+                        </p:inputMask>
+                    </div>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton id="btn-verify-change" update="otp-form:single-message" process="otp-panel @this" value="Register" action="#{beGuideBean.registerGuide()}" styleClass="ui-button-help rounded-button"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <dialog:alert-success widgetWar="success_dialog" header="Success" primaryText="You are guide now" secondaryText="You can logout and login again to your guide profile" actionButton="true" actionButtonValue="Login as guide" action="#{beGuideBean.loginToGuide()}"/>
+        <dialog:alert-error widgetWar="error_dialog" header="Error" primaryText="Failure in becoming guide" secondaryText="Unable to register user as guide"/>
     </h:body>
     <script>
         function goBack() {
