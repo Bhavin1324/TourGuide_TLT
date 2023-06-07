@@ -18,48 +18,161 @@
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
         <div class="my-5 px-2" >
             <div class="surface-card border-round-2xl p-4">
-                <h:form>
-                    <p:dataTable id="dt-payment-history" class="text-xl" var="p" widgetVar="dtPaymentHistory"
-                                 value="#{paymentMasterBean.usersPayments}" reflow="true" rows="10" 
-                                 paginator="true" paginatorPosition="bottom">
-                        <f:facet name="header">
-                            <div class="ml-2 text-3xl font-semibold">Transaction History</div>
-                        </f:facet>
+                <div class="ml-4 mt-4 text-3xl font-semibold">Transaction History</div>
+                <p:tabView class="pl-4 mt-5" activeIndex="0">
+                    <p:tab title="Subscription History" titleStyleClass="text-lg">
+                        <h:form>
+                            <p:dataTable id="dt-payment-history" class="text-lg" var="p" widgetVar="dtPaymentHistory"
+                                         value="#{paymentMasterBean.usersSubscriptions}" reflow="true" rows="10" 
+                                         paginator="true" paginatorPosition="bottom">
+                                <f:facet name="header">
+                                    <div class="product-table-header ml-2 mt-5">
+                                        <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" onkeyup="PF('dtPaymentHistory').filter()" 
+                                                         placeholder="Search" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <p:column  sortBy="#{p.subscriptionId.subscriptionModelId.name}" filterBy="#{p.subscriptionId.subscriptionModelId.name}" class="text-lg" headerText="Subscription Model">
+                                    <h:outputText value="#{p.subscriptionId.subscriptionModelId.name}"/>
+                                </p:column>
+                                <p:column sortBy="#{p.subscriptionId.subscriptionModelId.cost}" filterBy="#{p.subscriptionId.subscriptionModelId.cost}" class="text-lg px-4" headerText="Amount">
+                                    <h:outputText class="-mr-1" value="#{p.subscriptionId.subscriptionModelId.cost}"/>
+                                    <span class="material-symbols-outlined text-xl">
+                                        currency_rupee
+                                    </span>
+                                </p:column>
 
-                        <f:facet name="header">
-                            <div class="product-table-header ml-2 mt-5">
-                                <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" onkeyup="PF('dtPaymentHistory').filter()" 
-                                                 placeholder="Search" />
-                                </div>
-                            </div>
-                        </f:facet>
-                        <p:column  sortBy="#{p.subscriptionId.subscriptionModelId.name}" filterBy="#{p.subscriptionId.subscriptionModelId.name}" class="text-lg" headerText="Subscription Model">
-                            <h:outputText value="#{p.subscriptionId.subscriptionModelId.name}"/>
-                        </p:column>
-                        <p:column sortBy="#{p.subscriptionId.subscriptionModelId.cost}" filterBy="#{p.subscriptionId.subscriptionModelId.cost}" class="text-lg px-4" headerText="Amount">
-                            <h:outputText class="-mr-1" value="#{p.subscriptionId.subscriptionModelId.cost}"/>
-                            <span class="material-symbols-outlined text-xl">
-                                currency_rupee
-                            </span>
-                        </p:column>
+                                <p:column sortBy="#{p.paymentStatus}" filterBy="#{p.paymentStatus}" class="text-lg px-4" headerText="Payment Status">
+                                    <h:outputText value="#{p.paymentStatus}"/>
+                                </p:column>
 
-                        <p:column sortBy="#{p.paymentStatus}" filterBy="#{p.paymentStatus}" class="text-lg px-4" headerText="Payment Status">
-                            <h:outputText value="#{p.paymentStatus}"/>
-                        </p:column>
+                                <p:column sortBy="#{p.createdAt}" filterBy="#{p.createdAt}" class="text-lg px-4" headerText="Date" >
+                                    <h:outputText value="#{guideHomeBean.getFormatedDate(p.createdAt)}&nbsp;&nbsp;&nbsp;#{guideHomeBean.getFormatedTime(p.createdAt)} "/>
+                                </p:column>
 
-                        <p:column sortBy="#{p.createdAt}" filterBy="#{p.createdAt}" class="text-lg px-4" headerText="Date" >
-                            <h:outputText value="#{guideHomeBean.getFormatedDate(p.createdAt)}&nbsp;&nbsp;&nbsp;#{guideHomeBean.getFormatedTime(p.createdAt)} "/>
-                        </p:column>
+                                <p:column sortBy="#{p.cardDetails}" filterBy="#{p.cardDetails}" class="text-lg px-4" headerText="Card Number" >
+                                    <h:outputText value="#{p.cardDetails}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:tab>
+                    <p:tab titleStyleClass="text-lg" title="Personal Appointments History">
+                        <h:form>
+                            <p:dataTable id="dt-appt-history" class="text-lg" var="p" widgetVar="dtApptHistory"
+                                         value="#{userTransactionBean.usersAppointmentHistory}" reflow="true" rows="10" 
+                                         paginator="true" paginatorPosition="bottom">
+                                <f:facet name="header">
+                                    <div class="product-table-header ml-2 mt-5">
+                                        <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" onkeyup="PF('dtApptHistory').filter()" 
+                                                         placeholder="Search" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <p:column  sortBy="#{p.appointmentId.placeId}" filterBy="#{p.appointmentId.placeId}" class="text-lg" headerText="Place">
+                                    <div class="text-center flex flex-column justify-content-center">
+                                        <div>
+                                            <p:graphicImage  value="/uploads/places/#{p.appointmentId.placeId.images}"  
+                                                             style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                                        </div>
+                                        <div class="mt-2">
+                                            <h:outputText  value="#{p.appointmentId.placeId.name}"/>
+                                        </div>
+                                    </div>
+                                </p:column>
+                                <p:column sortBy="#{p.appointmentId.placeId.address}" filterBy="#{p.appointmentId.placeId.address}" class="text-lg px-4" headerText="Place Address">
+                                    <h:outputText class="-mr-1" value="#{p.appointmentId.placeId.address}"/>
+                                </p:column>
+                                <p:column sortBy="#{p.guideId.name}" filterBy="#{p.guideId.name}" class="text-lg px-4" headerText="Guide">
+                                    <div class="flex flex-row justify-content-center">
+                                        <div>
+                                            <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
+                                                <p:graphicImage value="/uploads/profiles/#{p.guideId.profileImage}" />
+                                            </p:avatar>
+                                        </div>
+                                        <div class="mt-3 ml-2"><h:outputText class="text-lg" value="#{p.guideId.name}"/></div>
+                                    </div>
+                                </p:column>
 
-                        <p:column sortBy="#{p.cardDetails}" filterBy="#{p.cardDetails}" class="text-lg px-4" headerText="Card Number" >
-                            <h:outputText value="#{p.cardDetails}"/>
-                        </p:column>
-                        <p:column sortBy="#{p.guideId.name}" filterBy="#{p.guideId.name}" class="text-lg px-4" headerText="Guide" >
-                            <h:outputText value="#{(p.guideId==null)? '&nbsp;&nbsp;----': p.guideId.name}" />
-                        </p:column>
-                    </p:dataTable>
-                </h:form>
+                                <p:column sortBy="#{p.amount}" filterBy="#{p.amount}" class="text-lg px-4" headerText="Amount">
+                                    <h:outputText value="#{p.amount}"/>
+                                    <span class="material-symbols-outlined text-xl">
+                                        currency_rupee
+                                    </span>
+                                </p:column>
+
+                                <p:column sortBy="#{p.paymentStatus}" filterBy="#{p.paymentStatus}" class="text-lg px-4" headerText="Payment Status" >
+                                    <h:outputText value="#{p.paymentStatus} "/>
+                                </p:column>
+                                <p:column sortBy="#{p.createdAt}" filterBy="#{p.createdAt}" class="text-lg px-4" headerText="Date" >
+                                    <h:outputText value="#{guideHomeBean.getFormatedDate(p.createdAt)}&nbsp;&nbsp;&nbsp;#{guideHomeBean.getFormatedTime(p.createdAt)} "/>
+                                </p:column>
+
+                                <p:column sortBy="#{p.cardDetails}" filterBy="#{p.cardDetails}" class="text-lg px-4" headerText="Card Number" >
+                                    <h:outputText value="#{p.cardDetails}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:tab>
+                    <p:tab titleStyleClass="text-lg" title="Events' History">
+                        <h:form>
+                            <p:dataTable id="dt--event-history" class="text-lg" var="p" widgetVar="dtEventHistory"
+                                         value="#{userTransactionBean.usersEventHistory}" reflow="true" rows="10" 
+                                         paginator="true" paginatorPosition="bottom">
+                                <f:facet name="header">
+                                    <div class="product-table-header ml-2 mt-5">
+                                        <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" onkeyup="PF('dtEventHistory').filter()" 
+                                                         placeholder="Search" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <p:column  sortBy="#{p.eventId.placeId.name}" filterBy="#{p.eventId.placeId.name}" class="text-lg" headerText="Place">
+                                    <div class="text-center flex flex-column justify-content-center">
+                                        <div>
+                                            <p:graphicImage  value="/uploads/places/#{p.eventId.placeId.images}"  
+                                                             style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                                        </div>
+                                        <div class="mt-2">
+                                            <h:outputText  value="#{p.eventId.placeId.name}"/>
+                                        </div>
+                                    </div>
+                                </p:column>
+                                <p:column sortBy="#{p.eventId.placeId.address}" filterBy="#{p.eventId.placeId.address}" class="text-lg px-4" headerText="Place Address">
+                                    <h:outputText class="-mr-1" value="#{p.eventId.placeId.address}"/>
+                                </p:column>
+                                <p:column sortBy="#{p.eventId.guideId.name}" filterBy="#{p.eventId.guideId.name}" class="text-lg px-4" headerText="Guide">
+                                    <div class="flex flex-row justify-content-center">
+                                        <div>
+                                            <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
+                                                <p:graphicImage value="/uploads/profiles/#{p.eventId.guideId.profileImage}" />
+                                            </p:avatar>
+                                        </div>
+                                        <div class="mt-3 ml-2"><h:outputText class="text-lg" value="#{p.eventId.guideId.name}"/></div>
+                                    </div>
+                                </p:column>
+
+                                <p:column sortBy="#{p.amount}" filterBy="#{p.amount}" class="text-lg px-4" headerText="Amount">
+                                    <h:outputText value="#{p.amount}"/>
+                                    <span class="material-symbols-outlined text-xl">
+                                        currency_rupee
+                                    </span>
+                                </p:column>
+                                <p:column sortBy="#{p.paymentStatus}" filterBy="#{p.paymentStatus}" class="text-lg px-4" headerText="Payment Status" >
+                                    <h:outputText value="#{p.paymentStatus} "/>
+                                </p:column>
+                                <p:column sortBy="#{p.createdAt}" filterBy="#{p.createdAt}" class="text-lg px-4" headerText="Date" >
+                                    <h:outputText value="#{guideHomeBean.getFormatedDate(p.createdAt)}&nbsp;&nbsp;&nbsp;#{guideHomeBean.getFormatedTime(p.createdAt)} "/>
+                                </p:column>
+
+                                <p:column sortBy="#{p.cardDetails}" filterBy="#{p.cardDetails}" class="text-lg px-4" headerText="Card Number" >
+                                    <h:outputText value="#{p.cardDetails}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:tab>
+                </p:tabView>
             </div>
         </div>
     </h:body>

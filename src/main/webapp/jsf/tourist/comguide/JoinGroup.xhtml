@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar"
-
+      xmlns:payment="http://xmlns.jcp.org/jsf/composite/components/payment"
+      xmlns:dialog="http://xmlns.jcp.org/jsf/composite/components/dialog"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
@@ -37,7 +38,7 @@
                             </div>
                         </f:facet>
                         <p:column  class="px-4 text-lg" sortBy="#{e.guideId.name}" filterBy="#{e.guideId.name}" headerText="Guide">
-                            <div class="flex flex-row">
+                            <div class="flex flex-row justify-content-center">
                                 <div>
                                     <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
                                         <p:graphicImage value="/uploads/profiles/#{e.guideId.profileImage}" />
@@ -59,7 +60,7 @@
                                     <p:graphicImage  value="/uploads/places/#{e.placeId.images}"  
                                                      style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
                                 </div>
-                                <div class="mt-4">
+                                <div class="mt-2">
                                     <h:outputText  value="#{e.placeId.name}"/>
                                 </div>
                             </div>
@@ -132,11 +133,11 @@
 
                         <f:facet name="footer">
                             <p:commandButton value="Join" styleClass="mr-2 bg-purple-500 ui-button-help" icon="pi pi-check" 
-                                             actionListener="#{joinGroupBean.joinEvent}"
+                                             actionListener="#{joinGroupBean.proceedToPayment}"
                                              update="manage-join-event-content" 
                                              process="manage-join-event-content @this" 
                                              >
-                                
+
                                 <!--<p:ajax event="click" update="dataTableForm:dt-join-event"/>-->
                             </p:commandButton>
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageJoinDialog').hide()"
@@ -144,6 +145,11 @@
                         </f:facet>
                     </p:dialog>
                 </h:form>
+                <p:outputPanel id="payment_panel">
+                    <payment:s-payment widgetWar="payment_dialog" cardNumber="#{joinGroupBean.cardNumber}" currentCost="#{joinGroupBean.currentCost}" paymentAction="#{joinGroupBean.joinEvent()}" />
+                </p:outputPanel>
+                <dialog:alert-success widgetWar="success_dialog" header="Payment success" primaryText="Done" secondaryText="Transaction has been made successfully" actionButton="true" actionButtonValue="Watch my trip" action="#{joinGroupBe.goToMyTrip()}"/>
+                <dialog:alert-error widgetWar="error_dialog" header="Payment aborted" primaryText="Failure" secondaryText="Transacrion cannot be completed due to internal issue"/>
             </div>
         </div>
     </h:body>

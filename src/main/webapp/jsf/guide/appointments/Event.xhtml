@@ -38,7 +38,12 @@
                         </f:facet>
                         <p:column  sortBy="#{e.placeId.name}" filterBy="#{e.placeId.name}" 
                                    class="text-lg" headerText="Place">
-                            <h:outputText value="#{e.placeId.name}"/>
+                            <div class="text-center flex flex-column justify-content-center">
+                                <div>
+                                    <p:graphicImage value="/uploads/places/#{e.placeId.images}" style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                                </div>
+                                <h:outputText class="mt-2" value="#{e.placeId.name}"/>
+                            </div>
                         </p:column>
                         <p:column  sortBy="#{e.placeId.address}" filterBy="#{e.placeId.address}" 
                                    class="text-lg" headerText="Place Address">

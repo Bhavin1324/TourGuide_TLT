@@ -5,6 +5,7 @@
 package com.tlt.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,7 +26,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "appointment_master")
@@ -32,7 +34,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "AppointmentMaster.findAll", query = "SELECT a FROM AppointmentMaster a"),
     @NamedQuery(name = "AppointmentMaster.findById", query = "SELECT a FROM AppointmentMaster a WHERE a.id = :id"),
     @NamedQuery(name = "AppointmentMaster.findByStartDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.startDatetime = :startDatetime"),
-    @NamedQuery(name = "AppointmentMaster.getAppointmentsByStatus", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid AND a.appointmentStatus = :status"),
+     @NamedQuery(name = "AppointmentMaster.getAppointmentsByStatus", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid AND a.appointmentStatus = :status"),
     @NamedQuery(name = "AppointmentMaster.getAppointmentsOfGuide", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId.id = :gid ORDER BY a.appointmentStatus DESC"),
     @NamedQuery(name = "AppointmentMaster.findByEndDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.endDatetime = :endDatetime"),
     @NamedQuery(name = "AppointmentMaster.findByNumberOfPeople", query = "SELECT a FROM AppointmentMaster a WHERE a.numberOfPeople = :numberOfPeople")})
@@ -61,6 +63,11 @@ public class AppointmentMaster implements Serializable {
     private String packType;
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
+    @OneToMany(mappedBy = "appointmentId", fetch = FetchType.LAZY)
+    private Collection<PaymentMaster> paymentMasterCollection;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserMaster userId;
     @JoinColumn(name = "guide_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GuideMaster guideId;
@@ -70,9 +77,6 @@ public class AppointmentMaster implements Serializable {
     @JoinColumn(name = "transport_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private TransportMaster transportId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserMaster userId;
 
     public AppointmentMaster() {
     }
@@ -129,6 +133,22 @@ public class AppointmentMaster implements Serializable {
         this.numberOfPeople = numberOfPeople;
     }
 
+    public Collection<PaymentMaster> getPaymentMasterCollection() {
+        return paymentMasterCollection;
+    }
+
+    public void setPaymentMasterCollection(Collection<PaymentMaster> paymentMasterCollection) {
+        this.paymentMasterCollection = paymentMasterCollection;
+    }
+
+    public UserMaster getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserMaster userId) {
+        this.userId = userId;
+    }
+
     public GuideMaster getGuideId() {
         return guideId;
     }
@@ -151,14 +171,6 @@ public class AppointmentMaster implements Serializable {
 
     public void setTransportId(TransportMaster transportId) {
         this.transportId = transportId;
-    }
-
-    public UserMaster getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UserMaster userId) {
-        this.userId = userId;
     }
 
     @Override

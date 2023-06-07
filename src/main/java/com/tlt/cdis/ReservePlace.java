@@ -180,7 +180,7 @@ public class ReservePlace implements Serializable {
             touristAppointment.setId(Utils.getUUID());
             touristAppointment.setUserId(currentUser);
             touristAppointment.setPlaceId(currentPlace);
-            touristAppointment.setAppointmentStatus("pending");
+            touristAppointment.setAppointmentStatus("Pending");
             touristAppointment.setPackType(pack);
             touristAppointment.setNumberOfPeople(numberOfPeople);
 
@@ -191,6 +191,7 @@ public class ReservePlace implements Serializable {
             payment.setPaymentStatus("Success");
             payment.setUserId(currentUser);
             payment.setPaymentMethodId(adminLogic.getCardPayment());
+            payment.setAppointmentId(touristAppointment);
             switch (pack) {
                 case "TG":
                     int grossAmount = selectedGuide.getAmount() + transporter.getAmount();

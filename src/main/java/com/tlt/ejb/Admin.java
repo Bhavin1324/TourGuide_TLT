@@ -501,23 +501,4 @@ public class Admin implements AdminLocal {
         return (PaymentMethod) em.find(PaymentMethod.class, "3hbk2jh3bkj2hb3");
     }
 
-    @Override
-    public void joinEvent(Integer noOfPeople, EventMaster event, String username) {
-        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
-        EventMaster emaster = em.find(EventMaster.class,event.getId());
-        Integer noofpeople = event.getNumberOfPeople() + noOfPeople;
-        emaster.setNumberOfPeople(noofpeople);
-        UserMaster umaster = em.find(UserMaster.class,user.getId());
-        Collection<EventMaster> usersEvent = umaster.getEventMasterCollection();
-        usersEvent.add(emaster);
-        umaster.setEventMasterCollection(usersEvent);
-        
-        Collection<UserMaster> eventsUser = emaster.getUserMasterCollection();
-        eventsUser.add(umaster);
-        emaster.setUserMasterCollection(eventsUser);
-        
-        em.merge(umaster);
-        em.merge(emaster);
-    }
-
 }

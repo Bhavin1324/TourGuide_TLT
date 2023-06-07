@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.SubscriptionModel;
@@ -45,5 +46,13 @@ public interface TouristLocal {
     void insertTransport(TransportMaster transport);
 
     void removeTransportInfo(String id);
+
+    Collection<PaymentMaster> getUsersSubscriptionHistory(String username);
+
+    Collection<PaymentMaster> getUsersAppointmentHistory(String username);
+
+    Collection<PaymentMaster> getUsersEventsHistory(String username);
+
+    void joinEvent(Integer noOfPeople, EventMaster event, String username, PaymentMaster payment);
 
 }

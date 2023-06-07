@@ -50,7 +50,7 @@
                             <p:menuitem value="Landmark tour prime" action="#{cc.attrs.bean.redirectTo(uc.TO_SUBS_CARDS)}" update="messages" icon="pi pi-verified" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
                             <p:menuitem value="About us" action="#{cc.attrs.bean.redirectTo(uc.TO_ABOUT_US)}" update="messages" icon="pi pi-info-circle"/>
                             <p:menuitem value="Logout" icon="pi pi-sign-out" action="#{cc.attrs.bean.logout(uc.TO_LOGOUT)}">
-                                <p:confirm header="Confirmation" message="Are you sure you want to logout?" icon="pi pi-question-circle"/>
+                                <p:confirm header="Logout" message="Are you sure you want to logout?" icon="pi pi-question-circle"/>
                             </p:menuitem>
                         </p:menu>
                     </div>

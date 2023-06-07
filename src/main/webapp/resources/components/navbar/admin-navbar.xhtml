@@ -18,7 +18,7 @@
             <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
             <h:form>
                 <p:growl id="messages"/>
-                <p:menubar>
+                <p:menubar class="bg-white">
                     <div style="display: block">
                         <p:menuitem styleClass="p-2 select-none">
                             <p:graphicImage value="/images/tlt-logo.png" height="40"/>
@@ -38,7 +38,7 @@
                             </div>
                             <div class="ml-3">
                                 <p:commandButton id="logout_action" value="Logout" styleClass="rounded-button ui-button-help" action="#{cc.attrs.sideNavigationBean.logout(uc.TO_LOGOUT)}">
-                                    <p:confirm header="Confirmation" message="Are you sure you want to logout?" icon="pi pi-question-circle"/>
+                                    <p:confirm header="Logout" message="Are you sure you want to logout?" icon="pi pi-question-circle"/>
                                 </p:commandButton>
                             </div>
                         </div>

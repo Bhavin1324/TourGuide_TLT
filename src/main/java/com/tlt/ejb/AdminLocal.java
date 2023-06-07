@@ -159,5 +159,5 @@ public interface AdminLocal {
     // Payment method
     public PaymentMethod getCardPayment();
     
-    void joinEvent(Integer noOfPeople,EventMaster event,String username);
+    
 }

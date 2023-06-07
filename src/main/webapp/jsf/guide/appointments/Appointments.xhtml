@@ -35,7 +35,13 @@
                         </f:facet>
                         <p:column  sortBy="#{ap.placeId.name}" filterBy="#{ap.placeId.name}" 
                                    class="text-lg" headerText="Place">
-                            <h:outputText value="#{ap.placeId.name}"/>
+                            
+                            <div class="text-center flex flex-column justify-content-center">
+                                <div>
+                                    <p:graphicImage value="/uploads/places/#{ap.placeId.images}" style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                                </div>
+                                <h:outputText class="mt-2" value="#{ap.placeId.name}"/>
+                            </div>
                         </p:column>
                         <p:column  sortBy="#{ap.placeId.address}" filterBy="#{ap.placeId.address}" 
                                    class="text-lg" headerText="Place Address">
@@ -51,10 +57,6 @@
 
                         <p:column sortBy="#{ap.startDatetime}" filterBy="#{ap.startDatetime}" class="text-lg px-4" headerText="Appointment Start-Time" >
                             <h:outputText value="#{guideHomeBean.getFormatedDate(ap.startDatetime)} #{guideHomeBean.getFormatedTime(ap.startDatetime)}"/>
-                        </p:column>
-
-                        <p:column sortBy="#{ap.endDatetime}" filterBy="#{ap.endDatetime}" class="text-lg px-4" headerText="Appointment End-Time" >
-                            <h:outputText value="#{guideHomeBean.getFormatedDate(ap.endDatetime)} #{guideHomeBean.getFormatedTime(ap.endDatetime)}"/>
                         </p:column>
                         <p:column sortBy="#{ap.appointmentStatus}" filterBy="#{ap.appointmentStatus}" class="text-lg px-4" headerText="Appointment Status" >
                             <h:outputText value="#{ap.appointmentStatus}" />
