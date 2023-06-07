@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition>
+            <p:outputPanel rendered="#{myTripBean.usersAppointments.isEmpty()}" styleClass="h-full">
+                <div class="flex align-items-center border-1 border-purple-100 bg-purple-50 block px-4 py-4 border-round-2xl">
+                    <span class="material-symbols-outlined mr-3">info</span>
+                    <h:outputText value="No appointment found"/>
+                </div>       
+            </p:outputPanel>
+            <h:form id="appointment-dt-form" rendered="#{!myTripBean.usersAppointments.isEmpty()}">
+                <p:outputPanel id="dt-appointment-panel">
+
+                    <p:growl id="messages" showDetail="true" ><p:autoUpdate/></p:growl>
+                    <p:dataTable id="dt-appointments-user" class="text-xl" var="apt" widgetVar="dtAppointmentsUser"
+                                 value="#{myTripBean.usersAppointments}" reflow="true" rows="10" 
+                                 paginator="true" paginatorPosition="bottom">
+
+                        <f:facet name="header">
+                            <div class="product-table-header ml-2 mt-5">
+                                <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtAppointmentsUser').filter()" 
+                                                 placeholder="Search" />
+                                </div>
+                            </div>
+                        </f:facet>
+                        <p:column  sortBy="#{apt.placeId.name}" filterBy="#{apt.placeId.name}" 
+                                   class="text-lg" headerText="Place">
+                            <div class="text-center flex flex-column justify-content-center">
+                                <div>
+                                    <p:graphicImage  value="/uploads/places/#{apt.placeId.images}"  
+                                                     style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                                </div>
+                                <div class="mt-2">
+                                    <h:outputText  value="#{apt.placeId.name}"/>
+                                </div>
+                            </div>
+                        </p:column>
+
+                        <p:column  sortBy="#{apt.placeId.address}" filterBy="#{apt.placeId.address}" 
+                                   class="text-lg" headerText="Place Address">
+                            <h:outputText value="#{apt.placeId.address}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{apt.startDatetime}" filterBy="#{apt.startDatetime}" class="text-lg px-4" headerText="Appointment time">
+                            <h:outputText class="-mr-1" value="#{myTripBean.getFormatedDate(apt.startDatetime)} #{myTripBean.getFormatedTime(apt.startDatetime)}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{apt.transportId.transporterId.name != null ? apt.transportId.transporterId.name : apt.placeId.name}" filterBy="#{apt.transportId.transporterId.name != null ? apt.transportId.transporterId.name : apt.placeId.name}" class="text-lg" headerText="Transporter">
+                            <p:outputPanel rendered="#{apt.transportId != null}">
+                                <div class="flex align-items-center mb-2">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">account_circle</span>
+                                    <span class="text-lg font-semibold">#{apt.transportId.transporterId.name}</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">directions_car</span>
+                                    <span>#{apt.transportId.transporterId.plateNo}</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">call</span>
+                                    <span>#{apt.transportId.transporterId.contactNo}</span>
+                                </div>
+                            </p:outputPanel>
+                            <h:outputText value="No transporter" style="color: rgba(0,0,0,.5)" rendered="#{apt.transportId == null}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{apt.transportId.pickupDateTime != null ? apt.transportId.pickupDateTime : apt.startDatetime}" filterBy="#{apt.transportId.pickupDateTime != null ? apt.transportId.pickupDateTime : apt.startDatetime}" class="text-lg px-4" headerText="Pickup time">
+                            <h:outputText class="-mr-1" value="#{myTripBean.getFormatedDate(apt.transportId.pickupDateTime)} #{myTripBean.getFormatedTime(apt.transportId.pickupDateTime)}" rendered="#{apt.transportId != null}"/>
+                            <h:outputText value="No transporter" style="color: rgba(0,0,0,.5)" rendered="#{apt.transportId == null}"/>
+
+                        </p:column>
+
+                        <p:column sortBy="#{apt.transportId.pickupLocation != null ? apt.transportId.pickupLocation : apt.placeId.address}" filterBy="#{apt.transportId.pickupLocation != null ? apt.transportId.pickupLocation : apt.placeId.address}" class="text-lg px-4" headerText="Pickup location" >
+                            <h:outputText value="#{apt.transportId.pickupLocation}" rendered="#{apt.transportId != null}"/>
+                            <h:outputText value="No transporter" style="color: rgba(0,0,0,.5)" rendered="#{apt.transportId == null}"/>
+
+                        </p:column>
+
+                        <p:column sortBy="#{apt.guideId.name != null ? apt.guideId.name : apt.placeId.name}" filterBy="#{apt.guideId.name != null ? apt.guideId.name : apt.placeId.name}" class="text-lg px-4" headerText="Guide" >
+                            <div class="flex align-items-center">
+                                <div>
+                                    <p:avatar styleClass="mr-2 shadow-4" size="large" shape="circle" rendered="#{apt.guideId != null}">
+                                        <p:graphicImage value="/uploads/profiles/#{apt.guideId.profileImage}" />
+                                    </p:avatar>
+                                </div>
+                                <div class="ml-2"><h:outputText value="#{apt.guideId.name}" rendered="#{apt.guideId != null}"/></div>
+                            </div>
+                            <h:outputText value="No guide" style="color: rgba(0,0,0,.5)" rendered="#{apt.guideId == null}"/>
+
+                        </p:column>
+
+                        <p:column sortBy="#{apt.guideId.email != null ? apt.guideId.email : apt.placeId.name}" filterBy="#{apt.guideId.email != null ? apt.guideId.email : apt.placeId.name}" class="text-lg px-4 overflow-auto" headerText="Guide contact">
+                            <p:outputPanel rendered="#{apt.guideId != null}">
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">email</span>
+                                    <span>#{apt.guideId.email}</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">call</span>
+                                    <span>#{apt.guideId.phoneNumber}</span>
+                                </div>
+                            </p:outputPanel>
+                            <h:outputText value="No guide" style="color: rgba(0,0,0,.5)" rendered="#{apt.guideId == null}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{apt.appointmentStatus}" filterBy="#{apt.appointmentStatus}" class="text-lg px-4" headerText="Event Status" >
+                            <h:outputText value="#{apt.appointmentStatus}" />
+                        </p:column>
+                        <p:column exportable="false">
+                            <p:commandButton icon="pi pi-check" rendered="#{apt.appointmentStatus.equals('Pending')}" 
+                                             onclick="PF('manageAppointmentDialog').show()"
+                                             styleClass="mr-3 edit-button rounded-button ui-button-success" process="@this">
+                                <f:setPropertyActionListener target="#{myTripBean.selectedAppointment}" value="#{apt}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-times" rendered="#{apt.appointmentStatus.equals('Pending')}" 
+                                             onclick="PF('manageAppointmentCancelDialog').show()"
+                                             styleClass="mr-3 edit-button rounded-button ui-button-danger" process="@this">
+                                <f:setPropertyActionListener target="#{myTripBean.selectedAppointment}" value="#{apt}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:outputPanel>
+            </h:form>
+            <p:dialog widgetVar="manageAppointmentDialog" header="Mark as complete" showEffect="fade" modal="true">
+                <h:form>
+                    <div class="flex flex-wrap justify-content-center align-items-center">
+                        <span class="material-symbols-outlined" style="font-size: 50px">help</span>
+                        <div class="content px-4">
+                            <h:outputText class="text-xl font-semibold mb-2 block" value="" rendered="false"/>
+                            <h:outputText class="block" value="Are you sure you want to mark this appointment as 'Complete'?"/>
+                        </div>
+                    </div>
+                    <div class="text-right mt-4">
+                        <p:commandButton type="button" class="ui-button-outlined ui-button-help mr-2" value="No" onclick="PF('manageAppointmentDialog').hide()"/>
+                        <p:commandButton class="ui-button-raised ui-button-help" value="Yes" update="apt-tab-view:appointment-dt-form @this" action="#{myTripBean.updateAppointmentStatus('Complete')}" oncomplete="PF('manageAppointmentDialog').hide()"/>
+                    </div>
+                </h:form>
+            </p:dialog>
+            <p:dialog widgetVar="manageAppointmentCancelDialog" header="Mark as cancel" showEffect="fade" modal="true">
+                <h:form>
+                    <div class="flex flex-wrap justify-content-center align-items-center">
+                        <span class="material-symbols-outlined" style="font-size: 50px">help</span>
+                        <div class="content px-4">
+                            <h:outputText class="text-xl font-semibold mb-2 block" value="" rendered="false"/>
+                            <h:outputText class="block" value="Are you sure you want to mark this appointment as 'Cancelled'?"/>
+                        </div>
+                    </div>
+                    <div class="text-right mt-4">
+                        <p:commandButton type="button" class="ui-button-outlined ui-button-help mr-2" value="No" onclick="PF('manageAppointmentDialog').hide()"/>
+                        <p:commandButton class="ui-button-raised ui-button-help" value="Yes" update="apt-tab-view:appointment-dt-form @this" action="#{myTripBean.updateAppointmentStatus('Cancelled')}" oncomplete="PF('manageAppointmentCancelDialog').hide()"/>
+                       
+                    </div>
+                </h:form>
+            </p:dialog>
+        </ui:composition>
+    </h:body>
+</html>
+

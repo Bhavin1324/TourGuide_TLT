@@ -155,9 +155,13 @@ public interface AdminLocal {
     void updateAppointment(String id, AppointmentMaster appointment);
 
     void deleteAppointment(String id);
-    
+
+    Collection<AppointmentMaster> getUserAppointments(String userId);
+
+    Collection<EventMaster> getUserEvents(String userId);
+
     // Payment method
     public PaymentMethod getCardPayment();
-    
-    void joinEvent(Integer noOfPeople,EventMaster event,String username);
+
+    void joinEvent(Integer noOfPeople, EventMaster event, String username);
 }

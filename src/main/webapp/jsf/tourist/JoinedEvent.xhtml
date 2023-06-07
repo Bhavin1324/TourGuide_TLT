@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition>
+            <p:outputPanel rendered="#{myTripBean.userEvents.isEmpty()}" styleClass="h-full">
+                <div class="flex align-items-center border-1 border-purple-100 bg-purple-50 block px-4 py-4 border-round-2xl">
+                    <span class="material-symbols-outlined mr-3">info</span>
+                    <h:outputText value="No joined event found"/>
+                </div>       
+            </p:outputPanel>
+            <h:form id="event-dt-form" rendered="#{!myTripBean.userEvents.isEmpty()}">
+                <p:outputPanel id="dt-event-panel">
+                    <p:growl id="messages" showDetail="true"><p:autoUpdate/></p:growl>
+                    <p:dataTable id="dt-event-user" class="text-xl" var="event" widgetVar="dtUserEvents"
+                                 value="#{myTripBean.userEvents}" reflow="true" rows="10" 
+                                 paginator="true" paginatorPosition="bottom">
+
+                        <f:facet name="header">
+                            <div class="product-table-header ml-2 mt-5">
+                                <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtUserEvents').filter()" 
+                                                 placeholder="Search" />
+                                </div>
+                            </div>
+                        </f:facet>
+                        <p:column  sortBy="#{event.placeId.name}" filterBy="#{event.placeId.name}" 
+                                   class="text-lg" headerText="Place">
+                            <div class="text-center flex flex-column justify-content-center">
+                                <div>
+                                    <p:graphicImage  value="/uploads/places/#{event.placeId.images}"  
+                                                     style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
+                                </div>
+                                <div class="mt-2">
+                                    <h:outputText  value="#{event.placeId.name}"/>
+                                </div>
+                            </div>
+                        </p:column>
+
+                        <p:column  sortBy="#{event.placeId.address}" filterBy="#{event.placeId.address}" 
+                                   class="text-lg" headerText="Place Address">
+                            <h:outputText value="#{event.placeId.address}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{event.startTime}" filterBy="#{event.startTime}" class="text-lg px-4" headerText="Starting at">
+                            <h:outputText class="-mr-1" value="#{myTripBean.getFormatedDate(event.startTime)} #{myTripBean.getFormatedTime(event.startTime)}"/>
+                        </p:column>
+                        <p:column sortBy="#{event.endTime}" filterBy="#{event.endTime}" class="text-lg px-4" headerText="Ending at">
+                            <h:outputText class="-mr-1" value="#{myTripBean.getFormatedDate(event.endTime)} #{myTripBean.getFormatedTime(event.endTime)}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{event.guideId.name}" filterBy="#{event.guideId.name}" class="text-lg px-4" headerText="Guide" >
+                            <div class="flex align-items-center">
+                                <div>
+                                    <p:avatar styleClass="mr-2 shadow-4" size="large" shape="circle">
+                                        <p:graphicImage value="/uploads/profiles/#{event.guideId.profileImage}" />
+                                    </p:avatar>
+                                </div>
+                                <div class="ml-2"><h:outputText value="#{event.guideId.name}"/></div>
+                            </div>
+
+
+                        </p:column>
+
+                        <p:column sortBy="#{event.guideId.email}" filterBy="#{event.guideId.email}" class="text-lg px-4 overflow-auto" headerText="Guide contact">
+                            <p:outputPanel>
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">email</span>
+                                    <span>#{event.guideId.email}</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">call</span>
+                                    <span>#{event.guideId.phoneNumber}</span>
+                                </div>
+                            </p:outputPanel>
+                        </p:column>
+
+                        <p:column sortBy="#{event.eventStatus}" filterBy="#{event.eventStatus}" class="text-lg px-4" headerText="Event Status" >
+                            <h:outputText value="#{event.eventStatus}" />
+                        </p:column>                        
+                    </p:dataTable>
+                </p:outputPanel>
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>
+

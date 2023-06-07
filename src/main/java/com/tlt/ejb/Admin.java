@@ -138,7 +138,7 @@ public class Admin implements AdminLocal {
 
     @Override
     public Collection<AppointmentMaster> getAppointmentsOfAllGuides() {
-        return em.createNamedQuery("AppointmentMaster.findAll").getResultList();
+        return em.createNamedQuery("AppointmentMaster.getAllGuidesAppointments").getResultList();
     }
 
     @Override
@@ -520,4 +520,22 @@ public class Admin implements AdminLocal {
         em.merge(emaster);
     }
 
+    @Override
+    public Collection<AppointmentMaster> getUserAppointments(String userId) {
+        UserMaster user = (UserMaster) em.find(UserMaster.class, userId);
+        if(user == null){
+            return null;
+        }
+        return user.getAppointmentMasterCollection();
+    }
+
+    @Override
+    public Collection<EventMaster> getUserEvents(String userId) {
+        UserMaster user = (UserMaster) em.find(UserMaster.class, userId);
+        if(user == null){
+            return null;
+        }
+        return user.getEventMasterCollection();
+    }
+    
 }
