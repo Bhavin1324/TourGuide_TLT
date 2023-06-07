@@ -334,7 +334,7 @@
             <payment:s-payment widgetWar="payment_dialog" cardNumber="#{reservePlace.cardNumber}" currentCost="#{reservePlace.transporter.amount}" paymentAction="#{reservePlace.paymentAction()}" rendered="#{reservePlace.pack.equals('T')}"/>
             <payment:s-payment widgetWar="payment_dialog" cardNumber="#{reservePlace.cardNumber}" currentCost="#{reservePlace.selectedGuide.amount}" paymentAction="#{reservePlace.paymentAction()}" rendered="#{reservePlace.pack.equals('G')}"/>
         </p:outputPanel>
-        <dialog:alert-success widgetWar="success_dialog" header="Payment success" primaryText="Done" secondaryText="Transacrion has been made successfully" actionButton="true" actionButtonValue="Watch my trip" action="#{reservePlace.goToMyTrip()}"/>
+        <dialog:alert-success widgetWar="success_dialog" header="Payment success" primaryText="Done" secondaryText="Transaction has been made successfully" actionButton="true" actionButtonValue="Watch my trip" action="#{reservePlace.goToMyTrip()}"/>
         <dialog:alert-error widgetWar="error_dialog" header="Payment aborted" primaryText="Failure" secondaryText="Transacrion cannot be completed due to internal issue"/>
     </h:body>
 </html>

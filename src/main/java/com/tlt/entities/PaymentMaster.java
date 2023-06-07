@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lenovo
+ * @author kunal
  */
 @Entity
 @Table(name = "payment_master")
@@ -33,6 +33,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "PaymentMaster.findById", query = "SELECT p FROM PaymentMaster p WHERE p.id = :id"),
     @NamedQuery(name = "PaymentMaster.findByUsername", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :username"),
     @NamedQuery(name = "PaymentMaster.findByCreatedAt", query = "SELECT p FROM PaymentMaster p WHERE p.createdAt = :createdAt"),
+    @NamedQuery(name = "PaymentMaster.findUsersSubscription", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :user AND p.subscriptionId IS NOT NULL"),
+    @NamedQuery(name = "PaymentMaster.findUsersAppt", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :user AND p.appointmentId IS NOT NULL"),
+    @NamedQuery(name = "PaymentMaster.findUsersEvent", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :user AND p.eventId IS NOT NULL"),
     @NamedQuery(name = "PaymentMaster.findByAmount", query = "SELECT p FROM PaymentMaster p WHERE p.amount = :amount")})
 public class PaymentMaster implements Serializable {
 
@@ -56,21 +59,27 @@ public class PaymentMaster implements Serializable {
     private String paymentStatus;
     @Column(name = "amount")
     private Integer amount;
-    @JoinColumn(name = "guide_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private GuideMaster guideId;
     @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PaymentMethod paymentMethodId;
+    @JoinColumn(name = "guide_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private GuideMaster guideId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserMaster userId;
     @JoinColumn(name = "subscription_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private SubscriptionMaster subscriptionId;
     @JoinColumn(name = "transport_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private TransportMaster transportId;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "appointment_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private UserMaster userId;
+    private AppointmentMaster appointmentId;
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private EventMaster eventId;
 
     public PaymentMaster() {
     }
@@ -119,6 +128,14 @@ public class PaymentMaster implements Serializable {
         this.amount = amount;
     }
 
+    public PaymentMethod getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
+    }
+
     public GuideMaster getGuideId() {
         return guideId;
     }
@@ -127,12 +144,12 @@ public class PaymentMaster implements Serializable {
         this.guideId = guideId;
     }
 
-    public PaymentMethod getPaymentMethodId() {
-        return paymentMethodId;
+    public UserMaster getUserId() {
+        return userId;
     }
 
-    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
+    public void setUserId(UserMaster userId) {
+        this.userId = userId;
     }
 
     public SubscriptionMaster getSubscriptionId() {
@@ -151,12 +168,20 @@ public class PaymentMaster implements Serializable {
         this.transportId = transportId;
     }
 
-    public UserMaster getUserId() {
-        return userId;
+    public AppointmentMaster getAppointmentId() {
+        return appointmentId;
     }
 
-    public void setUserId(UserMaster userId) {
-        this.userId = userId;
+    public void setAppointmentId(AppointmentMaster appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public EventMaster getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(EventMaster eventId) {
+        this.eventId = eventId;
     }
 
     @Override
@@ -183,5 +208,5 @@ public class PaymentMaster implements Serializable {
     public String toString() {
         return "com.tlt.entities.PaymentMaster[ id=" + id + " ]";
     }
-
+    
 }

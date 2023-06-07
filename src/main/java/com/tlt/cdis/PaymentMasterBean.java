@@ -7,6 +7,7 @@ package com.tlt.cdis;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.PaymentMaster;
+import com.tlt.entities.SubscriptionMaster;
 import com.tlt.record.KeepRecord;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -32,6 +33,9 @@ public class PaymentMasterBean implements Serializable {
 
     Collection<PaymentMaster> usersPayments;
     Collection<PaymentMaster> adminAllPaymentDetails;
+    Collection<PaymentMaster> usersSubscriptions;
+    
+    
     public PaymentMasterBean() {
         usersPayments = new ArrayList<>();
         adminAllPaymentDetails= new ArrayList<>();
@@ -53,6 +57,16 @@ public class PaymentMasterBean implements Serializable {
     public void setAdminAllPaymentDetails(Collection<PaymentMaster> adminAllPaymentDetails) {
         this.adminAllPaymentDetails = adminAllPaymentDetails;
     }
+
+    public Collection<PaymentMaster> getUsersSubscriptions() {
+        return tb.getUsersSubscriptionHistory(KeepRecord.getUsername());
+    }
+
+    public void setUsersSubscriptions(Collection<PaymentMaster> usersSubscriptions) {
+        this.usersSubscriptions = usersSubscriptions;
+    }
+
+    
     
 
 }

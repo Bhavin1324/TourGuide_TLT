@@ -164,4 +164,6 @@ public interface AdminLocal {
     public PaymentMethod getCardPayment();
 
     void joinEvent(Integer noOfPeople, EventMaster event, String username);
+    
+    
 }

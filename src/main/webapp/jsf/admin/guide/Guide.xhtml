@@ -17,7 +17,7 @@
         <div class="my-5 px-2" >
             <h:form>
                 <div class="surface-card border-round-2xl p-4">
-                    <p:dataTable id="dt-guide-details" widgetVar="dtGuideDetails" class="text-lg mx-2 px-2" var="g" value="#{usersBean.allGuides}" reflow="true" rows="5" paginator="true" paginatorPosition="bottom">
+                    <p:dataTable id="dt-guide-details" widgetVar="dtGuideDetails" class="text-lg mx-2 px-2" var="g" value="#{usersBean.allGuides}" reflow="true" rows="10" paginator="true" paginatorPosition="bottom">
                         <f:facet name="header">
                             <div class="ml-2 text-4xl text-800 font-semibold">Guides</div>
                         </f:facet>
@@ -29,7 +29,7 @@
                             </div>
                         </f:facet>
                         <p:column  class="px-4" sortBy="#{g.username}" filterBy="#{g.username}" headerText="Guide's Username">
-                            <div class="flex flex-row">
+                            <div class="flex flex-row justify-content-center">
                                 <div>
                                     <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
                                         <p:graphicImage value="/uploads/profiles/#{g.profileImage}" />

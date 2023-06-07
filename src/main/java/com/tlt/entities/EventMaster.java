@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.tlt.entities;
 
 import java.io.Serializable;
@@ -15,12 +19,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ *
+ * @author kunal
+ */
 @Entity
 @Table(name = "event_master")
 @NamedQueries({
@@ -62,6 +71,8 @@ public class EventMaster implements Serializable {
     @JoinColumn(name = "place_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PlaceMaster placeId;
+    @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
+    private Collection<PaymentMaster> paymentMasterCollection;
 
     public EventMaster() {
     }
@@ -132,6 +143,14 @@ public class EventMaster implements Serializable {
 
     public void setPlaceId(PlaceMaster placeId) {
         this.placeId = placeId;
+    }
+
+    public Collection<PaymentMaster> getPaymentMasterCollection() {
+        return paymentMasterCollection;
+    }
+
+    public void setPaymentMasterCollection(Collection<PaymentMaster> paymentMasterCollection) {
+        this.paymentMasterCollection = paymentMasterCollection;
     }
 
     @Override

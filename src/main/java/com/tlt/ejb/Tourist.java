@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.EventMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PaymentMethod;
 import com.tlt.entities.SubscriptionMaster;
@@ -175,7 +176,7 @@ public class Tourist implements TouristLocal {
     @Override
     public TransportMaster findTransportById(String id) {
         TransportMaster transport = (TransportMaster) em.find(TransportMaster.class, id);
-        if(transport == null){
+        if (transport == null) {
             return null;
         }
         return transport;
@@ -184,7 +185,7 @@ public class Tourist implements TouristLocal {
     @Override
     public void updateTransportInfo(String id, TransportMaster tranport) {
         TransportMaster trans = (TransportMaster) em.find(TransportMaster.class, id);
-        if(trans == null){
+        if (trans == null) {
             return;
         }
         em.merge(tranport);
@@ -193,7 +194,7 @@ public class Tourist implements TouristLocal {
     @Override
     public void insertTransport(TransportMaster transport) {
         TransportMaster trans = (TransportMaster) em.find(TransportMaster.class, transport.getId());
-        if(trans == null){
+        if (trans == null) {
             em.persist(transport);
         }
     }
@@ -201,10 +202,49 @@ public class Tourist implements TouristLocal {
     @Override
     public void removeTransportInfo(String id) {
         TransportMaster transport = (TransportMaster) em.find(TransportMaster.class, id);
-        if(transport == null){
+        if (transport == null) {
             return;
         }
         em.remove(transport);
     }
 
+    @Override
+    public Collection<PaymentMaster> getUsersSubscriptionHistory(String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        Collection<PaymentMaster> history = em.createNamedQuery("PaymentMaster.findUsersSubscription").setParameter("user", user).getResultList();
+        return history;
+    }
+
+    @Override
+    public Collection<PaymentMaster> getUsersAppointmentHistory(String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        Collection<PaymentMaster> history = em.createNamedQuery("PaymentMaster.findUsersAppt").setParameter("user", user).getResultList();
+        return history;
+    }
+
+    @Override
+    public Collection<PaymentMaster> getUsersEventsHistory(String username) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        Collection<PaymentMaster> history = em.createNamedQuery("PaymentMaster.findUsersEvent").setParameter("user", user).getResultList();
+        return history;
+    }
+
+    @Override
+    public void joinEvent(Integer noOfPeople, EventMaster event, String username, PaymentMaster payment) {
+        UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
+        EventMaster emaster = em.find(EventMaster.class, event.getId());
+        Integer noofpeople = event.getNumberOfPeople() + noOfPeople;
+        emaster.setNumberOfPeople(noofpeople);
+        UserMaster umaster = em.find(UserMaster.class, user.getId());
+        Collection<EventMaster> usersEvent = umaster.getEventMasterCollection();
+        usersEvent.add(emaster);
+        umaster.setEventMasterCollection(usersEvent);
+
+        Collection<UserMaster> eventsUser = emaster.getUserMasterCollection();
+        eventsUser.add(umaster);
+        emaster.setUserMasterCollection(eventsUser);
+        em.persist(payment);
+        em.merge(umaster);
+        em.merge(emaster);
+    }
 }
