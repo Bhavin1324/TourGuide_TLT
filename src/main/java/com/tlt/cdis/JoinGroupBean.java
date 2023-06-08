@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -112,7 +113,7 @@ public class JoinGroupBean implements Serializable {
         if (cityText.equals("")) {
             this.cityText = GeoLocationUtil.getUserCurrentCity();
             this.events = adminLogic.getEventsByCity(cityText);
-            PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
+            PrimeFaces.current().ajax().update(":data-table-form:dt-join-event");
         }
         return cityText;
     }
@@ -125,11 +126,11 @@ public class JoinGroupBean implements Serializable {
         if (!this.cityText.equals("none")) {
             this.events = new ArrayList<>();
             this.events = adminLogic.getEventsByCity(cityText);
-            PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
+            PrimeFaces.current().ajax().update(":data-table-form:dt-join-event");
 
         } else {
             this.events = adminLogic.getEventsOfAllGuides();
-            PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
+            PrimeFaces.current().ajax().update(":data-table-form:dt-join-event");
         }
     }
 
@@ -142,6 +143,8 @@ public class JoinGroupBean implements Serializable {
     }
 
     public void proceedToPayment() {
+
+        this.currentCost = 0;
         this.currentCost = selectedEvent.getGuideId().getAmount();
         PrimeFaces.current().executeScript("PF('manageJoinDialog').hide()");
         PrimeFaces.current().executeScript("PF('payment_dialog').show()");
@@ -161,17 +164,18 @@ public class JoinGroupBean implements Serializable {
             payment.setPaymentMethodId(adminLogic.getCardPayment());
             payment.setAmount(this.currentCost);
             payment.setEventId(selectedEvent);
-            touristLogic.joinEvent(people, selectedEvent, KeepRecord.getUsername(), payment);
+            selectedEvent.setNumberOfPeople(selectedEvent.getNumberOfPeople() + people);
+            touristLogic.joinEvent(selectedEvent, KeepRecord.getUsername(), payment);
             this.currentCost = 0;
             this.cardNumber = "";
-            PrimeFaces.current().ajax().update("dataTableForm:dt-join-event");
+//            PrimeFaces.current().ajax().update("data-table-form:dt-join-event");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event Joined"));
 
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You Already Joined this event!"));
         }
-        PrimeFaces.current().ajax().update(":dataTableForm:messages");
         PrimeFaces.current().executeScript("PF('payment_dialog').hide()");
+        PrimeFaces.current().ajax().update("data-table-form:messages", "data-table-form:dt-join-event");
     }
 }

@@ -20,7 +20,7 @@
     <div class="my-5 px-2">
         <div class="shadow-2 surface-card border-round-2xl p-4">
             <div class="ml-4 text-3xl text-800 font-semibold my-2">Events Raised</div>
-            <h:form id="dataTableForm">
+            <h:form id="data-table-form">
                 <p:growl id="messages" showDetail="true" />
                 <p:dataTable id="dt-join-event" var="e" widgetVar="dtEventsOfGuide" value="#{joinGroupBean.events}"
                     reflow="true" rows="10" paginator="true" paginatorPosition="bottom">
@@ -31,7 +31,7 @@
                                 value="#{joinGroupBean.cityText}" completeMethod="#{placesBean.completeText}" />
                             <p:commandButton id="search" icon="pi pi-search" value="Search"
                                 actionListener="#{joinGroupBean.cityValuChangeListener}"
-                                update=":dataTableForm:dt-join-event" class="ui-button-help" />
+                                update=":data-table-form:dt-join-event" class="ui-button-help" />
 
                         </div>
                     </f:facet>
@@ -147,20 +147,20 @@
 
                     <f:facet name="footer">
                         <p:commandButton value="Join" styleClass="mr-2 bg-purple-500 ui-button-help" icon="pi pi-check"
-                            actionListener="#{joinGroupBean.proceedToPayment}" update="manage-join-event-content dataTableForm:dt-join-event @this"
-                            process="manage-join-event-content @this">
-
-                           
+                            actionListener="#{joinGroupBean.proceedToPayment}" 
+                            update="payment_panel" >                          
                         </p:commandButton>
                         <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageJoinDialog').hide()"
                             class="mx-3 ui-button-secondary" type="button" />
                     </f:facet>
                 </p:dialog>
             </h:form>
-            <p:outputPanel id="payment_panel">
+           <p:outputPanel id="payment_panel">
                 <payment:s-payment widgetWar="payment_dialog" cardNumber="#{joinGroupBean.cardNumber}"
-                    currentCost="#{joinGroupBean.currentCost}" paymentAction="#{joinGroupBean.joinEvent()}" />
+                    currentCost="#{joinGroupBean.currentCost}" paymentAction="#{joinGroupBean.joinEvent()}" 
+                    />
             </p:outputPanel>
+            
             <dialog:alert-success widgetWar="success_dialog" header="Payment success" primaryText="Done"
                 secondaryText="Transaction has been made successfully" actionButton="true"
                 actionButtonValue="Watch my trip" action="#{joinGroupBe.goToMyTrip()}" />

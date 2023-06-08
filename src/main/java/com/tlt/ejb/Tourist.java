@@ -230,11 +230,10 @@ public class Tourist implements TouristLocal {
     }
 
     @Override
-    public void joinEvent(Integer noOfPeople, EventMaster event, String username, PaymentMaster payment) {
+    public void joinEvent(EventMaster event, String username, PaymentMaster payment) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         EventMaster emaster = em.find(EventMaster.class, event.getId());
-        Integer noofpeople = event.getNumberOfPeople() + noOfPeople;
-        emaster.setNumberOfPeople(noofpeople);
+        
         UserMaster umaster = em.find(UserMaster.class, user.getId());
         Collection<EventMaster> usersEvent = umaster.getEventMasterCollection();
         usersEvent.add(emaster);
