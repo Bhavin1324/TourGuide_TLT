@@ -97,7 +97,23 @@
                                     </p:outputPanel>
                                     <h:outputText value="No guide" style="color: rgba(0,0,0,.5)" rendered="#{p.guideId == null}"/>
                                 </p:column>
-
+                                <p:column sortBy="#{p.transportId.transporterId.name != null ? p.transportId.transporterId.name : p.appointmentId.placeId.name}" filterBy="#{p.transportId.transporterId.name != null ? p.transportId.transporterId.name : p.appointmentId.placeId.name}" class="text-lg" headerText="Transporter">
+                            <p:outputPanel rendered="#{p.transportId != null}">
+                                <div class="flex align-items-center mb-2">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">account_circle</span>
+                                    <span class="text-lg font-semibold">#{p.transportId.transporterId.name}</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">directions_car</span>
+                                    <span>#{p.transportId.transporterId.plateNo}</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <span class="material-symbols-outlined mr-2" style="font-size: 20px">call</span>
+                                    <span>#{p.transportId.transporterId.contactNo}</span>
+                                </div>
+                            </p:outputPanel>
+                            <h:outputText value="No transporter" style="color: rgba(0,0,0,.5)" rendered="#{p.transportId == null}"/>
+                        </p:column>
                                 <p:column sortBy="#{p.amount}" filterBy="#{p.amount}" class="text-lg px-4" headerText="Amount">
                                     <h:outputText value="#{p.amount}"/>
                                     <span class="material-symbols-outlined text-xl">
