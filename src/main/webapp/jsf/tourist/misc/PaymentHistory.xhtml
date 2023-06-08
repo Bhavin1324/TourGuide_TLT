@@ -20,7 +20,7 @@
             <div class="surface-card border-round-2xl p-4">
                 <div class="ml-4 mt-4 text-3xl font-semibold">Transaction History</div>
                 <p:tabView class="pl-4 mt-5" activeIndex="0">
-                    <p:tab title="Subscription History" titleStyleClass="text-lg">
+                    <p:tab title="Subscription" titleStyleClass="text-lg">
                         <h:form>
                             <p:dataTable id="dt-payment-history" class="text-lg" var="p" widgetVar="dtPaymentHistory"
                                          value="#{paymentMasterBean.usersSubscriptions}" reflow="true" rows="10" 
@@ -57,7 +57,7 @@
                             </p:dataTable>
                         </h:form>
                     </p:tab>
-                    <p:tab titleStyleClass="text-lg" title="Personal Appointments History">
+                    <p:tab titleStyleClass="text-lg" title="Appointments">
                         <h:form>
                             <p:dataTable id="dt-appt-history" class="text-lg" var="p" widgetVar="dtApptHistory"
                                          value="#{userTransactionBean.usersAppointmentHistory}" reflow="true" rows="10" 
@@ -84,15 +84,18 @@
                                 <p:column sortBy="#{p.appointmentId.placeId.address}" filterBy="#{p.appointmentId.placeId.address}" class="text-lg px-4" headerText="Place Address">
                                     <h:outputText class="-mr-1" value="#{p.appointmentId.placeId.address}"/>
                                 </p:column>
-                                <p:column sortBy="#{p.guideId.name}" filterBy="#{p.guideId.name}" class="text-lg px-4" headerText="Guide">
-                                    <div class="flex flex-row justify-content-center">
-                                        <div>
-                                            <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
-                                                <p:graphicImage value="/uploads/profiles/#{p.guideId.profileImage}" />
-                                            </p:avatar>
+                                <p:column sortBy="#{p.guideId != null ? p.guideId.name : p.appointmentId.placeId.name}" filterBy="#{p.guideId.name}" class="text-lg px-4" headerText="Guide">
+                                    <p:outputPanel rendered="#{p.guideId != null}">
+                                        <div class="flex flex-row justify-content-center">
+                                            <div>
+                                                <p:avatar styleClass="mr-2 shadow-4" size="xlarge" shape="circle">
+                                                    <p:graphicImage value="/uploads/profiles/#{p.guideId.profileImage}" />
+                                                </p:avatar>
+                                            </div>
+                                            <div class="mt-3 ml-2"><h:outputText class="text-lg" value="#{p.guideId.name}"/></div>
                                         </div>
-                                        <div class="mt-3 ml-2"><h:outputText class="text-lg" value="#{p.guideId.name}"/></div>
-                                    </div>
+                                    </p:outputPanel>
+                                    <h:outputText value="No guide" style="color: rgba(0,0,0,.5)" rendered="#{p.guideId == null}"/>
                                 </p:column>
 
                                 <p:column sortBy="#{p.amount}" filterBy="#{p.amount}" class="text-lg px-4" headerText="Amount">
@@ -115,7 +118,7 @@
                             </p:dataTable>
                         </h:form>
                     </p:tab>
-                    <p:tab titleStyleClass="text-lg" title="Events' History">
+                    <p:tab titleStyleClass="text-lg" title="Event">
                         <h:form>
                             <p:dataTable id="dt--event-history" class="text-lg" var="p" widgetVar="dtEventHistory"
                                          value="#{userTransactionBean.usersEventHistory}" reflow="true" rows="10" 

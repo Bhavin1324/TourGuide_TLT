@@ -136,21 +136,21 @@
                         </div>
                         <div class="field">
                             <p:outputLabel for="people">Confirm no. of People</p:outputLabel>
-                            <p:spinner id="people" value="#{joinGroupBean.people}" min="0" max="50"
+                            <p:spinner id="people" value="#{joinGroupBean.people}" min="0" max="10"
                                 placeholder="Number of people excluding kids" downButtonStyleClass="ui-button-help"
                                 upButtonStyleClass="ui-button-help" required="true"
                                 requiredMessage="Number of people is required"
                                 validator="#{validatorBean.validateGoPerson}" />
-                            <small class="mt-1 block">You can take maximum 50 people</small>
+                            <small class="mt-1 block">You can take maximum 10 people</small>
                         </div>
                     </p:outputPanel>
 
                     <f:facet name="footer">
                         <p:commandButton value="Join" styleClass="mr-2 bg-purple-500 ui-button-help" icon="pi pi-check"
-                            actionListener="#{joinGroupBean.proceedToPayment}" update="manage-join-event-content"
+                            actionListener="#{joinGroupBean.proceedToPayment}" update="manage-join-event-content dataTableForm:dt-join-event @this"
                             process="manage-join-event-content @this">
 
-                            <!--<p:ajax event="click" update="dataTableForm:dt-join-event"/>-->
+                           
                         </p:commandButton>
                         <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageJoinDialog').hide()"
                             class="mx-3 ui-button-secondary" type="button" />

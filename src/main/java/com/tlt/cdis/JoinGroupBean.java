@@ -23,22 +23,23 @@ import java.util.Collection;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import org.primefaces.PrimeFaces;
 
 /**
  *
- * @author kunal
+ * @author Lenovo
  */
 @Named(value = "joinGroupBean")
 @SessionScoped
 public class JoinGroupBean implements Serializable {
-    
+
     @EJB
     AdminLocal adminLogic;
-    
-    @EJB TouristLocal touristLogic;
+
+    @EJB
+    TouristLocal touristLogic;
     Collection<Cities> cities;
     Collection<EventMaster> events;
     EventMaster selectedEvent;
@@ -46,91 +47,92 @@ public class JoinGroupBean implements Serializable {
     TouristBean tb;
     Integer people, currentCost;
     String cardNumber;
-    
+
     public JoinGroupBean() {
         cities = new ArrayList<>();
         events = new ArrayList<>();
         cityText = "";
-        currentCost=0;
-        cardNumber="";
+        currentCost = 0;
+        cardNumber = "";
         tb = new TouristBean();
         people = 0;
     }
-    
+
     public Integer getCurrentCost() {
         return currentCost;
     }
-    
+
     public void setCurrentCost(Integer currentCost) {
         this.currentCost = currentCost;
     }
-    
+
     public String getCardNumber() {
         return cardNumber;
     }
-    
+
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
-    
+
     public Integer getPeople() {
         return people;
     }
-    
+
     public void setPeople(Integer people) {
         this.people = people;
     }
-    
+
     public Collection<Cities> getCities() {
         cities = adminLogic.getCityByStateId(4030);
         return cities;
     }
-    
+
     public void setCities(Collection<Cities> cities) {
         this.cities = cities;
     }
-    
+
     public Collection<EventMaster> getEvents() {
+        getCityText();
         return events;
     }
-    
+
     public EventMaster getSelectedEvent() {
         return selectedEvent;
     }
-    
+
     public void setSelectedEvent(EventMaster selectedEvent) {
         this.selectedEvent = selectedEvent;
     }
-    
+
     public void setEvents(Collection<EventMaster> events) {
         this.events = events;
     }
-    
+
     public String getCityText() {
         if (cityText.equals("")) {
             this.cityText = GeoLocationUtil.getUserCurrentCity();
             this.events = adminLogic.getEventsByCity(cityText);
-             PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
+            PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
         }
         return cityText;
     }
-    
+
     public void setCityText(String cityText) {
         this.cityText = cityText;
     }
-    
+
     public void cityValuChangeListener() {
         if (!this.cityText.equals("none")) {
             this.events = new ArrayList<>();
             this.events = adminLogic.getEventsByCity(cityText);
             PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
-            
+
         } else {
             this.events = adminLogic.getEventsOfAllGuides();
             PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
         }
     }
-    
+
     public void goToMyTrip() {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(TO_MY_TRIP);
@@ -138,19 +140,18 @@ public class JoinGroupBean implements Serializable {
             ex.printStackTrace();
         }
     }
-    
+
     public void proceedToPayment() {
-        this.currentCost = 0;
         this.currentCost = selectedEvent.getGuideId().getAmount();
         PrimeFaces.current().executeScript("PF('manageJoinDialog').hide()");
         PrimeFaces.current().executeScript("PF('payment_dialog').show()");
-        
+
     }
-    
+
     public void joinEvent() {
         try {
             UserMaster currentUser = touristLogic.findUserByUsername(KeepRecord.getUsername());
-            
+
             PaymentMaster payment = new PaymentMaster();
             payment.setId(Utils.getUUID());
             payment.setCreatedAt(new Date());
@@ -160,12 +161,12 @@ public class JoinGroupBean implements Serializable {
             payment.setPaymentMethodId(adminLogic.getCardPayment());
             payment.setAmount(this.currentCost);
             payment.setEventId(selectedEvent);
-            touristLogic.joinEvent(people, selectedEvent, KeepRecord.getUsername(),payment);
+            touristLogic.joinEvent(people, selectedEvent, KeepRecord.getUsername(), payment);
             this.currentCost = 0;
             this.cardNumber = "";
+            PrimeFaces.current().ajax().update("dataTableForm:dt-join-event");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event Joined"));
-            PrimeFaces.current().ajax().update(":dataTableForm:dt-join-event");
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You Already Joined this event!"));

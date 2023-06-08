@@ -1,6 +1,5 @@
 package com.tlt.cdis;
 
-import static com.tlt.constants.UrlConstants.TO_LOGIN;
 import static com.tlt.constants.UrlConstants.TO_MY_TRIP;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
@@ -20,10 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
