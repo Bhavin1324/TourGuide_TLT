@@ -5,6 +5,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.TravelMode;
+import com.maxmind.geoip2.model.CityResponse;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.GuideMaster;
@@ -152,8 +153,9 @@ public class ChosenPlaceBean implements Serializable {
         PrimeFaces.current().ajax().update("map");
         GeoApiContext context = new GeoApiContext.Builder().apiKey(Utils.getPropertyValue("properties.config", "MAPS_API_KEY")).build();
         try {
-            String originLat = GeoLocationUtil.getUserLocation().getLatitude().toString();
-            String originLng = GeoLocationUtil.getUserLocation().getLongitude().toString();
+            CityResponse userLocation = GeoLocationUtil.getUserLocation();
+            String originLat = userLocation.getLocation().getLatitude().toString();
+            String originLng = userLocation.getLocation().getLongitude().toString();
             String desinationLat = selectedPlace.getLatitude();
             String desinationLng = selectedPlace.getLongitude();
             String origin = originLat + "," + originLng;

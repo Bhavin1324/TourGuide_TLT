@@ -37,6 +37,10 @@ public interface AdminLocal {
 
     Collection<PlaceMaster> getPlacesByName(String Name);
 
+    Collection<PlaceMaster> getPlacesByCity(String cityName, String countryCode);
+
+    Collection<PlaceMaster> getCityPlacesByCategory(PlaceCategory categoryId, String currentCityName, String countryCode);
+
     // Guide
     void insertGuide(GuideMaster data);
 
@@ -164,6 +168,5 @@ public interface AdminLocal {
     public PaymentMethod getCardPayment();
 
     void joinEvent(Integer noOfPeople, EventMaster event, String username);
-    
-    
+
 }

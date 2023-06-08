@@ -36,6 +36,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Cities.findByCreatedAt", query = "SELECT c FROM Cities c WHERE c.createdAt = :createdAt"),
     @NamedQuery(name = "Cities.findByUpdatedAt", query = "SELECT c FROM Cities c WHERE c.updatedAt = :updatedAt"),
     @NamedQuery(name = "Cities.findByFlag", query = "SELECT c FROM Cities c WHERE c.flag = :flag"),
+    @NamedQuery(name = "Cities.findByNameAndCountryCode", query = "SELECT c FROM Cities c WHERE c.name = :name AND c.countryCode = :countryCode"),
     @NamedQuery(name = "Cities.findByWikiDataId", query = "SELECT c FROM Cities c WHERE c.wikiDataId = :wikiDataId")})
 public class Cities implements Serializable {
 

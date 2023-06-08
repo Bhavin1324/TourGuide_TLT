@@ -1,5 +1,6 @@
 package com.tlt.cdis;
 
+import com.maxmind.geoip2.model.CityResponse;
 import static com.tlt.constants.UrlConstants.TO_CHOSEN_PLACES_FORWARD;
 import com.tlt.ejb.AdminLocal;
 import com.tlt.ejb.TouristLocal;
@@ -43,11 +44,11 @@ public class LandingBean implements Serializable {
     ArrayList<PlaceCategory> placeCategories;
     PlaceCategory selectedCategory;
     Collection<PlaceMaster> lstPlacesByCategory;
-
+    
     MapBean mapBean;
     String currentLat;
     String currentLng;
-
+    CityResponse userLocation;
     @Inject
     public LandingBean(MapBean mapBean) {
         recommandedPlaces = new ArrayList<>();
@@ -58,7 +59,11 @@ public class LandingBean implements Serializable {
     }
 
     public void loadMarkers() {
-        Collection<PlaceMaster> places = adminLogic.getAllPlaces();
+        userLocation = getUserLocation();
+        String currentUserCity = userLocation.getCity().getName();
+        String countryCode = userLocation.getCountry().getIsoCode();
+
+        Collection<PlaceMaster> places = adminLogic.getPlacesByCity(currentUserCity, countryCode);
         MapModel<String> advancedModel = new DefaultMapModel<>();
         for (PlaceMaster p : places) {
             LatLng ll = new LatLng(Double.parseDouble(p.getLatitude()), Double.parseDouble(p.getLongitude()));
@@ -66,8 +71,8 @@ public class LandingBean implements Serializable {
         }
         mapBean.setAdvancedModel(advancedModel);
         PrimeFaces.current().executeScript("getLocation();");
-        this.currentLat = getUserLocation().getLatitude().toString();
-        this.currentLng = getUserLocation().getLongitude().toString();
+        this.currentLat = userLocation.getLocation().getLatitude().toString();
+        this.currentLng = userLocation.getLocation().getLongitude().toString();
     }
 
     public void loadMarkerByCategory() {
@@ -189,7 +194,9 @@ public class LandingBean implements Serializable {
     }
 
     public void onCatCardSelect(PlaceCategory category) {
-        lstPlacesByCategory = adminLogic.getPlacesByCategory(category);
+        String currentUserCity = userLocation.getCity().getName();
+        String countryCode = userLocation.getCountry().getIsoCode();
+        lstPlacesByCategory = adminLogic.getCityPlacesByCategory(category,currentUserCity,countryCode);
         selectedCategory = category;
         loadMarkerByCategory();
         PrimeFaces.current().executeScript("PF('c_dialog').show()");

@@ -24,6 +24,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 @Stateful
 public class Admin implements AdminLocal {
@@ -76,6 +77,27 @@ public class Admin implements AdminLocal {
     public Collection<PlaceMaster> getPlacesByName(String Name) {
         Collection<PlaceMaster> places = em.createNamedQuery("PlaceMaster.findByPlaceName").setParameter("placeName", Name).getResultList();
         return places;
+    }
+
+    @Override
+    public Collection<PlaceMaster> getPlacesByCity(String cityName, String countryCode) {
+        TypedQuery<Cities> cityQuery = em.createNamedQuery("Cities.findByNameAndCountryCode", Cities.class);
+        cityQuery.setParameter("name", cityName);
+        cityQuery.setParameter("countryCode", countryCode);
+        List<Cities> cities = cityQuery.getResultList();
+        return em.createNamedQuery("PlaceMaster.findPlacesByCity").setParameter("cityId", cities.get(0)).getResultList();
+    }
+
+    @Override
+    public Collection<PlaceMaster> getCityPlacesByCategory(PlaceCategory categoryId, String currentCityName, String countryCode) {
+        TypedQuery<Cities> cityQuery = em.createNamedQuery("Cities.findByNameAndCountryCode", Cities.class);
+        cityQuery.setParameter("name", currentCityName);
+        cityQuery.setParameter("countryCode", countryCode);
+        List<Cities> cities = cityQuery.getResultList();
+        TypedQuery<PlaceMaster> placeQuery = em.createNamedQuery("PlaceMaster.findByCategoryIdInCity", PlaceMaster.class);
+        placeQuery.setParameter("categoryId", categoryId);
+        placeQuery.setParameter("cityId", cities.get(0));
+        return placeQuery.getResultList();
     }
 
     // implementation of methods related to guide
@@ -145,9 +167,10 @@ public class Admin implements AdminLocal {
     public Collection<EventMaster> getEventsOfAllGuides() {
         return em.createNamedQuery("EventMaster.findAll").getResultList();
     }
+
     @Override
     public Collection<EventMaster> getEventsByCity(String cityName) {
-        return em.createNamedQuery("EventMaster.findByCity").setParameter("cityname",cityName ).getResultList();
+        return em.createNamedQuery("EventMaster.findByCity").setParameter("cityname", cityName).getResultList();
     }
 
     @Override
@@ -490,32 +513,32 @@ public class Admin implements AdminLocal {
     @Override
     public void deleteAppointment(String id) {
         AppointmentMaster appt = (AppointmentMaster) em.find(AppointmentMaster.class, id);
-        if(appt == null){
+        if (appt == null) {
             return;
         }
         em.remove(appt);
     }
 
     @Override
-    public PaymentMethod getCardPayment(){
+    public PaymentMethod getCardPayment() {
         return (PaymentMethod) em.find(PaymentMethod.class, "3hbk2jh3bkj2hb3");
     }
 
     @Override
     public void joinEvent(Integer noOfPeople, EventMaster event, String username) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
-        EventMaster emaster = em.find(EventMaster.class,event.getId());
+        EventMaster emaster = em.find(EventMaster.class, event.getId());
         Integer noofpeople = event.getNumberOfPeople() + noOfPeople;
         emaster.setNumberOfPeople(noofpeople);
-        UserMaster umaster = em.find(UserMaster.class,user.getId());
+        UserMaster umaster = em.find(UserMaster.class, user.getId());
         Collection<EventMaster> usersEvent = umaster.getEventMasterCollection();
         usersEvent.add(emaster);
         umaster.setEventMasterCollection(usersEvent);
-        
+
         Collection<UserMaster> eventsUser = emaster.getUserMasterCollection();
         eventsUser.add(umaster);
         emaster.setUserMasterCollection(eventsUser);
-        
+
         em.merge(umaster);
         em.merge(emaster);
     }
@@ -523,7 +546,7 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<AppointmentMaster> getUserAppointments(String userId) {
         UserMaster user = (UserMaster) em.find(UserMaster.class, userId);
-        if(user == null){
+        if (user == null) {
             return null;
         }
         return user.getAppointmentMasterCollection();
@@ -532,10 +555,10 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<EventMaster> getUserEvents(String userId) {
         UserMaster user = (UserMaster) em.find(UserMaster.class, userId);
-        if(user == null){
+        if (user == null) {
             return null;
         }
         return user.getEventMasterCollection();
     }
-    
+
 }

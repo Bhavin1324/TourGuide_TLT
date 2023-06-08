@@ -21,10 +21,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 
@@ -111,7 +109,7 @@ public class JoinGroupBean implements Serializable {
 
     public String getCityText() {
         if (cityText.equals("")) {
-            this.cityText = GeoLocationUtil.getUserCurrentCity();
+            this.cityText = GeoLocationUtil.getUserLocation().getCity().getName();
             this.events = adminLogic.getEventsByCity(cityText);
             PrimeFaces.current().ajax().update(":data-table-form:dt-join-event");
         }

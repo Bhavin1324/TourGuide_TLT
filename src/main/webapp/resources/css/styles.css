@@ -697,6 +697,31 @@ body .ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-s
     animation: sh1 2s infinite cubic-bezier(0.3,1,0,1);
 }
 @keyframes sh1 {
-  33% {border-radius: 0;background:#5187ED ;clip-path: polygon(0 0,100% 0,100% 100%,0 100%)}
-  66% {border-radius: 0;background:#525780 ;clip-path: polygon(50% 0,50% 0,100% 100%,0 100%)}
+    33% {
+        border-radius: 0;
+        background:#5187ED ;
+        clip-path: polygon(0 0,100% 0,100% 100%,0 100%)
+    }
+    66% {
+        border-radius: 0;
+        background:#525780 ;
+        clip-path: polygon(50% 0,50% 0,100% 100%,0 100%)
+    }
+}
+::-webkit-scrollbar {
+    width: 2px;
+    height: 4px;
+}
+::-webkit-scrollbar:hover{
+    width: 4px
+}
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 4px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #9C27B0;
+    border-radius: 4px;
 }

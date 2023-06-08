@@ -2,18 +2,14 @@ package com.tlt.utils;
 
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
-import com.maxmind.geoip2.record.Location;
 import static com.tlt.constants.PathConstants.GEO_LOCATION_DB;
 import static com.tlt.utils.Utils.CrossFetch_GET;
 import java.io.File;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GeoLocationUtil {
 
-    public static Location getUserLocation() {
+    public static CityResponse getUserLocation() {
         try {
             File database = new File(GEO_LOCATION_DB);
             DatabaseReader reader = new DatabaseReader.Builder(database).build();
@@ -31,21 +27,7 @@ public class GeoLocationUtil {
             // https://api.ip.sb/ip
             InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ip.sb/ip"));
             CityResponse cityResponse = reader.city(ipAddress);
-            Location location = cityResponse.getLocation();
-            return location;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public static String getUserCurrentCity() {
-        File database = new File(GEO_LOCATION_DB);
-        try {
-            DatabaseReader reader = new DatabaseReader.Builder(database).build();
-            InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ip.sb/ip"));
-            CityResponse cityResponse = reader.city(ipAddress);
-            return cityResponse.getCity().getName();
+            return cityResponse;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
