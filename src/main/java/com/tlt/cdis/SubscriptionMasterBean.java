@@ -39,12 +39,7 @@ public class SubscriptionMasterBean implements Serializable {
     public Collection<SubscriptionMaster> getUsersSubscriptions() {
         String username = KeepRecord.getUsername();
         usersSubscriptions = tb.getUsersSubscriptions(username);
-        if (!usersSubscriptions.isEmpty()) {
-            return usersSubscriptions;
-        } else {
-            PrimeFaces.current().executeScript("PF('noSubsDlg').show()");
-            return usersSubscriptions;
-        }
+        return usersSubscriptions;
     }
 
     public Collection<UserSubscriptionMapping> getAdminAllSubscriptions() {
@@ -53,14 +48,6 @@ public class SubscriptionMasterBean implements Serializable {
 
     public void setAdminAllSubscriptions(Collection<UserSubscriptionMapping> adminAllSubscriptions) {
         this.adminAllSubscriptions = adminAllSubscriptions;
-    }
-
-    public void redirectToSubscriptionPlans() {
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(TO_SUBS_CARDS);
-        } catch (IOException ex) {
-            Logger.getLogger(SubscriptionMasterBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void setUsersSubscriptions(Collection<SubscriptionMaster> usersSubscriptions) {

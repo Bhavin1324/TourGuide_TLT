@@ -179,7 +179,7 @@
                         <p:inputMask value="#{beGuideBean.loggedInUser.contact}" mask="999 999 9999" styleClass="w-full" readonly="true" />
                     </div>
                     <div class="ui-fluid field w-full mb-3">
-                        <p:datePicker id="time" value="#{reservePlace.touristAppointment.startDatetime}" showTime="true" placeholder="Select appointment timing" required="true" requiredMessage="Appointment timeing selection in required" showIcon="true"/>
+                        <p:datePicker id="time" value="#{reservePlace.touristAppointment.startDatetime}" showTime="true" placeholder="Select appointment timing" validator="#{validatorBean.validateMissedDate}" required="true" requiredMessage="Appointment timeing selection in required" showIcon="true"/>
                     </div>
                     <div class="w-full mb-3">
                         <h:outputLabel value="Number of people excluding kids" styleClass="block mb-1"/>
@@ -190,8 +190,8 @@
 
                         <p:selectOneRadio id="packSelectionRadio" value="#{reservePlace.pack}">
                             <f:selectItem itemValue="T"/>
-                            <f:selectItem itemValue="G" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
-                            <f:selectItem itemValue="TG" rendered="#{!reservePlace.guidesOfPlace.isEmpty()}"/>
+                            <f:selectItem itemValue="G" rendered="#{!reservePlace.availableGuideOfPlace.isEmpty()}"/>
+                            <f:selectItem itemValue="TG" rendered="#{!reservePlace.availableGuideOfPlace.isEmpty()}"/>
                             <p:ajax event="change" update="form"/>
                             <p:ajax event="change" update="payment_panel"/>
                             <f:facet name="custom">
@@ -206,7 +206,7 @@
                                         </p:outputLabel>
                                     </span>
                                 </p:outputPanel>
-                                <p:outputPanel rendered="#{!reservePlace.guidesOfPlace.isEmpty()}">
+                                <p:outputPanel rendered="#{!reservePlace.availableGuideOfPlace.isEmpty()}">
                                     <span class="field-radiobutton" role="radio">
                                         <p:radioButton id="facet2" for="packSelectionRadio" itemIndex="1"/>
                                         <p:outputLabel for="facet2">
@@ -217,7 +217,7 @@
                                         </p:outputLabel>
                                     </span>
                                 </p:outputPanel>
-                                <p:outputPanel rendered="#{!reservePlace.guidesOfPlace.isEmpty()}">
+                                <p:outputPanel rendered="#{!reservePlace.availableGuideOfPlace.isEmpty()}">
                                     <span class="field-radiobutton" role="radio">
                                         <p:radioButton id="facet3" for="packSelectionRadio" itemIndex="2"/>
                                         <p:outputLabel for="facet3">
@@ -258,7 +258,7 @@
                     </fieldset>
                     <div class="ui-fluid field mb-3 my-3 mx-3">
                         <p:outputLabel for="@next" value="Select pickup time" styleClass="mb-2"/>
-                        <p:datePicker id="pickup-time" value="#{reservePlace.transport.pickupDateTime}" showTime="true" placeholder="Select pickup timing" required="true" requiredMessage="Pickup timing selection in required" showIcon="true"/>
+                        <p:datePicker id="pickup-time" value="#{reservePlace.transport.pickupDateTime}" showTime="true" placeholder="Select pickup timing" required="true" validator="#{validatorBean.validateMissedDate}" requiredMessage="Pickup timing selection in required" showIcon="true"/>
                     </div>
                     <div class="ui-fluid field mb-4 mx-3">
                         <p:inputTextarea id="pickup-location" cols="33" styleClass="w-full" placeholder="Enter pickup location" required="true" requiredMessage="Pickup location is required" value="#{reservePlace.transport.pickupLocation}"/>

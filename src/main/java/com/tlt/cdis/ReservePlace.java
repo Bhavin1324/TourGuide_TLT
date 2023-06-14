@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -53,12 +54,16 @@ public class ReservePlace implements Serializable {
 
     public ReservePlace() {
         numberOfPeople = 0;
-        pack = "T";
         currentPlace = new PlaceMaster();
         selectedGuide = null;
         guidesOfPlace = new ArrayList<>();
         touristAppointment = new AppointmentMaster();
         transport = new TransportMaster();
+    }
+
+    @PostConstruct
+    public void init() {
+        pack = "T";
     }
 
     public String getCurrentPlaceIdFromSession() {
@@ -110,7 +115,9 @@ public class ReservePlace implements Serializable {
     public GuideMaster getSelectedGuide() {
         if (selectedGuide == null) {
             List<GuideMaster> agl = new ArrayList<GuideMaster>(this.availableGuideOfPlace);
-            selectedGuide = agl.get(0);
+            if (agl.size() > 0) {
+                selectedGuide = agl.get(0);
+            }
         }
         return selectedGuide;
     }

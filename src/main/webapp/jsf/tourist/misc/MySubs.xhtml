@@ -14,63 +14,71 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
+        <p:importConstants type="com.tlt.constants.UrlConstants" var="uc"/>
 
     </h:head>
     <h:body class="bg-gray-200" style="font-family: sans-serif">
         <navbar:tourist-navbar user="#{touristBean.userMaster}" sideNavigationBean="#{navigationBean}"/>
-        <section class=" flex flex-column relative" style="height: 350px;background-color: #8c239e">
-            <div class="py-4 md\:-py-6">
-                <div class="text-center mt-4 text-5xl text-white">Active Plans</div>
-            </div>
-             <div class="text-center text-100 text-xl mt-1">Pick a plan. Get amazing features. Explore more in a better way.</div>
-            <div class="absolute top-50 left-50 w-full" style="transform: translate(-50%,0%)">
-                <div class="grid justify-content-center mx-8" >
-                    <ui:repeat var="sm" value="#{subMasterBean.usersSubscriptions}" >
-                        <div class="col-12 md:col-6 lg:col-3">
-                            <div class="shadow-2 mt-4 py-6 px-6 flex flex-column surface-card badge-card border-round-3xl"
-                                 style="border-radius: 6px;">
-                                <div class="font-medium text-3xl text-center mb-2">#{sm.subscriptionModelId.name}</div>
-                                <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
-                                <div class="flex align-items-center flex-column">
-                                    <div>
-                                        <span class="text-7xl -mr-3 text-purple-700">#{sm.subscriptionModelId.cost}
-                                        </span>
-                                        <span class="material-symbols-outlined text-5xl text-purple-700 font-semibold">
-                                            currency_rupee
+        <p:outputPanel rendered="#{joinGroupBean.hasAnySubscription()}" style="font-family: sans-serif">
+            <section class=" flex flex-column relative" style="height: 350px;background-color: #8c239e">
+                <div class="py-4 md\:-py-6">
+                    <div class="text-center mt-4 text-5xl text-white">Active Plans</div>
+                </div>
+                <div class="text-center text-100 text-xl mt-1">Pick a plan. Get amazing features. Explore more in a better way.</div>
+                <div class="absolute top-50 left-50 w-full" style="transform: translate(-50%,0%)">
+                    <div class="grid justify-content-center mx-8" >
+                        <ui:repeat var="sm" value="#{subMasterBean.usersSubscriptions}" >
+                            <div class="col-12 md:col-6 lg:col-3">
+                                <div class="shadow-2 mt-4 py-6 px-6 flex flex-column surface-card badge-card border-round-3xl"
+                                     style="border-radius: 6px;">
+                                    <div class="font-medium text-3xl text-center mb-2">#{sm.subscriptionModelId.name}</div>
+                                    <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                    <div class="flex align-items-center flex-column">
+                                        <div>
+                                            <span class="text-7xl -mr-3 text-purple-700">#{sm.subscriptionModelId.cost}
+                                            </span>
+                                            <span class="material-symbols-outlined text-5xl text-purple-700 font-semibold">
+                                                currency_rupee
+                                            </span>
+                                        </div>
+                                        <span class="text-2xl text-600 blocks">
+                                            for #{sm.subscriptionModelId.durationInMonth} month
                                         </span>
                                     </div>
-                                    <span class="text-2xl text-600 blocks">
-                                        for #{sm.subscriptionModelId.durationInMonth} month
-                                    </span>
-                                </div>
-                                <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
-                                <div class="flex mt-4 justify-content-around">
-                                    <div class="text-xl"><span class="text-green-600">S</span> : 
-                                        #{sm.startDate.date}/#{sm.startDate.month}/#{sm.startDate.year+1900}
-                                    </div>
-                                    <div class="text-xl"><span class="text-red-500">E</span> : 
-                                        #{sm.endDate.date}/#{sm.endDate.month}/#{sm.endDate.year+1900}
+                                    <hr class="my-3 mx-0 border-top-1 border-bottom-none surface-border"/>
+                                    <div class="flex mt-4 justify-content-around">
+                                        <div class="text-xl"><span class="text-green-600">S</span> : 
+                                            #{sm.startDate.date}/#{sm.startDate.month}/#{sm.startDate.year+1900}
+                                        </div>
+                                        <div class="text-xl"><span class="text-red-500">E</span> : 
+                                            #{sm.endDate.date}/#{sm.endDate.month}/#{sm.endDate.year+1900}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </ui:repeat>
-                </div>
-            </div>
-        </section>
-        <h:form>
-            <p:dialog id="no-sub-dialog" header="Warning" widgetVar="noSubsDlg" height="50" width="350" showEffect="fade">
-                <div class="text-center">
-                    <i class="pi pi-exclamation-circle text-5xl" />
-                </div>
-                <div class="text-center text-xl mt-3">No Active Plans</div>
-                <f:facet name="footer" >
-                    <div class="text-center" >
-                        <p:commandButton class=" ui-button-help text-center px-2 text-lg" value="Go To Subscription Plans" action="#{subMasterBean.redirectToSubscriptionPlans()}" />
+                        </ui:repeat>
                     </div>
-                </f:facet>
-            </p:dialog>
-        </h:form>
+                </div>
+            </section>
+        </p:outputPanel>
+        <p:outputPanel rendered="#{!joinGroupBean.hasAnySubscription()}">
+            <h:form>
+                <div class="absolute top-50 left-0 w-full" style="transform: translate(0%, -50%);font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+                    <p:card class="shadow-2 border-round-2xl px-3 w-full md:w-25rem lg:w-30rem mx-auto my-auto">
+                        <f:facet name="header">
+                            <p:graphicImage value="/images/take_subscription.jpg"/>
+                        </f:facet>
+                        <f:facet name="title">
+                            You don't have any subscription
+                        </f:facet>
+                        <f:facet name="subtitle">Try our subscription plans for explore places in better way</f:facet>
+                        <f:facet name="footer">
+                            <div class="mb-2"><p:commandButton value="Subscription plans" action="#{navigationBean.redirectTo(uc.TO_SUBS_CARDS)}" styleClass="ui-button-help rounded-button"/></div>
+                        </f:facet>
+                    </p:card>
+                </div>
+            </h:form>
+        </p:outputPanel>
     </h:body>
 </html>
 

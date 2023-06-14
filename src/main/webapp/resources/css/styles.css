@@ -725,3 +725,11 @@ body .ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-s
     background: #9C27B0;
     border-radius: 4px;
 }
+
+
+body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active{
+    background: #fbe3fd !important;
+}
+body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-focus{
+    box-shadow: 0 0 0 .2rem #e5a6fa !important;
+}

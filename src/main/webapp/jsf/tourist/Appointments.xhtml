@@ -22,11 +22,11 @@
                                  paginator="true" paginatorPosition="bottom">
 
                         <f:facet name="header">
-                            <div class="product-table-header ml-2 mt-5">
+                            <div class="product-table-header ml-2 mt-5 flex">
                                 <div class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
                                     <p:inputText id="globalFilter" onkeyup="PF('dtAppointmentsUser').filter()" 
                                                  placeholder="Search" />
-                                </div>
+                                </div>        
                             </div>
                         </f:facet>
                         <p:column  sortBy="#{apt.placeId.name}" filterBy="#{apt.placeId.name}" 
@@ -113,14 +113,13 @@
                         </p:column>
                         <p:column exportable="false">
                             <p:commandButton icon="pi pi-check" rendered="#{apt.appointmentStatus.equals('Pending')}" 
-                                             onclick="PF('manageAppointmentDialog').show()"
+                                             onclick="#{myTripBean.selectRow(apt)};PF('manageAppointmentDialog').show()"
                                              styleClass="mr-3 edit-button rounded-button ui-button-success" process="@this">
-                                <f:setPropertyActionListener target="#{myTripBean.selectedAppointment}" value="#{apt}"/>
+                                
                             </p:commandButton>
                             <p:commandButton icon="pi pi-times" rendered="#{apt.appointmentStatus.equals('Pending')}" 
-                                             onclick="PF('manageAppointmentCancelDialog').show()"
+                                             onclick="#{myTripBean.selectRow(apt)};PF('manageAppointmentCancelDialog').show()"
                                              styleClass="mr-3 edit-button rounded-button ui-button-danger" process="@this">
-                                <f:setPropertyActionListener target="#{myTripBean.selectedAppointment}" value="#{apt}"/>
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -152,8 +151,8 @@
                     </div>
                     <div class="text-right mt-4">
                         <p:commandButton type="button" class="ui-button-outlined ui-button-help mr-2" value="No" onclick="PF('manageAppointmentDialog').hide()"/>
-                        <p:commandButton class="ui-button-raised ui-button-help" value="Yes" update="apt-tab-view:appointment-dt-form @this" action="#{myTripBean.updateAppointmentStatus('Cancelled')}" oncomplete="PF('manageAppointmentCancelDialog').hide()"/>
-                       
+                        <p:commandButton class="ui-button-raised ui-button-help" value="Yes" update="apt-tab-view:appointment-dt-form apt-tab-view:appointment-dt-form:dt-appointments-user @this" action="#{myTripBean.updateAppointmentStatus('Cancelled')}" oncomplete="PF('manageAppointmentCancelDialog').hide()"/>
+
                     </div>
                 </h:form>
             </p:dialog>

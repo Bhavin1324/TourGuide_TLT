@@ -28,7 +28,7 @@
                             <span class="mr-2 font-semibold">#{cc.attrs.user.name}</span>
                         </div>
                         <p:menu toggleable="true" styleClass="border-0 w-full">
-                            <p:menuitem value="Switch profile" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_TOURIST_SELECTION)}" update="messages" icon="pi pi-arrow-right-arrow-left" rendered="#{subMasterBean.isPrimeUser}"/>
+                            <p:menuitem value="Switch profile" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE_TOURIST_SELECTION)}" update="messages" icon="pi pi-arrow-right-arrow-left" rendered="#{subMasterBean.isPrimeUser and cc.attrs.bean.isRoleContainsGuide()}"/>
                             <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_TOURIST)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>
                             <p:menuitem value="Home" icon="pi pi-home" action="#{cc.attrs.bean.redirectTo(uc.TO_GUIDE)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_GUIDE)}"/>
                             <p:menuitem value="My trip" icon="pi pi-flag" action="#{cc.attrs.bean.redirectTo(uc.TO_MY_TRIP)}" rendered="#{cc.attrs.bean.activeRole.equals(jc.ROLE_TOURIST)}"/>

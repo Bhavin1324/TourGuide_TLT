@@ -546,10 +546,11 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<AppointmentMaster> getUserAppointments(String userId) {
         UserMaster user = (UserMaster) em.find(UserMaster.class, userId);
-        if (user == null) {
+        if(user == null){
             return null;
         }
-        return user.getAppointmentMasterCollection();
+        Collection<AppointmentMaster> userAppointments = em.createNamedQuery("AppointmentMaster.getUserAppointments").setParameter("userId", user).getResultList();
+        return userAppointments;
     }
 
     @Override

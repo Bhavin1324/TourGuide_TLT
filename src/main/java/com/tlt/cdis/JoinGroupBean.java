@@ -10,6 +10,7 @@ import com.tlt.ejb.TouristLocal;
 import com.tlt.entities.Cities;
 import com.tlt.entities.EventMaster;
 import com.tlt.entities.PaymentMaster;
+import com.tlt.entities.SubscriptionMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.record.KeepRecord;
 import com.tlt.utils.GeoLocationUtil;
@@ -36,7 +37,7 @@ public class JoinGroupBean implements Serializable {
 
     @EJB
     AdminLocal adminLogic;
-
+    
     @EJB
     TouristLocal touristLogic;
     Collection<Cities> cities;
@@ -175,5 +176,14 @@ public class JoinGroupBean implements Serializable {
         }
         PrimeFaces.current().executeScript("PF('payment_dialog').hide()");
         PrimeFaces.current().ajax().update("data-table-form:messages", "data-table-form:dt-join-event");
+    }
+    
+    public boolean hasAnySubscription () {
+        Collection<SubscriptionMaster> usersSubscriptions = touristLogic.getUsersSubscriptions(String.valueOf(KeepRecord.getUsername()));
+        if (!usersSubscriptions.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
