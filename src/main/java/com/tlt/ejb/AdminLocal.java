@@ -169,4 +169,11 @@ public interface AdminLocal {
 
     void joinEvent(Integer noOfPeople, EventMaster event, String username);
 
+    Long getTodaysAppointmentsCount();
+
+    Long getTodaysEventsCount();
+
+    Long getTodaysSubscriptionsCount();
+    Long getEventCancelCount();
+    Long getAppointmentCancelCount();
 }

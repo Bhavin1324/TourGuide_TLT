@@ -39,6 +39,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "AppointmentMaster.findByEndDatetime", query = "SELECT a FROM AppointmentMaster a WHERE a.endDatetime = :endDatetime"),
     @NamedQuery(name = "AppointmentMaster.getAllGuidesAppointments", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId IS NOT NULL"),
     @NamedQuery(name = "AppointmentMaster.getUserAppointments", query = "SELECT a FROM AppointmentMaster a WHERE a.userId = :userId"),
+    @NamedQuery(name = "AppointmentMaster.getTodaysAppointmentsCount", query = "SELECT COUNT(a) FROM AppointmentMaster a WHERE a.startDatetime = :today"),
     @NamedQuery(name = "AppointmentMaster.findByNumberOfPeople", query = "SELECT a FROM AppointmentMaster a WHERE a.numberOfPeople = :numberOfPeople")})
 public class AppointmentMaster implements Serializable {
 

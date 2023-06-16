@@ -38,6 +38,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "EventMaster.findByStartTime", query = "SELECT e FROM EventMaster e WHERE e.startTime = :startTime"),
     @NamedQuery(name = "EventMaster.findByCity", query = "SELECT e FROM EventMaster e WHERE e.placeId.cityId.name = :cityname"),
     @NamedQuery(name = "EventMaster.findByEndTime", query = "SELECT e FROM EventMaster e WHERE e.endTime = :endTime"),
+    @NamedQuery(name = "EventMaster.getTodaysEventsCount", query = "SELECT COUNT(e) FROM EventMaster e WHERE e.startTime = :today"),
     @NamedQuery(name = "EventMaster.findByNumberOfPeople", query = "SELECT e FROM EventMaster e WHERE e.numberOfPeople = :numberOfPeople")})
 public class EventMaster implements Serializable {
 
