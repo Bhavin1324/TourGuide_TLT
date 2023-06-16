@@ -151,7 +151,7 @@
                     </div>
                     <div class="text-right mt-4">
                         <p:commandButton type="button" class="ui-button-outlined ui-button-help mr-2" value="No" onclick="PF('manageAppointmentDialog').hide()"/>
-                        <p:commandButton class="ui-button-raised ui-button-help" value="Yes" update="apt-tab-view:appointment-dt-form apt-tab-view:appointment-dt-form:dt-appointments-user @this" action="#{myTripBean.updateAppointmentStatus('Cancelled')}" oncomplete="PF('manageAppointmentCancelDialog').hide()"/>
+                        <p:commandButton class="ui-button-raised ui-button-help" value="Yes" update="apt-tab-view:appointment-dt-form apt-tab-view:appointment-dt-form:dt-appointments-user @this" action="#{myTripBean.updateAppointmentStatus('Canceled')}" oncomplete="PF('manageAppointmentCancelDialog').hide()"/>
 
                     </div>
                 </h:form>

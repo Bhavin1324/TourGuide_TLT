@@ -16,6 +16,7 @@ import com.tlt.entities.UserMaster;
 import com.tlt.entities.UserRole;
 import com.tlt.utils.GraphUtils;
 import com.tlt.utils.UserSubscriptionMapping;
+import com.tlt.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -546,7 +547,7 @@ public class Admin implements AdminLocal {
     @Override
     public Collection<AppointmentMaster> getUserAppointments(String userId) {
         UserMaster user = (UserMaster) em.find(UserMaster.class, userId);
-        if(user == null){
+        if (user == null) {
             return null;
         }
         Collection<AppointmentMaster> userAppointments = em.createNamedQuery("AppointmentMaster.getUserAppointments").setParameter("userId", user).getResultList();
@@ -560,6 +561,32 @@ public class Admin implements AdminLocal {
             return null;
         }
         return user.getEventMasterCollection();
+    }
+
+    @Override
+    public Long getTodaysAppointmentsCount() {
+        return (long) em.createNativeQuery("SELECT COUNT(*) from appointment_master WHERE DATE(start_datetime) = CURRENT_DATE();").getSingleResult();
+
+    }
+
+    @Override
+    public Long getTodaysEventsCount() {
+         return (long) em.createNativeQuery("SELECT COUNT(*) from event_master e WHERE DATE(e.start_time) = CURRENT_DATE();").getSingleResult();
+    }
+
+    @Override
+    public Long getTodaysSubscriptionsCount() {
+       return (long) em.createNativeQuery("SELECT COUNT(*) FROM `subscription_master` WHERE DATE(start_date) = CURRENT_DATE();").getSingleResult();
+    }
+
+    @Override
+    public Long getEventCancelCount() {
+         return (long) em.createNativeQuery("SELECT COUNT(*) FROM `event_master` WHERE event_status  = 'Canceled'").getSingleResult();
+    }
+
+    @Override
+    public Long getAppointmentCancelCount() {
+      return (long) em.createNativeQuery("SELECT COUNT(*) FROM `appointment_master` WHERE appointment_status = 'Canceled'").getSingleResult();
     }
 
 }

@@ -10,6 +10,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import org.primefaces.model.charts.bar.BarChartModel;
@@ -26,7 +27,7 @@ public class AdminHomeBean implements Serializable {
     private BarChartModel barModel;
     private PieChartModel pieModel;
     GraphUtils gUtils;
-    long userCount, placeCount, subsCount;
+    long userCount, placeCount, subsCount, todaysApptCount, todaysEventsCount, todaysSubsCount, eventCancelCount, apptCancelCount;
     long revenue;
 
     public AdminHomeBean() {
@@ -40,6 +41,11 @@ public class AdminHomeBean implements Serializable {
         this.barModel = gUtils.createBarModel("Subscriptions", barGraphData);
         pieGraphData = ad.getMonthlyRevenueData();
         this.pieModel = gUtils.createPirChart(pieGraphData);
+        this.todaysApptCount = ad.getTodaysAppointmentsCount();
+        this.todaysEventsCount = ad.getTodaysEventsCount();
+        this.todaysSubsCount = ad.getTodaysSubscriptionsCount();
+        this.eventCancelCount = ad.getEventCancelCount();
+        this.apptCancelCount = ad.getAppointmentCancelCount();
     }
 
     public List<GraphUtils> getGraphData() {
@@ -48,6 +54,46 @@ public class AdminHomeBean implements Serializable {
 
     public void setGraphData(List<GraphUtils> graphData) {
         this.barGraphData = graphData;
+    }
+
+    public long getTodaysEventsCount() {
+        return todaysEventsCount;
+    }
+
+    public void setTodaysEventsCount(long todaysEventsCount) {
+        this.todaysEventsCount = todaysEventsCount;
+    }
+
+    public long getTodaysSubsCount() {
+        return todaysSubsCount;
+    }
+
+    public void setTodaysSubsCount(long todaysSubsCount) {
+        this.todaysSubsCount = todaysSubsCount;
+    }
+
+    public long getEventCancelCount() {
+        return eventCancelCount;
+    }
+
+    public void setEventCancelCount(long eventCancelCount) {
+        this.eventCancelCount = eventCancelCount;
+    }
+
+    public long getApptCancelCount() {
+        return apptCancelCount;
+    }
+
+    public void setApptCancelCount(long apptCancelCount) {
+        this.apptCancelCount = apptCancelCount;
+    }
+
+    public long getTodaysApptCount() {
+        return todaysApptCount;
+    }
+
+    public void setTodaysApptCount(long todaysApptCount) {
+        this.todaysApptCount = todaysApptCount;
     }
 
     public long getUserCount() {

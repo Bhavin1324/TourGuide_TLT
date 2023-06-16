@@ -100,7 +100,7 @@
                             <p:commandButton value="No" type="button" onclick="PF('manageAppointmentCancelDialog').hide()" class="border-purple-400 mr-3 text-lg ui-button-outlined ui-button-help"/>
                             <p:commandButton value="Yes" process="@this" 
                                              update=":dataTableForm:messages :dataTableForm:dt-event-guide @this" 
-                                             action="#{guidingPlaceBean.updateStatus('Cancel')}" 
+                                             action="#{guidingPlaceBean.updateStatus('Canceled')}" 
                                              styleClass="text-lg ui-button-help" 
                                              oncomplete="PF('manageAppointmentCancelDialog').hide()"
                                              />
