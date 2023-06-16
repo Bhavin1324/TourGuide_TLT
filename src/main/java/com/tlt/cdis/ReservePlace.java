@@ -198,6 +198,7 @@ public class ReservePlace implements Serializable {
             switch (pack) {
                 case "TG":
                     int grossAmount = selectedGuide.getAmount() + transporter.getAmount();
+                    selectedGuide.setIsAppointed(true);
                     touristAppointment.setGuideId(selectedGuide);
                     touristAppointment.setTransportId(transport);
 
@@ -208,10 +209,12 @@ public class ReservePlace implements Serializable {
                     touristLogic.insertTransport(transport);
                     adminLogic.insertIntoAppointment(touristAppointment);
                     touristLogic.reserveYourPlace(payment);
+                    adminLogic.updateGuide(selectedGuide.getId(), selectedGuide);
                     reset();
                     PrimeFaces.current().executeScript("PF('success_dialog').show()");
                     return;
                 case "G":
+                    selectedGuide.setIsAppointed(true);
                     touristAppointment.setGuideId(selectedGuide);
 
                     payment.setGuideId(selectedGuide);
@@ -219,6 +222,7 @@ public class ReservePlace implements Serializable {
 
                     adminLogic.insertIntoAppointment(touristAppointment);
                     touristLogic.reserveYourPlace(payment);
+                    adminLogic.updateGuide(selectedGuide.getId(), selectedGuide);
                     reset();
                     PrimeFaces.current().executeScript("PF('success_dialog').show()");
                     return;

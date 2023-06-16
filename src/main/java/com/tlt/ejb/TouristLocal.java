@@ -34,6 +34,8 @@ public interface TouristLocal {
 
     Collection<PaymentMaster> usersPaymentHistory(String username);
 
+    void updatePayment(PaymentMaster payment);
+
     void reserveYourPlace(PaymentMaster payment);
 
     // Transport methods
@@ -53,6 +55,6 @@ public interface TouristLocal {
 
     Collection<PaymentMaster> getUsersEventsHistory(String username);
 
-    void joinEvent( EventMaster event, String username, PaymentMaster payment);
+    void joinEvent(EventMaster event, String username, PaymentMaster payment);
 
 }

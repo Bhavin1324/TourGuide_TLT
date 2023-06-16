@@ -3,6 +3,7 @@ package com.tlt.ejb;
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
+import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.entities.UserMaster;
 import com.tlt.utils.GraphUtils;
@@ -164,6 +165,18 @@ public class Guide implements GuideLocal {
         appt.setAppointmentStatus(status);
         em.merge(appt);
     }
+
+   
+    @Override
+    public PaymentMaster getPaymentByAppointmentId(String appointmentId) {
+        AppointmentMaster appointment = em.find(AppointmentMaster.class, appointmentId);
+        if(appointment != null){
+            PaymentMaster paymentOfAppointment = (PaymentMaster) em.createNamedQuery("PaymentMaster.findByAppointmentId").setParameter("appointmentId", appointment).getSingleResult();
+            return paymentOfAppointment;
+        }
+        return null;
+    }
+
     @Override
     public void updateEventStatus(EventMaster event, String status) {
         EventMaster e = em.find(EventMaster.class, event.getId());
@@ -246,9 +259,9 @@ public class Guide implements GuideLocal {
 
     @Override
     public Collection<EventMaster> getEventsOfGuide(String gusername) {
-       GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
-       Collection<EventMaster> events =  guide.getEventMasterCollection();
-       return events;
+        GuideMaster guide = (GuideMaster) em.createNamedQuery("GuideMaster.findByUsername").setParameter("username", gusername).getSingleResult();
+        Collection<EventMaster> events = guide.getEventMasterCollection();
+        return events;
     }
 
 }

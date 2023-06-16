@@ -3,6 +3,7 @@ package com.tlt.ejb;
 import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.EventMaster;
 import com.tlt.entities.GuideMaster;
+import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PlaceMaster;
 import com.tlt.utils.GraphUtils;
 import java.util.Collection;
@@ -45,4 +46,6 @@ public interface GuideLocal {
     void raiseAnEvent(PlaceMaster placeMaster, String gusername, Date startDate, Date endDate);
 
     Collection<EventMaster> getEventsOfGuide(String gusername);
+
+    PaymentMaster getPaymentByAppointmentId(String appointmentId);
 }

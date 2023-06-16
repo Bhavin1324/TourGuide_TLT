@@ -246,4 +246,13 @@ public class Tourist implements TouristLocal {
         em.merge(umaster);
         em.merge(emaster);
     }
+
+    @Override
+    public void updatePayment(PaymentMaster payment) {
+        PaymentMaster oldPayment = em.find(PaymentMaster.class, payment.getId());
+        if(oldPayment != null){
+            em.merge(payment);
+        }
+    }
+    
 }

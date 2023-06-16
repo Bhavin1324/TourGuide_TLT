@@ -36,6 +36,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "PaymentMaster.findUsersSubscription", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :user AND p.subscriptionId IS NOT NULL"),
     @NamedQuery(name = "PaymentMaster.findUsersAppt", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :user AND p.appointmentId IS NOT NULL"),
     @NamedQuery(name = "PaymentMaster.findUsersEvent", query = "SELECT p FROM PaymentMaster p WHERE p.userId = :user AND p.eventId IS NOT NULL"),
+    @NamedQuery(name = "PaymentMaster.findByAppointmentId", query = "SELECT p FROM PaymentMaster p WHERE p.appointmentId = :appointmentId"),
     @NamedQuery(name = "PaymentMaster.findByAmount", query = "SELECT p FROM PaymentMaster p WHERE p.amount = :amount")})
 public class PaymentMaster implements Serializable {
 
