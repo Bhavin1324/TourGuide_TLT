@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.tlt.entities;
 
 import java.io.Serializable;
@@ -24,10 +21,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author kunal
- */
+
 @Entity
 @Table(name = "appointment_master")
 @NamedQueries({
@@ -40,7 +34,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "AppointmentMaster.getAllGuidesAppointments", query = "SELECT a FROM AppointmentMaster a WHERE a.guideId IS NOT NULL"),
     @NamedQuery(name = "AppointmentMaster.getUserAppointments", query = "SELECT a FROM AppointmentMaster a WHERE a.userId = :userId"),
     @NamedQuery(name = "AppointmentMaster.getTodaysAppointmentsCount", query = "SELECT COUNT(a) FROM AppointmentMaster a WHERE a.startDatetime = :today"),
-    @NamedQuery(name = "AppointmentMaster.findByNumberOfPeople", query = "SELECT a FROM AppointmentMaster a WHERE a.numberOfPeople = :numberOfPeople")})
+    @NamedQuery(name = "AppointmentMaster.findByNumberOfPeople", query = "SELECT a FROM AppointmentMaster a WHERE a.numberOfPeople = :numberOfPeople"),
+    @NamedQuery(name = "AppointmentMaster.markMissingAppointment", query = "UPDATE AppointmentMaster a SET a.appointmentStatus = :status WHERE a.startDatetime < FUNCTION('NOW')")
+})
 public class AppointmentMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;

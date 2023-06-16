@@ -50,6 +50,7 @@ public class MyTripBean {
     }
 
     public Collection<AppointmentMaster> getUsersAppointments() {
+        touristLogic.markMissedAppointment();
         loggedInUser = touristLogic.findUserByUsername(KeepRecord.getUsername());
         usersAppointments = adminLogic.getUserAppointments(loggedInUser.getId());
         return usersAppointments;

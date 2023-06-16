@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.EventMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.PaymentMethod;
@@ -233,7 +234,7 @@ public class Tourist implements TouristLocal {
     public void joinEvent(EventMaster event, String username, PaymentMaster payment) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         EventMaster emaster = em.find(EventMaster.class, event.getId());
-        
+
         UserMaster umaster = em.find(UserMaster.class, user.getId());
         Collection<EventMaster> usersEvent = umaster.getEventMasterCollection();
         usersEvent.add(emaster);
@@ -250,9 +251,17 @@ public class Tourist implements TouristLocal {
     @Override
     public void updatePayment(PaymentMaster payment) {
         PaymentMaster oldPayment = em.find(PaymentMaster.class, payment.getId());
-        if(oldPayment != null){
+        if (oldPayment != null) {
             em.merge(payment);
         }
     }
-    
+
+    @Override
+    public void markMissedAppointment() {
+        try {
+            em.createNamedQuery("AppointmentMaster.markMissingAppointment").setParameter("status", "Missed").executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

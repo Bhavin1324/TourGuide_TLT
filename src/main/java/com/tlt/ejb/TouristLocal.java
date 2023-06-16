@@ -1,5 +1,6 @@
 package com.tlt.ejb;
 
+import com.tlt.entities.AppointmentMaster;
 import com.tlt.entities.EventMaster;
 import com.tlt.entities.PaymentMaster;
 import com.tlt.entities.SubscriptionMaster;
@@ -57,4 +58,5 @@ public interface TouristLocal {
 
     void joinEvent(EventMaster event, String username, PaymentMaster payment);
 
+    void markMissedAppointment();
 }
