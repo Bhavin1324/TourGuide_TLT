@@ -26,13 +26,7 @@
                                              styleClass="ui-button-success" style="margin-right: .5rem">
                                 <p:resetInput target=":dialogs:manage-users-content" />
                             </p:commandButton>
-                            <p:commandButton id="delete-users-button" value="#{usersBean.deleteButtonMessage}"
-                                             icon="pi pi-trash" actionListener="#{usersBean.deleteSelectedUsers}"
-                                             styleClass="ui-button-danger mr-2" 
-                                             disabled="#{!usersBean.hasSelectedUsers()}" update="@this">
-                                <p:confirm header="Confirmation" message="Delete the selected Places?"
-                                           icon="pi pi-exclamation-triangle" />
-                            </p:commandButton>
+                           
                         </p:toolbarGroup>
                     </p:toolbar>
 
@@ -57,11 +51,7 @@
                                 </span>
                             </div>
                         </f:facet>
-                        <p:ajax event="rowSelect" update=":form:delete-users-button" />
-                        <p:ajax event="rowUnselect" update=":form:delete-users-button" />
-                        <p:ajax event="rowSelectCheckbox" update=":form:delete-users-button" />
-                        <p:ajax event="rowUnselectCheckbox" update=":form:delete-users-button" />
-                        <p:ajax event="toggleSelect" update=":form:delete-users-button" />
+                        
 
                         <p:column selectionMode="multiple" styleClass="mr-2" exportable="false"></p:column>
 
@@ -99,7 +89,7 @@
                 </h:form>
 
                 <h:form enctype="multipart/form-data" id="dialogs">
-                    <p:dialog  header="Place Details" styleClass="w-10 md:w-6 h-fit" showEffect="fade" modal="true" widgetVar="manageUserDialog" responsive="true">
+                    <p:dialog  header="Add new user" styleClass="w-10 md:w-6 h-fit" showEffect="fade" modal="true" widgetVar="manageUserDialog" responsive="true">
                         <p:outputPanel id="manage-users-content" class="ui-fluid px-4">
                             <p:messages id="validationMsg"  closable="true">
                                 <p:autoUpdate/>
@@ -118,7 +108,7 @@
                                 <p:inputText id="username" placeholder="Username" styleClass="w-full" rendered="true" requiredMessage="Username: Username is required" validatorMessage="Username: Username criteria should be matched" value="#{registerUserBean.userMaster.username}">
                                     <f:validateRegex pattern="^[a-zA-Z]+\d+$"/>
                                 </p:inputText>
-                                <small class="mb-3 text-blue-400">Username must start with character and ends with any digit</small>
+                                <small class="mb-3 text-purple-600">Username must start with character and ends with any digit</small>
                             </div>
                             <div class="field">
                                 <p:password id="password" placeholder="Create password" toggleMask="true" redisplay="true" styleClass="block w-full" required="true" requiredMessage="Password: Password is required" validatorMessage="Password: Password should contains minimun 6 characters and atleast one digit" value="#{registerUserBean.userMaster.password}">
@@ -142,7 +132,7 @@
                         </p:outputPanel>
 
                         <f:facet name="footer">
-                            <p:commandButton value="Save" styleClass="mr-2" icon="pi pi-check" actionListener="#{registerUserBean.register()}"
+                            <p:commandButton value="Save" styleClass="mr-2 ui-button-help" icon="pi pi-check" actionListener="#{registerUserBean.register()}"
                                              update="manage-users-content" process="manage-users-content @this" />
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageUserDialog').hide()"
                                              class="mx-3 ui-button-secondary" type="button" />
@@ -159,7 +149,7 @@
                                          onclick="PF('deleteUserDialog').hide()"
                                          />
                         <p:commandButton value="Yes" actionListener="#{usersBean.deleteUser}"
-                                         process="@this" update=":form:delete-users-button"
+                                         process="@this" update=":form"
                                          oncomplete="PF('deleteUserDialog').hide()"
                                          styleClass="ui-confirmdialog-yes ui-button-help"
                                          />

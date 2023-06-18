@@ -58,7 +58,7 @@
                         <p:column headerText="Name" sortBy="#{p.name}">
                             <h:outputText value="#{p.name}" />
                         </p:column>
-                        <p:column styleClass="" headerText="Image" exportable="false">
+                        <p:column styleClass="overflow-auto px-2 py-4" headerText="Image" exportable="false">
                             <p:graphicImage value="/uploads/places/#{p.images}" style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
                         </p:column>
                         <p:column headerText="Adress" sortBy="#{p.address}">

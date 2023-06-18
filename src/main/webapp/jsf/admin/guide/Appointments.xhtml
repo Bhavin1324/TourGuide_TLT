@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </p:column>
-                            <p:column class="" sortBy="#{ap.guideId.email}" filterBy="#{ap.guideId.email}"
+                            <p:column class="overflow-auto" sortBy="#{ap.guideId.email}" filterBy="#{ap.guideId.email}"
                                 headerText="Guide's Email">
                                 <h:outputText value="#{ap.guideId.email}" />
                             </p:column>
@@ -112,7 +112,7 @@
                                     </div>
                                 </div>
                             </p:column>
-                            <p:column class="px-4" sortBy="#{e.guideId.email}" filterBy="#{e.guideId.email}"
+                            <p:column class="px-4 overflow-auto" sortBy="#{e.guideId.email}" filterBy="#{e.guideId.email}"
                                 headerText="Guide's Email">
                                 <h:outputText value="#{e.guideId.email}" />
                             </p:column>

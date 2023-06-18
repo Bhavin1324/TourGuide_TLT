@@ -99,7 +99,7 @@ public class LandingBean implements Serializable {
     }
 
     public Collection<PlaceMaster> getRecommandedPlaces() {
-        recommandedPlaces = adminLogic.getAllPlaces();
+        recommandedPlaces = adminLogic.getPlacesByCity(userLocation.getCity().getName(), userLocation.getCountry().getIsoCode().toString());
         ArrayList<PlaceMaster> recPlace = new ArrayList<>(recommandedPlaces);
         return recPlace.subList(recPlace.size() - 4, recPlace.size());
     }

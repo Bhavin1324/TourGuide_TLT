@@ -75,7 +75,7 @@
                         </p:column>
 
                         <p:column exportable="false" >
-                            <p:commandButton value="Raise an Event" class="text-lg ui-button-help mr-4" 
+                            <p:commandButton value="Raise event" class="text-lg ui-button-help mr-3" 
                                              action="#{guidingPlaceBean.setSelectedPlace(gp)}" 
                                              update=":raise-event:manage-event-content"
                                              icon="pi pi-calendar-plus" process="@this" oncomplete="PF('manageEventDialog').show()">
@@ -143,16 +143,16 @@
                                              value="#{guidingPlaceBean.selectedPlace.address}" styleClass="w-full" />
                             </div>
                             <div class="field">
-                                <p:outputLabel for="sdate">Event Start Date</p:outputLabel>
+                                <p:outputLabel for="sdate">Event Start Date time</p:outputLabel>
                                 <p:datePicker showIcon="true" id="sdate" 
                                               value="${guidingPlaceBean.eventRaised.startTime}" showTime="true" required="true"
-                                              requiredMessage="Event Starting Time is Required"/>
+                                              requiredMessage="Event Starting Time is Required" validator="#{validatorBean.validateMissedDate}"/>
                             </div>
                             <div class="field">
-                                <p:outputLabel for="edate">Event Start Date</p:outputLabel>
+                                <p:outputLabel for="edate">Event End Date time</p:outputLabel>
                                 <p:datePicker showIcon="true" id="edate" 
                                               value="${guidingPlaceBean.eventRaised.endTime}" required="true" 
-                                              showTime="true" requiredMessage="Event Ending Time is Required"/>
+                                              showTime="true" requiredMessage="Event Ending Time is Required" validator="#{validatorBean.validateMissedDate}"/>
                             </div>
                         </p:outputPanel>
 

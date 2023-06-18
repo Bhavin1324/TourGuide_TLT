@@ -41,7 +41,7 @@
                         <p:column  class="px-4" sortBy="#{g.name}" filterBy="#{g.name}" headerText="Guide's Name">
                             <h:outputText value="#{g.name}"/>
                         </p:column>
-                        <p:column  class="px-4" sortBy="#{g.email}" filterBy="#{g.email}" headerText="Email">
+                        <p:column  class="px-4 overflow-auto" sortBy="#{g.email}" filterBy="#{g.email}" headerText="Email">
                             <h:outputText class="-mr-1" value="#{g.email}"/>
                         </p:column>
                         <p:column  class="px-4" sortBy="#{g.gender}" filterBy="#{g.gender}" headerText="Gender">
