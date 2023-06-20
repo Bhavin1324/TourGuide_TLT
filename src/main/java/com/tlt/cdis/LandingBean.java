@@ -44,11 +44,12 @@ public class LandingBean implements Serializable {
     ArrayList<PlaceCategory> placeCategories;
     PlaceCategory selectedCategory;
     Collection<PlaceMaster> lstPlacesByCategory;
-    
+
     MapBean mapBean;
     String currentLat;
     String currentLng;
     CityResponse userLocation;
+
     @Inject
     public LandingBean(MapBean mapBean) {
         recommandedPlaces = new ArrayList<>();
@@ -152,15 +153,18 @@ public class LandingBean implements Serializable {
         if (placeCategories.size() > 0) {
             return this.placeCategories;
         }
+        String currentUserCity = userLocation.getCity().getName();
+        String countryCode = userLocation.getCountry().getIsoCode();
         ArrayList<PlaceCategory> placeCategoryList = new ArrayList(adminLogic.getAllPlaceCategories());
 
         for (PlaceCategory pc : placeCategoryList) {
-            ArrayList<PlaceMaster> pm = new ArrayList<>(pc.getPlaceMasterCollection());
-            if (pm.size() == 0 || pm == null) {
+            ArrayList<PlaceMaster> pm = new ArrayList<>(adminLogic.getCityPlacesByCategory(pc, currentUserCity, countryCode));
+            if ((pm.size() == 0 || pm == null)) {
                 continue;
             }
             placeCategories.add(pc);
         }
+
         return this.placeCategories;
     }
 
@@ -196,7 +200,7 @@ public class LandingBean implements Serializable {
     public void onCatCardSelect(PlaceCategory category) {
         String currentUserCity = userLocation.getCity().getName();
         String countryCode = userLocation.getCountry().getIsoCode();
-        lstPlacesByCategory = adminLogic.getCityPlacesByCategory(category,currentUserCity,countryCode);
+        lstPlacesByCategory = adminLogic.getCityPlacesByCategory(category, currentUserCity, countryCode);
         selectedCategory = category;
         loadMarkerByCategory();
         PrimeFaces.current().executeScript("PF('c_dialog').show()");

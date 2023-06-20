@@ -26,6 +26,9 @@ public class GeoLocationUtil {
             // https://api.my-ip.io/ip
             // https://api.ip.sb/ip
             InetAddress ipAddress = InetAddress.getByName(CrossFetch_GET("https://api.ip.sb/ip"));
+            
+            // Ahemdavad global ip 
+            //InetAddress ipAddress = InetAddress.getByName("182.237.8.5");
             CityResponse cityResponse = reader.city(ipAddress);
             return cityResponse;
         } catch (Exception ex) {
