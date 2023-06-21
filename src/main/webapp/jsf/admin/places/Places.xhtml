@@ -10,6 +10,7 @@
         <title>Places</title>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../../../images/favicon.ico"/>
 
     </h:head>
     <h:body class="bg-gray-200">
@@ -55,31 +56,31 @@
 
                         <p:column selectionMode="multiple" styleClass="mr-2" exportable="false"></p:column>
 
-                        <p:column headerText="Name" sortBy="#{p.name}">
+                        <p:column headerText="Name" sortBy="#{p.name}" filterBy="#{p.name}">
                             <h:outputText value="#{p.name}" />
                         </p:column>
                         <p:column styleClass="overflow-auto px-2 py-4" headerText="Image" exportable="false">
                             <p:graphicImage value="/uploads/places/#{p.images}" style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)"/>
                         </p:column>
-                        <p:column headerText="Adress" sortBy="#{p.address}">
+                        <p:column headerText="Adress" sortBy="#{p.address}" filterBy="#{p.address}">
                             <h:outputText value="#{p.address}" />
                         </p:column>
-                        <p:column headerText="Latitude" sortBy="#{p.longitude}" >
-                            <h:outputText value="#{p.longitude}" />
-                        </p:column>
-                        <p:column headerText="Longitude" sortBy="#{p.latitude}">
+                        <p:column headerText="Latitude" sortBy="#{p.latitude}" filterBy="#{p.latitude}">
                             <h:outputText value="#{p.latitude}" />
                         </p:column>
-                        <p:column headerText="Opening Time" sortBy="#{p.openingTime}" >
+                        <p:column headerText="Longitude" sortBy="#{p.longitude}" filterBy="#{p.longitude}">
+                            <h:outputText value="#{p.longitude}" />
+                        </p:column>
+                        <p:column headerText="Opening Time" sortBy="#{p.openingTime}" filterBy="#{p.openingTime}">
                             <h:outputText value="#{placesBean.get12hTime(p,'opening')}" />
                         </p:column>
-                        <p:column headerText="Closing Time" sortBy="#{p.closingTime}">
+                        <p:column headerText="Closing Time" sortBy="#{p.closingTime}" filterBy="#{p.closingTime}">
                             <h:outputText value="#{placesBean.get12hTime(p, 'closing')}" />
                         </p:column>
-                        <p:column headerText="Category" sortBy="#{p.categoryId.name}">
+                        <p:column headerText="Category" sortBy="#{p.categoryId.name}" filterBy="#{p.categoryId.name}">
                             <h:outputText value="#{p.categoryId.name}" />
                         </p:column>
-                        <p:column headerText="City" sortBy="#{p.cityId.name}">
+                        <p:column headerText="City" sortBy="#{p.cityId.name}" filterBy="#{p.cityId.name}">
                             <h:outputText value="#{p.cityId.name}" />
                         </p:column>
 

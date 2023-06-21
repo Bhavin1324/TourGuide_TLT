@@ -2,158 +2,159 @@
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar" xmlns:p="http://primefaces.org/ui"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
-    <title>Appointments</title>
-    <h:outputStylesheet library="css" name="primeflex.min.css" />
-    <h:outputStylesheet library="css" name="styles.css" />
-</h:head>
-<h:body class="bg-gray-200" style="font-family: sans-serif">
-    <navbar:admin-navbar sideNavigationBean="#{navigationBean}" />
-    <div class="my-5 px-2">
-        <h:form>
-            <div class="surface-card border-round-2xl p-4">
-                <div class="ml-4 text-4xl text-800 font-semibold my-4">Appointments of all Guides</div>
-                <!--                    <div class="ml-4">
-                                            <span><p:commandButton value="Personal Appointments" class="ui-button-help" /></span>
-                                            <span><p:commandButton value="Events Raised" class="ui-button-help" /></span>
-                                        </div>-->
-                <p:tabView activeIndex="#{usersBean.activeTabIndex}">
-                    <p:tab titleStyleClass="text-lg" title="Personal Appointments">
-                        <p:dataTable id="dt-appt-details" widgetVar="dtAppointmentsDetails" class="text-lg mx-2 px-2"
-                            var="ap" value="#{usersBean.allAppointmentsOfGuides}" reflow="true" rows="5"
-                            paginator="true" paginatorPosition="bottom">
-                            <f:facet name="header">
-                                <div class="product-table-header ml-2 mt-5">
-                                    <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
-                                        <p:inputText id="globalFilter" onkeyup="PF('dtAppointmentsDetails').filter()"
-                                            placeholder="Search" />
+      xmlns:navbar="http://xmlns.jcp.org/jsf/composite/components/navbar" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Appointments</title>
+        <h:outputStylesheet library="css" name="primeflex.min.css" />
+        <h:outputStylesheet library="css" name="styles.css" />
+        <link rel="shortcut icon" type="image/x-icon" href="../../../images/favicon.ico"/>
+    </h:head>
+    <h:body class="bg-gray-200" style="font-family: sans-serif">
+        <navbar:admin-navbar sideNavigationBean="#{navigationBean}" />
+        <div class="my-5 px-2">
+            <h:form>
+                <div class="surface-card border-round-2xl p-4">
+                    <div class="ml-4 text-4xl text-800 font-semibold my-4">Appointments of all Guides</div>
+                    <!--                    <div class="ml-4">
+                                                <span><p:commandButton value="Personal Appointments" class="ui-button-help" /></span>
+                                                <span><p:commandButton value="Events Raised" class="ui-button-help" /></span>
+                                            </div>-->
+                    <p:tabView activeIndex="#{usersBean.activeTabIndex}">
+                        <p:tab titleStyleClass="text-lg" title="Personal Appointments">
+                            <p:dataTable id="dt-appt-details" widgetVar="dtAppointmentsDetails" class="text-lg mx-2 px-2"
+                                         var="ap" value="#{usersBean.allAppointmentsOfGuides}" reflow="true" rows="5"
+                                         paginator="true" paginatorPosition="bottom">
+                                <f:facet name="header">
+                                    <div class="product-table-header ml-2 mt-5">
+                                        <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" onkeyup="PF('dtAppointmentsDetails').filter()"
+                                                         placeholder="Search" />
+                                        </span>
+                                    </div>
+                                </f:facet>
+                                <p:column class="px-4" sortBy="#{ap.guideId.name}" filterBy="#{ap.guideId.name}"
+                                          headerText="Guide's Name">
+                                    <div class="flex flex-row align-items-center">
+                                        <div>
+                                            <p:avatar styleClass="mr-3 shadow-4" size="xlarge" shape="circle">
+                                                <p:graphicImage value="/uploads/profiles/#{ap.guideId.profileImage}" />
+                                            </p:avatar>
+                                        </div>
+                                        <div>
+                                            <h:outputText value="#{ap.guideId.name}" />
+                                        </div>
+                                    </div>
+                                </p:column>
+                                <p:column class="overflow-auto" sortBy="#{ap.guideId.email}" filterBy="#{ap.guideId.email}"
+                                          headerText="Guide's Email">
+                                    <h:outputText value="#{ap.guideId.email}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{ap.placeId.name}" filterBy="#{ap.placeId.name}"
+                                          headerText="Place">
+                                    <div class="text-center flex flex-column justify-content-center">
+                                        <div>
+                                            <p:graphicImage value="/uploads/places/#{ap.placeId.images}"
+                                                            style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)" />
+                                        </div>
+                                        <div class="mt-2">
+                                            <h:outputText value="#{ap.placeId.name}" />
+                                        </div>
+                                    </div>
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{ap.placeId.address}" filterBy="#{ap.placeId.address}"
+                                          headerText="Place Address">
+                                    <h:outputText value="#{ap.placeId.address}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{ap.startDatetime}" filterBy="#{ap.startDatetime}"
+                                          headerText="Start Date">
+                                    <h:outputText
+                                        value="#{usersBean.getFormatedDate(ap.startDatetime)} #{usersBean.getFormatedTime(ap.startDatetime)}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{ap.userId.email}" filterBy="#{ap.userId.email}"
+                                          headerText="Tourist's Email">
+                                    <h:outputText value="#{ap.userId.email}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{ap.guideId.amount}" filterBy="#{ap.guideId.amount}"
+                                          headerText="Amount">
+                                    <h:outputText value="#{ap.guideId.amount}" />
+                                    <span class="material-symbols-outlined text-xl">
+                                        currency_rupee
                                     </span>
-                                </div>
-                            </f:facet>
-                            <p:column class="px-4" sortBy="#{ap.guideId.name}" filterBy="#{ap.guideId.name}"
-                                headerText="Guide's Name">
-                                <div class="flex flex-row align-items-center">
-                                    <div>
-                                        <p:avatar styleClass="mr-3 shadow-4" size="xlarge" shape="circle">
-                                            <p:graphicImage value="/uploads/profiles/#{ap.guideId.profileImage}" />
-                                        </p:avatar>
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{ap.appointmentStatus}" filterBy="#{ap.appointmentStatus}"
+                                          headerText="Appointment status">
+                                    <h:outputText value="#{ap.appointmentStatus}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab titleStyleClass="text-lg" title="Events Raised">
+                            <p:dataTable id="dt-event-details" widgetVar="dtEventDetails" class="text-lg mx-2 px-2" var="e"
+                                         value="#{usersBean.allEventsOfGuides}" reflow="true" rows="5" paginator="true"
+                                         paginatorPosition="bottom">
+                                <f:facet name="header">
+                                    <div class="product-table-header ml-2 mt-5">
+                                        <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" onkeyup="PF('dtEventDetails').filter()"
+                                                         placeholder="Search" />
+                                        </span>
                                     </div>
-                                    <div>
-                                        <h:outputText value="#{ap.guideId.name}" />
+                                </f:facet>
+                                <p:column class="px-4" sortBy="#{e.guideId.name}" filterBy="#{e.guideId.name}"
+                                          headerText="Guide's Name">
+                                    <div class="flex flex-row align-items-center">
+                                        <div>
+                                            <p:avatar styleClass="mr-3 shadow-4" size="xlarge" shape="circle">
+                                                <p:graphicImage value="/uploads/profiles/#{e.guideId.profileImage}" />
+                                            </p:avatar>
+                                        </div>
+                                        <div>
+                                            <h:outputText value="#{e.guideId.name}" />
+                                        </div>
                                     </div>
-                                </div>
-                            </p:column>
-                            <p:column class="overflow-auto" sortBy="#{ap.guideId.email}" filterBy="#{ap.guideId.email}"
-                                headerText="Guide's Email">
-                                <h:outputText value="#{ap.guideId.email}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{ap.placeId.name}" filterBy="#{ap.placeId.name}"
-                                headerText="Place">
-                                <div class="text-center flex flex-column justify-content-center">
-                                    <div>
-                                        <p:graphicImage value="/uploads/places/#{ap.placeId.images}"
-                                            style="width: 150px;height:100px;border-radius: 10px;box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23)" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <h:outputText value="#{ap.placeId.name}" />
-                                    </div>
-                                </div>
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{ap.placeId.address}" filterBy="#{ap.placeId.address}"
-                                headerText="Place Address">
-                                <h:outputText value="#{ap.placeId.address}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{ap.startDatetime}" filterBy="#{ap.startDatetime}"
-                                headerText="Start Date">
-                                <h:outputText
-                                    value="#{usersBean.getFormatedDate(ap.startDatetime)} #{usersBean.getFormatedTime(ap.startDatetime)}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{ap.userId.email}" filterBy="#{ap.userId.email}"
-                                headerText="Tourist's Email">
-                                <h:outputText value="#{ap.userId.email}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{ap.guideId.amount}" filterBy="#{ap.guideId.amount}"
-                                headerText="Amount">
-                                <h:outputText value="#{ap.guideId.amount}" />
-                                <span class="material-symbols-outlined text-xl">
-                                    currency_rupee
-                                </span>
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{ap.appointmentStatus}" filterBy="#{ap.appointmentStatus}"
-                                headerText="Appointment status">
-                                <h:outputText value="#{ap.appointmentStatus}" />
-                            </p:column>
-                        </p:dataTable>
-                    </p:tab>
-                    <p:tab titleStyleClass="text-lg" title="Events Raised">
-                        <p:dataTable id="dt-event-details" widgetVar="dtEventDetails" class="text-lg mx-2 px-2" var="e"
-                            value="#{usersBean.allEventsOfGuides}" reflow="true" rows="5" paginator="true"
-                            paginatorPosition="bottom">
-                            <f:facet name="header">
-                                <div class="product-table-header ml-2 mt-5">
-                                    <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
-                                        <p:inputText id="globalFilter" onkeyup="PF('dtEventDetails').filter()"
-                                            placeholder="Search" />
+                                </p:column>
+                                <p:column class="px-4 overflow-auto" sortBy="#{e.guideId.email}" filterBy="#{e.guideId.email}"
+                                          headerText="Guide's Email">
+                                    <h:outputText value="#{e.guideId.email}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{e.placeId.name}" filterBy="#{e.placeId.name}"
+                                          headerText="Place">
+                                    <h:outputText class="-mr-1" value="#{e.placeId.name}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{e.placeId.address}" filterBy="#{e.placeId.address}"
+                                          headerText="Place Address">
+                                    <h:outputText value="#{e.placeId.address}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{e.startTime}" filterBy="#{e.startTime}"
+                                          headerText="Start Date">
+                                    <h:outputText
+                                        value="#{usersBean.getFormatedDate(e.startTime)} #{usersBean.getFormatedTime(e.startTime)}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{e.endTime}" filterBy="#{e.endTime}" headerText="End Date">
+                                    <h:outputText
+                                        value="#{usersBean.getFormatedDate(e.endTime)} #{usersBean.getFormatedTime(e.endTime)}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{e.guideId.amount}" filterBy="#{e.guideId.amount}"
+                                          headerText="Amount">
+                                    <h:outputText value="#{e.guideId.amount}" />
+                                    <span class="material-symbols-outlined text-xl">
+                                        currency_rupee
                                     </span>
-                                </div>
-                            </f:facet>
-                            <p:column class="px-4" sortBy="#{e.guideId.name}" filterBy="#{e.guideId.name}"
-                                headerText="Guide's Name">
-                                <div class="flex flex-row align-items-center">
-                                    <div>
-                                        <p:avatar styleClass="mr-3 shadow-4" size="xlarge" shape="circle">
-                                            <p:graphicImage value="/uploads/profiles/#{e.guideId.profileImage}" />
-                                        </p:avatar>
-                                    </div>
-                                    <div>
-                                        <h:outputText value="#{e.guideId.name}" />
-                                    </div>
-                                </div>
-                            </p:column>
-                            <p:column class="px-4 overflow-auto" sortBy="#{e.guideId.email}" filterBy="#{e.guideId.email}"
-                                headerText="Guide's Email">
-                                <h:outputText value="#{e.guideId.email}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{e.placeId.name}" filterBy="#{e.placeId.name}"
-                                headerText="Place">
-                                <h:outputText class="-mr-1" value="#{e.placeId.name}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{e.placeId.address}" filterBy="#{e.placeId.address}"
-                                headerText="Place Address">
-                                <h:outputText value="#{e.placeId.address}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{e.startTime}" filterBy="#{e.startTime}"
-                                headerText="Start Date">
-                                <h:outputText
-                                    value="#{usersBean.getFormatedDate(e.startTime)} #{usersBean.getFormatedTime(e.startTime)}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{e.endTime}" filterBy="#{e.endTime}" headerText="End Date">
-                                <h:outputText
-                                    value="#{usersBean.getFormatedDate(e.endTime)} #{usersBean.getFormatedTime(e.endTime)}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{e.guideId.amount}" filterBy="#{e.guideId.amount}"
-                                headerText="Amount">
-                                <h:outputText value="#{e.guideId.amount}" />
-                                <span class="material-symbols-outlined text-xl">
-                                    currency_rupee
-                                </span>
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{e.numberOfPeople}" filterBy="#{e.numberOfPeople}"
-                                headerText="Number of People">
-                                <h:outputText value="#{e.numberOfPeople}" />
-                            </p:column>
-                            <p:column class="px-4" sortBy="#{e.eventStatus}" filterBy="#{e.eventStatus}"
-                                headerText="Event Status">
-                                <h:outputText value="#{e.eventStatus}" />
-                            </p:column>
-                        </p:dataTable>
-                    </p:tab>
-                </p:tabView>
-            </div>
-        </h:form>
-    </div>
-</h:body>
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{e.numberOfPeople}" filterBy="#{e.numberOfPeople}"
+                                          headerText="Number of People">
+                                    <h:outputText value="#{e.numberOfPeople}" />
+                                </p:column>
+                                <p:column class="px-4" sortBy="#{e.eventStatus}" filterBy="#{e.eventStatus}"
+                                          headerText="Event Status">
+                                    <h:outputText value="#{e.eventStatus}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+                </div>
+            </h:form>
+        </div>
+    </h:body>
 
 </html>

@@ -231,21 +231,26 @@ public class Tourist implements TouristLocal {
     }
 
     @Override
-    public void joinEvent(EventMaster event, String username, PaymentMaster payment) {
+    public boolean joinEvent(EventMaster event, String username, PaymentMaster payment) {
         UserMaster user = (UserMaster) em.createNamedQuery("UserMaster.findByUsername").setParameter("username", username).getSingleResult();
         EventMaster emaster = em.find(EventMaster.class, event.getId());
-
         UserMaster umaster = em.find(UserMaster.class, user.getId());
         Collection<EventMaster> usersEvent = umaster.getEventMasterCollection();
-        usersEvent.add(emaster);
-        umaster.setEventMasterCollection(usersEvent);
+        if (usersEvent.contains(emaster)) {
+            return false;
+        } else {
+        emaster.setNumberOfPeople(event.getNumberOfPeople());
+            usersEvent.add(emaster);
+            umaster.setEventMasterCollection(usersEvent);
 
-        Collection<UserMaster> eventsUser = emaster.getUserMasterCollection();
-        eventsUser.add(umaster);
-        emaster.setUserMasterCollection(eventsUser);
-        em.persist(payment);
-        em.merge(umaster);
-        em.merge(emaster);
+            Collection<UserMaster> eventsUser = emaster.getUserMasterCollection();
+            eventsUser.add(umaster);
+            emaster.setUserMasterCollection(eventsUser);
+            em.persist(payment);
+            em.merge(umaster);
+            em.merge(emaster);
+        }
+        return true;
     }
 
     @Override

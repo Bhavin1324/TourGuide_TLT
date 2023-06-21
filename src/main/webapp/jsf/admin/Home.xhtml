@@ -8,61 +8,68 @@
       xmlns:footer="http://xmlns.jcp.org/jsf/composite/components/footer"
       >
     <h:head>
-        <title>Facelet Title</title>
+        <title>Dashboard</title>
         <h:outputStylesheet library="css" name="primeflex.min.css"/>
         <h:outputStylesheet library="css" name="styles.css"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../../images/favicon.ico"/>
     </h:head>
     <h:body class="bg-gray-200">
         <navbar:admin-navbar sideNavigationBean="#{navigationBean}"/>
-        
+
         #{adminHomeBean.init()}
         <!--Counts cards-->
 
         <div class="container-fluid p-5" >
             <div class="grid" style="font-family: sans-serif">
                 <div class="col-12 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-orange-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="pi pi-user text-orange-500 " style="font-size: 3rem"/>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-orange-500 font-medium text-4xl mb-3"> #{adminHomeBean.userCount} </div>
-                                <span class="block text-orange-500">Registered Users</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-blue-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="pi pi-map-marker text-blue-500 " style="font-size: 3rem"/>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-blue-500 font-medium text-4xl mb-3"> #{adminHomeBean.placeCount} </div>
-                                <span class="block text-blue-500">Places Offered</span>
+                    <a href="users/Users.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-orange-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="pi pi-user text-orange-500 " style="font-size: 3rem"/>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-orange-500 font-medium text-4xl mb-3"> #{adminHomeBean.userCount} </div>
+                                    <span class="block text-orange-500">Registered Users</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-green-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="pi pi-verified text-green-500 " style="font-size: 3rem"/>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-green-500 font-medium text-4xl mb-3"> #{adminHomeBean.subsCount} </div>
-                                <span class="block text-green-500 ">Subscriptions</span>
+                    <a href="places/Places.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-blue-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="pi pi-map-marker text-blue-500 " style="font-size: 3rem"/>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-blue-500 font-medium text-4xl mb-3"> #{adminHomeBean.placeCount} </div>
+                                    <span class="block text-blue-500">Places Offered</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 md:col-4 lg:col-4">
+                    <a href="payment/Subscription.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-green-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="pi pi-verified text-green-500 " style="font-size: 3rem"/>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-green-500 font-medium text-4xl mb-3"> #{adminHomeBean.subsCount} </div>
+                                    <span class="block text-green-500 ">Subscriptions</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 md:col-4 lg:col-4" style="cursor: pointer">
                     <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
                         <div class="flex justify-content-center mb-3">
                             <div class="flex align-items-center justify-content-center bg-red-100 border-round-3xl"
@@ -77,74 +84,84 @@
                     </div>
                 </div>
                 <div class="col-12 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-cyan-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="material-symbols-outlined text-cyan-700 " style="font-size: 3rem">event_upcoming</i>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-cyan-700 font-medium text-4xl mb-3">#{adminHomeBean.todaysApptCount}</div>
-                                <span class="block text-cyan-700">Appointments Today</span>
+                    <a href="guide/Appointments.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="material-symbols-outlined text-cyan-700 " style="font-size: 3rem">event_upcoming</i>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-cyan-700 font-medium text-4xl mb-3">#{adminHomeBean.todaysApptCount}</div>
+                                    <span class="block text-cyan-700">Appointments Today</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-purple-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="material-symbols-outlined text-purple-500 " style="font-size: 3rem">event_busy</i>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-purple-500 font-medium text-4xl mb-3">#{adminHomeBean.apptCancelCount}</div>
-                                <span class="block text-purple-500">Appointments Canceled</span>
+                    <a href="guide/Appointments.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-purple-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="material-symbols-outlined text-purple-500 " style="font-size: 3rem">event_busy</i>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-purple-500 font-medium text-4xl mb-3">#{adminHomeBean.apptCancelCount}</div>
+                                    <span class="block text-purple-500">Appointments Cancelled</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-yellow-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="material-symbols-outlined text-yellow-600 " style="font-size: 3rem">event_note</i>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-yellow-600 font-medium text-4xl mb-3">#{adminHomeBean.todaysEventsCount}</div>
-                                <span class="block text-yellow-600">Events Today</span>
+                    <a href="guide/Appointments.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-yellow-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="material-symbols-outlined text-yellow-600 " style="font-size: 3rem">event_note</i>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-yellow-600 font-medium text-4xl mb-3">#{adminHomeBean.todaysEventsCount}</div>
+                                    <span class="block text-yellow-600">Events Today</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-primary-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="material-symbols-outlined text-primary-600 " style="font-size: 3rem">event_busy</i>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-primary-600 font-medium text-4xl mb-3">#{adminHomeBean.eventCancelCount}</div>
-                                <span class="block text-primary-600">Events Canceled</span>
+                    <a href="guide/Appointments.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-primary-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="material-symbols-outlined text-primary-600 " style="font-size: 3rem">event_busy</i>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-primary-600 font-medium text-4xl mb-3">#{adminHomeBean.eventCancelCount}</div>
+                                    <span class="block text-primary-600">Events Canceled</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-6 md:col-4 lg:col-4">
-                    <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
-                        <div class="flex justify-content-center mb-3">
-                            <div class="flex align-items-center justify-content-center bg-orange-100 border-round-3xl"
-                                 style="width:5rem;height:5rem">
-                                <i class="material-symbols-outlined text-orange-600" style="font-size: 3rem">card_membership</i>
-                            </div>
-                            <div class="ml-7">
-                                <div class="text-orange-600 font-medium text-4xl mb-3">#{adminHomeBean.todaysSubsCount}</div>
-                                <span class="block text-orange-600">Subscriptions Today</span>
+                <div class="col-12 md:col-4 lg:col-4">
+                    <a href="payment/Subscription.jsf" style="text-decoration: none">
+                        <div class="surface-card shadow-3 mx-2 px-3 pt-5 pb-3 border-round-3xl">
+                            <div class="flex justify-content-center mb-3">
+                                <div class="flex align-items-center justify-content-center bg-orange-100 border-round-3xl"
+                                     style="width:5rem;height:5rem">
+                                    <i class="material-symbols-outlined text-orange-600" style="font-size: 3rem">card_membership</i>
+                                </div>
+                                <div class="ml-7">
+                                    <div class="text-orange-600 font-medium text-4xl mb-3">#{adminHomeBean.todaysSubsCount}</div>
+                                    <span class="block text-orange-600">Subscriptions Today</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

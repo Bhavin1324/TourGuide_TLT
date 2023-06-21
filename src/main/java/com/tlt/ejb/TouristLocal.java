@@ -56,7 +56,7 @@ public interface TouristLocal {
 
     Collection<PaymentMaster> getUsersEventsHistory(String username);
 
-    void joinEvent(EventMaster event, String username, PaymentMaster payment);
+    boolean joinEvent(EventMaster event, String username, PaymentMaster payment);
 
     void markMissedAppointment();
 }

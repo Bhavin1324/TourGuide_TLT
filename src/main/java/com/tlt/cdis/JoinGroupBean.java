@@ -164,10 +164,17 @@ public class JoinGroupBean implements Serializable {
             payment.setAmount(this.currentCost);
             payment.setEventId(selectedEvent);
             selectedEvent.setNumberOfPeople(selectedEvent.getNumberOfPeople() + people);
-            touristLogic.joinEvent(selectedEvent, KeepRecord.getUsername(), payment);
+            boolean status = touristLogic.joinEvent(selectedEvent, KeepRecord.getUsername(), payment);
+            if (!status) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You Already Joined this event!"));
+                this.currentCost = 0;
+                this.cardNumber = "";
+                this.selectedEvent = null;
+                return;
+            }
             this.currentCost = 0;
             this.cardNumber = "";
-//            PrimeFaces.current().ajax().update("data-table-form:dt-join-event");
+            this.selectedEvent = null;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event Joined"));
 
         } catch (Exception e) {
